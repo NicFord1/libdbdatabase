@@ -1,0 +1,11 @@
+window_sizes 1920 1020 450 1350 720 82
+diagrams
+  active  objectdiagram_ref 128010 // Diagram
+    1464 864 106 4 0 0
+end
+show_stereotypes
+selected class_ref 129546 // ConstraintChecker
+open
+  classview_ref 128010 // sketch
+end
+end
