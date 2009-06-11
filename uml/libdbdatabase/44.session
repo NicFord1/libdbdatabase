@@ -1,0 +1,19 @@
+window_sizes 1500 1050 375 1115 827 144
+diagrams
+  objectdiagram_ref 128010 // Diagram
+    892 661 100 4 0 0
+  classdiagram_ref 128428 // UserTree
+    892 661 100 4 0 0
+  classdiagram_ref 128556 // UserAuthenticationTree
+    892 661 100 4 0 0
+  classdiagram_ref 128812 // LibraryCore
+    892 636 100 4 0 0
+  active  classdiagram_ref 129068 // Item
+    892 661 100 4 21 0
+end
+show_stereotypes
+selected classdiagram_ref 129068 // Item
+open
+  class_ref 128300 // Employee
+end
+end
