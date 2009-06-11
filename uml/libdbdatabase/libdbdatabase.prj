@@ -1,7 +1,7 @@
 format 66
 "libdbdatabase"
-  revision 2
-  modified_by 10 "Drew"
+  revision 3
+  modified_by 44 "charles"
 
 
   
@@ -97,6 +97,17 @@ ${members}}
       explicit_switch_type ""
       
       comment "The GUI will allow users to easily perform whatever library tasks they need to perform."
+      classrelation 128940 // <association>
+	relation 128940 ----
+	  a role_name "" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 128940 // <association>
+	  b role_name "" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 129068 // <association>
+      end
     end
 
     class 129674 "UserStuff"
@@ -165,6 +176,415 @@ ${members}}
         end
       relations
         end
+    end
+
+    classdiagram 128428 "UserTree"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    class 128172 "Person"
+      visibility package 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "name : String
+address : String
+dateofbirth : Date"
+    end
+
+    class 128300 "Employee"
+      visibility package 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "userID : int
+"
+      classrelation 128044 // <generalisation>
+	relation 128044 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 128044 // <generalisation>
+	  b parent class_ref 128172 // Person
+      end
+    end
+
+    class 128428 "Customer"
+      visibility package 
+      
+      constraint "buy( item : Media )
+rent( item : Media )
+return( item: Media)
+search( item: Media)"cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "custID : int"
+      classrelation 128172 // <generalisation>
+	relation 128172 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 128172 // <generalisation>
+	  b parent class_ref 128172 // Person
+      end
+    end
+
+    class 128556 "Teller"
+      visibility package 
+      
+      constraint "request( item : media )"cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 128300 // <generalisation>
+	relation 128300 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 128300 // <generalisation>
+	  b parent class_ref 128300 // Employee
+      end
+    end
+
+    class 128684 "Admin"
+      visibility package 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "Can add,search, and remove items in database
+"
+      classrelation 128428 // <generalisation>
+	relation 128428 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 128428 // <generalisation>
+	  b parent class_ref 128300 // Employee
+      end
+    end
+
+    classdiagram 128556 "UserAuthenticationTree"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    class 128812 "AuthorizeUser"
+      visibility package 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 128940 "Child"
+      visibility package 
+      
+      constraint "buy(item : MediaUnder18)
+rent(item : MediaUnder18)
+return( item : MediaUnder18)
+search( item : MediaUnder18)"cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 128556 // <generalisation>
+	relation 128556 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 128556 // <generalisation>
+	  b parent class_ref 128428 // Customer
+      end
+    end
+
+    class 129068 "Adult"
+      visibility package 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 128812 // <generalisation>
+	relation 128812 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 128812 // <generalisation>
+	  b parent class_ref 128428 // Customer
+      end
+    end
+
+    class 129196 "Senior"
+      visibility package 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 128684 // <generalisation>
+	relation 128684 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 128684 // <generalisation>
+	  b parent class_ref 128428 // Customer
+      end
+    end
+
+    classdiagram 128812 "LibraryCore"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    class 129580 "LibraryCore"
+      visibility package 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 129068 // <association>
+	relation_ref 128940 // <association>
+      end
+    end
+
+    classdiagram 129068 "Item"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    class 129836 "Media"
+      visibility package 
+      
+      constraint "canBeBought(boolean)
+canBeRented(boolean)"cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 129196 // <composition>
+	relation 129068 *---
+	  a role_name "" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 129196 // <composition>
+	  b role_name "" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 129324 // <composition>
+      end
+
+      classrelation 129452 // <composition>
+	relation 129196 *---
+	  a role_name "" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 129452 // <composition>
+	  b role_name "" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 129580 // <composition>
+      end
+
+      classrelation 129708 // <composition>
+	relation 129324 *---
+	  a role_name "" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 129708 // <composition>
+	  b role_name "" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 129836 // <composition>
+      end
+
+      classrelation 129964 // <composition>
+	relation 129452 *---
+	  a role_name "" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 129964 // <composition>
+	  b role_name "" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 130092 // <composition>
+      end
+
+      classrelation 130220 // <composition>
+	relation 129580 *---
+	  a role_name "" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 130220 // <composition>
+	  b role_name "" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 130348 // <composition>
+      end
+
+      classrelation 130476 // <generalisation>
+	relation 129708 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 130476 // <generalisation>
+	  b parent class_ref 130604 // MediaUnder18
+      end
+    end
+
+    class 129964 "Book"
+      visibility package 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 129324 // <composition>
+	relation_ref 129068 // <composition>
+      end
+    end
+
+    class 130092 "Journal"
+      visibility package 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 129580 // <composition>
+	relation_ref 129196 // <composition>
+      end
+    end
+
+    class 130220 "Movie"
+      visibility package 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 129836 // <composition>
+	relation_ref 129324 // <composition>
+      end
+    end
+
+    class 130348 "Music"
+      visibility package 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 130092 // <composition>
+	relation_ref 129452 // <composition>
+      end
+    end
+
+    class 130476 "Misc"
+      visibility package 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 130348 // <composition>
+	relation_ref 129580 // <composition>
+      end
+
+      classrelation 130732 // <composition>
+	relation_ref 129836 // <composition>
+      end
+    end
+
+    class 130604 "MediaUnder18"
+      visibility package 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 130604 // <composition>
+	relation 129836 *---
+	  a role_name "" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 130604 // <composition>
+	  b role_name "" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 130732 // <composition>
+      end
     end
   end
 end

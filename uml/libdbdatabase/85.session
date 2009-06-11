@@ -1,7 +1,11 @@
 window_sizes 1350 787 337 1007 596 136
+diagrams
+  active  objectdiagram_ref 128010 // Diagram
+    1003 576 160 4 0 0
+end
 show_stereotypes
-selected 
-package_ref 129 // libdbdatabase
+selected class_ref 129674 // UserStuff
 open
+  classview_ref 128010 // sketch
 end
 end
