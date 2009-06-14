@@ -1,7 +1,7 @@
 format 66
 "libdbdatabase"
-  revision 5
-  modified_by 10 "Drew"
+  revision 7
+  modified_by 85 "nicford1"
 
 
   
@@ -630,96 +630,6 @@ ${members}}
 	idl_decl ""
       end
 
-      attribute 128138 "title"
-	private explicit_type "string"
-	cpp_decl ""
-	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      attribute 128906 "author"
-	private explicit_type "string"
-	cpp_decl ""
-	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      attribute 128266 "genre"
-	private explicit_type "string"
-	cpp_decl ""
-	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      attribute 130570 "publisher"
-	private explicit_type "string"
-	cpp_decl ""
-	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      attribute 128394 "releaseDate"
-	private explicit_type "string"
-	cpp_decl ""
-	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      attribute 128522 "rating"
-	private explicit_type "float"
-	cpp_decl ""
-	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      attribute 128650 "cost"
-	private explicit_type "float"
-	cpp_decl ""
-	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      attribute 128778 "lateFee"
-	private explicit_type "float"
-	cpp_decl ""
-	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      attribute 130314 "description"
-	private explicit_type "string"
-	cpp_decl ""
-	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
       operation 128010 "getIDNum"
 	stereotype "getter"
 	public explicit_return_type "string"
@@ -731,6 +641,30 @@ ${members}}
 	
 	
 	
+      end
+
+      operation 128138 "setIDNum"
+	stereotype "setter"
+	public explicit_return_type "bool"
+	nparams 1
+	  param in name "IDNum" explicit_type "string"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      attribute 128138 "title"
+	private explicit_type "string"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
       end
 
       operation 128266 "getTitle"
@@ -746,6 +680,30 @@ ${members}}
 	
       end
 
+      operation 128394 "setTitle"
+	stereotype "setter"
+	public explicit_return_type "bool"
+	nparams 1
+	  param in name "title" explicit_type "string"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      attribute 128906 "author"
+	private explicit_type "string"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
       operation 128522 "getAuthor"
 	stereotype "getter"
 	public explicit_return_type "string"
@@ -757,6 +715,30 @@ ${members}}
 	
 	
 	
+      end
+
+      operation 129290 "setAuthor"
+	stereotype "setter"
+	public explicit_return_type "bool"
+	nparams 1
+	  param in name "author" explicit_type "string"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      attribute 128266 "genre"
+	private explicit_type "string"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
       end
 
       operation 128650 "getGenre"
@@ -772,7 +754,31 @@ ${members}}
 	
       end
 
-      operation 131082 "setPublisher"
+      operation 129418 "setGenre"
+	stereotype "setter"
+	public explicit_return_type "bool"
+	nparams 1
+	  param in name "genre" explicit_type "string"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      attribute 130570 "publisher"
+	private explicit_type "string"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      operation 131082 "getPublisher"
 	stereotype "getter"
 	public explicit_return_type "string"
 	nparams 0
@@ -783,6 +789,30 @@ ${members}}
 	
 	
 	
+      end
+
+      operation 131210 "setPublisher"
+	stereotype "setter"
+	public explicit_return_type "bool"
+	nparams 1
+	  param in name "publisher" explicit_type "string"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      attribute 128394 "releaseDate"
+	private explicit_type "string"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
       end
 
       operation 128778 "getReleaseDate"
@@ -798,6 +828,30 @@ ${members}}
 	
       end
 
+      operation 129546 "setReleaseDate"
+	stereotype "setter"
+	public explicit_return_type "bool"
+	nparams 1
+	  param in name "releaseDate" explicit_type "string"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      attribute 128522 "rating"
+	private explicit_type "float"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
       operation 128906 "getRating"
 	stereotype "getter"
 	public explicit_return_type "float"
@@ -809,6 +863,30 @@ ${members}}
 	
 	
 	
+      end
+
+      operation 129674 "setRating"
+	stereotype "setter"
+	public explicit_return_type "bool"
+	nparams 1
+	  param in name "rating" explicit_type "float"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      attribute 128650 "cost"
+	private explicit_type "float"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
       end
 
       operation 129034 "getCost"
@@ -824,6 +902,30 @@ ${members}}
 	
       end
 
+      operation 129802 "setCost"
+	stereotype "setter"
+	public explicit_return_type "bool"
+	nparams 1
+	  param in name "cost" explicit_type "float"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      attribute 128778 "lateFee"
+	private explicit_type "float"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
       operation 129162 "getLateFee"
 	stereotype "getter"
 	public explicit_return_type "float"
@@ -835,6 +937,30 @@ ${members}}
 	
 	
 	
+      end
+
+      operation 129930 "setLateFee"
+	stereotype "setter"
+	public explicit_return_type "bool"
+	nparams 1
+	  param in name "lateFee" explicit_type "float"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      attribute 130314 "description"
+	private explicit_type "string"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
       end
 
       operation 130314 "getDescription"
@@ -850,135 +976,9 @@ ${members}}
 	
       end
 
-      operation 128138 "setIDNum"
-	stereotype "setter"
-	public explicit_return_type ""
-	nparams 1
-	  param in name "IDNum" explicit_type "string"
-	
-	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-      end
-
-      operation 128394 "setTitle"
-	stereotype "setter"
-	public explicit_return_type ""
-	nparams 1
-	  param in name "title" explicit_type "string"
-	
-	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-      end
-
-      operation 129290 "setAuthor"
-	stereotype "setter"
-	public explicit_return_type ""
-	nparams 1
-	  param in name "author" explicit_type "string"
-	
-	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-      end
-
-      operation 129418 "setGenre"
-	stereotype "setter"
-	public explicit_return_type ""
-	nparams 1
-	  param in name "genre" explicit_type "string"
-	
-	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-      end
-
-      operation 131210 "setPublisher"
-	stereotype "setter"
-	public explicit_return_type ""
-	nparams 1
-	  param in name "publisher" explicit_type "string"
-	
-	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-      end
-
-      operation 129546 "setReleaseDate"
-	stereotype "setter"
-	public explicit_return_type ""
-	nparams 1
-	  param in name "releaseDate" explicit_type "string"
-	
-	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-      end
-
-      operation 129674 "setRating"
-	stereotype "setter"
-	public explicit_return_type ""
-	nparams 1
-	  param in name "rating" explicit_type "float"
-	
-	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-      end
-
-      operation 129802 "setCost"
-	stereotype "setter"
-	public explicit_return_type ""
-	nparams 1
-	  param in name "cost" explicit_type "float"
-	
-	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-      end
-
-      operation 129930 "setLateFee"
-	stereotype "setter"
-	public explicit_return_type ""
-	nparams 1
-	  param in name "lateFee" explicit_type "float"
-	
-	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-      end
-
       operation 130442 "setDescription"
 	stereotype "setter"
-	public explicit_return_type ""
+	public explicit_return_type "bool"
 	nparams 1
 	  param in name "description" explicit_type "string"
 	
@@ -989,7 +989,6 @@ ${members}}
 	
 	
       end
-
     end
 
     class 130954 "Book"
@@ -1011,6 +1010,45 @@ ${members}}
 	  b parent class_ref 130826 // Media
       end
 
+      attribute 128213 "isbn"
+	private explicit_type "string"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	comment "a unique thirteen-digit number used to identify a book"
+      end
+
+      operation 128341 "getISBN"
+	stereotype "getter"
+	public explicit_return_type "string"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "returns the ISBN for this book"
+      end
+
+      operation 128469 "setISBN"
+	stereotype "setter"
+	public explicit_return_type "bool"
+	nparams 1
+	  param in name "isbn" explicit_type "string"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "sets the ISBN for this book"
+      end
     end
 
     class 131082 "Periodical"
@@ -1024,7 +1062,15 @@ ${members}}
       idl_decl ""
       explicit_switch_type ""
       
-      attribute 130058 "volume"
+      classrelation 129802 // <generalisation>
+	relation 129802 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 129802 // <generalisation>
+	  b parent class_ref 130826 // Media
+      end
+
+      attribute 128085 "issn"
 	private explicit_type "string"
 	cpp_decl ""
 	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
@@ -1032,9 +1078,10 @@ ${members}}
 	php_decl ""
 	python_decl ""
 	idl_decl ""
+	comment "a unique eight-digit number used to identify a print or electronic periodical publication"
       end
 
-      operation 130058 "getVolume"
+      operation 128085 "getISSN"
 	stereotype "getter"
 	public explicit_return_type "string"
 	nparams 0
@@ -1045,13 +1092,14 @@ ${members}}
 	
 	
 	
+	comment "returns the ISSN for this periodical"
       end
 
-      operation 130186 "setVolume"
+      operation 128213 "setISSN"
 	stereotype "setter"
-	public explicit_return_type ""
+	public explicit_return_type "bool"
 	nparams 1
-	  param in name "volume" explicit_type "string"
+	  param in name "issn" explicit_type "string"
 	
 	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
   ${body}}
@@ -1059,14 +1107,85 @@ ${members}}
 	
 	
 	
+	comment "sets the ISSN for this periodical"
       end
 
-      classrelation 129802 // <generalisation>
-	relation 129802 ---|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 129802 // <generalisation>
-	  b parent class_ref 130826 // Media
+      attribute 130058 "volume"
+	private explicit_type "int"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      operation 130058 "getVolume"
+	stereotype "getter"
+	public explicit_return_type "int"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "returns the volume number for this periodical"
+      end
+
+      operation 130186 "setVolume"
+	stereotype "setter"
+	public explicit_return_type "bool"
+	nparams 1
+	  param in name "volume" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "sets the volume number for this periodical"
+      end
+
+      attribute 128341 "issue"
+	private explicit_type "int"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      operation 128597 "getIssue"
+	stereotype "getter"
+	public explicit_return_type "int"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "returns the issue number for this periodical"
+      end
+
+      operation 128725 "setIssue"
+	stereotype "setter"
+	public explicit_return_type "bool"
+	nparams 1
+	  param in name "issue" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "sets the issue number for this periodical"
       end
     end
 
@@ -1088,6 +1207,46 @@ ${members}}
 	    classrelation_ref 129930 // <generalisation>
 	  b parent class_ref 130826 // Media
       end
+
+      attribute 128469 "upc"
+	private explicit_type "string"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	comment "a barcode symbology (i.e., a specific type of barcode), that is widely used in the United States and Canada for tracking trade items in stores"
+      end
+
+      operation 128853 "getUPC"
+	stereotype "getter"
+	public explicit_return_type "string"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "returns the upc for this cd"
+      end
+
+      operation 129109 "setUPC"
+	stereotype "setter"
+	public explicit_return_type "bool"
+	nparams 1
+	  param in name "upc" explicit_type "string"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "sets the upc for this cd"
+      end
     end
 
     class 131338 "DVD"
@@ -1107,6 +1266,46 @@ ${members}}
 	    java "${type}"
 	    classrelation_ref 130058 // <generalisation>
 	  b parent class_ref 130826 // Media
+      end
+
+      attribute 128597 "upc"
+	private explicit_type "string"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	comment "a barcode symbology (i.e., a specific type of barcode), that is widely used in the United States and Canada for tracking trade items in stores"
+      end
+
+      operation 128981 "getUPC"
+	stereotype "getter"
+	public explicit_return_type "string"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "returns the upc for this dvd"
+      end
+
+      operation 129237 "setUPC"
+	stereotype "setter"
+	public explicit_return_type "bool"
+	nparams 1
+	  param in name "upc" explicit_type "string"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	comment "sets the upc for this dvd"
       end
     end
 
@@ -1136,193 +1335,9 @@ ${members}}
 	idl_decl ""
       end
 
-      attribute 130826 "firstName"
-	private explicit_type "string"
-	cpp_decl ""
-	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      attribute 130954 "lastName"
-	private explicit_type "string"
-	cpp_decl ""
-	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      attribute 131210 "address"
-	private explicit_type "string"
-	cpp_decl ""
-	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      attribute 131338 "birthdate"
-	private explicit_type "string"
-	cpp_decl ""
-	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      attribute 131466 "sex"
-	private explicit_type "char"
-	cpp_decl ""
-	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      attribute 131594 "phoneNumber"
-	private explicit_type "string"
-	cpp_decl ""
-	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      attribute 131722 "balance"
-	private explicit_type "float"
-	cpp_decl ""
-	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      attribute 131850 "history"
-	private explicit_type "string[]"
-	cpp_decl ""
-	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
       operation 131338 "getUserID"
 	stereotype "getter"
 	public explicit_return_type "string"
-	nparams 0
-	
-	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-      end
-
-      operation 131466 "getFirstName"
-	stereotype "getter"
-	public explicit_return_type "string"
-	nparams 0
-	
-	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-      end
-
-      operation 131594 "getLastName"
-	stereotype "getter"
-	public explicit_return_type "string"
-	nparams 0
-	
-	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-      end
-
-      operation 131722 "getAddress"
-	stereotype "getter"
-	public explicit_return_type "string"
-	nparams 0
-	
-	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-      end
-
-      operation 131850 "getBirthdate"
-	stereotype "getter"
-	public explicit_return_type "string"
-	nparams 0
-	
-	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-      end
-
-      operation 131978 "getSex"
-	stereotype "getter"
-	public explicit_return_type "string"
-	nparams 0
-	
-	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-      end
-
-      operation 132106 "getPhoneNumber"
-	stereotype "getter"
-	public explicit_return_type "string"
-	nparams 0
-	
-	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-      end
-
-      operation 132234 "getBalance"
-	stereotype "getter"
-	public explicit_return_type "float"
-	nparams 0
-	
-	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-      end
-
-      operation 132362 "getHistory"
-	stereotype "getter"
-	public explicit_return_type "string[]"
 	nparams 0
 	
 	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
@@ -1347,6 +1362,29 @@ ${members}}
 	
       end
 
+      attribute 130826 "firstName"
+	private explicit_type "string"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      operation 131466 "getFirstName"
+	stereotype "getter"
+	public explicit_return_type "string"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
       operation 132618 "setFirstName"
 	stereotype "setter"
 	public explicit_return_type ""
@@ -1354,6 +1392,29 @@ ${members}}
 	  param in name "firstName" explicit_type "string"
 	
 	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      attribute 130954 "lastName"
+	private explicit_type "string"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      operation 131594 "getLastName"
+	stereotype "getter"
+	public explicit_return_type "string"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
   ${body}}
 "
 	
@@ -1375,6 +1436,29 @@ ${members}}
 	
       end
 
+      attribute 131210 "address"
+	private explicit_type "string"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      operation 131722 "getAddress"
+	stereotype "getter"
+	public explicit_return_type "string"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
       operation 132874 "setAddress"
 	stereotype "setter"
 	public explicit_return_type ""
@@ -1382,6 +1466,29 @@ ${members}}
 	  param in name "address" explicit_type "string"
 	
 	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      attribute 131338 "birthdate"
+	private explicit_type "string"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      operation 131850 "getBirthdate"
+	stereotype "getter"
+	public explicit_return_type "string"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
   ${body}}
 "
 	
@@ -1403,6 +1510,29 @@ ${members}}
 	
       end
 
+      attribute 131466 "sex"
+	private explicit_type "char"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      operation 131978 "getSex"
+	stereotype "getter"
+	public explicit_return_type "string"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
       operation 133130 "setSex"
 	stereotype "setter"
 	public explicit_return_type ""
@@ -1410,6 +1540,29 @@ ${members}}
 	  param in name "sex" explicit_type "char"
 	
 	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      attribute 131594 "phoneNumber"
+	private explicit_type "string"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      operation 132106 "getPhoneNumber"
+	stereotype "getter"
+	public explicit_return_type "string"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
   ${body}}
 "
 	
@@ -1431,6 +1584,29 @@ ${members}}
 	
       end
 
+      attribute 131722 "balance"
+	private explicit_type "float"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      operation 132234 "getBalance"
+	stereotype "getter"
+	public explicit_return_type "float"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
       operation 133386 "setBalance"
 	stereotype "setter"
 	public explicit_return_type ""
@@ -1438,6 +1614,29 @@ ${members}}
 	  param in name "balance" explicit_type "float"
 	
 	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+      end
+
+      attribute 131850 "history"
+	private explicit_type "string[]"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      operation 132362 "getHistory"
+	stereotype "getter"
+	public explicit_return_type "string[]"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
   ${body}}
 "
 	
