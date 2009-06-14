@@ -1,19 +1,51 @@
 window_sizes 1440 795 337 1097 604 136
 diagrams
-  active  classdiagram_ref 128428 // UserTree
+  classdiagram_ref 130314 // User
+    877 483 100 4 0 0
+  active  classdiagram_ref 129162 // Media
     1093 584 100 4 0 0
-  objectdiagram_ref 128010 // Diagram
-    805 476 100 4 0 0
-  classdiagram_ref 129068 // Item
-    805 476 100 4 0 0
-  classdiagram_ref 128812 // LibraryCore
-    805 476 100 4 0 0
-  classdiagram_ref 128556 // UserAuthenticationTree
-    805 476 100 4 0 0
 end
 show_stereotypes
-selected classdiagram_ref 128428 // UserTree
+selected attribute_ref 128138 // title
 open
-  classview_ref 128010 // sketch
+  operation_ref 128010 // getIDNum
+  operation_ref 128266 // getTitle
+  operation_ref 128650 // getGenre
+  operation_ref 128778 // getReleaseDate
+  attribute_ref 128522 // rating
+  operation_ref 128906 // getRating
+  operation_ref 129034 // getCost
+  operation_ref 129162 // getLateFee
+  attribute_ref 130314 // description
+  operation_ref 130314 // getDescription
+  class_ref 130954 // Book
+  classrelation_ref 129802 // <generalisation>
+  attribute_ref 128085 // issn
+  operation_ref 128085 // getISSN
+  class_ref 131210 // CD
+  class_ref 131338 // DVD
+  operation_ref 131338 // getUserID
+  operation_ref 132490 // setUserID
+  operation_ref 131594 // getLastName
+  operation_ref 132746 // setLastName
+  operation_ref 131722 // getAddress
+  operation_ref 132874 // setAddress
+  operation_ref 133002 // setBirthdate
+  attribute_ref 131466 // sex
+  operation_ref 131978 // getSex
+  operation_ref 133130 // setSex
+  operation_ref 132106 // getPhoneNumber
+  operation_ref 133258 // setPhoneNumber
+  operation_ref 132234 // getBalance
+  operation_ref 133386 // setBalance
+  attribute_ref 131850 // history
+  operation_ref 132362 // getHistory
+  class_ref 132618 // Employee
+  class_ref 132746 // Teller
+  class_ref 132874 // Administrator
+  class_ref 133002 // Customer
+  class_ref 133130 // Child
+  class_ref 133258 // Adult
+  class_ref 133386 // Senior
 end
 end
