@@ -1,10 +1,18 @@
-window_sizes 1350 787 337 1007 596 136
+window_sizes 1440 795 337 1097 604 136
 diagrams
-  active  objectdiagram_ref 128010 // Diagram
-    1003 576 160 4 0 0
+  active  classdiagram_ref 128428 // UserTree
+    1093 584 100 4 0 0
+  objectdiagram_ref 128010 // Diagram
+    805 476 100 4 0 0
+  classdiagram_ref 129068 // Item
+    805 476 100 4 0 0
+  classdiagram_ref 128812 // LibraryCore
+    805 476 100 4 0 0
+  classdiagram_ref 128556 // UserAuthenticationTree
+    805 476 100 4 0 0
 end
 show_stereotypes
-selected class_ref 129674 // UserStuff
+selected classdiagram_ref 128428 // UserTree
 open
   classview_ref 128010 // sketch
 end
