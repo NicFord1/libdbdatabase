@@ -1,0 +1,9 @@
+#summary We will keep links to resources we are given or plan to use here.
+
+= Details =
+
+Below is a list of the reources for this project:
+
+    * Project Description -- http://userpages.umbc.edu/~vick/432/assignments/Summer09/Programming/
+    * BOUML (free/Open Source UML 2 tool box) -- http://bouml.sourceforge.net/
+    * Hibernate (Relational Persistence for Java) -- https://www.hibernate.org/ 

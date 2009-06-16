@@ -1,0 +1,36 @@
+#summary Contains the project name, names the developers on the project, briefly describes the project, and identifies the implementation language.
+
+Charles Crookes
+
+Drew Bergman
+
+Ivan Tewell
+
+Nicholas Ford
+
+= <p align="center">Abstract<p> =
+
+Our team has decided to create a library application, which will be written in Java or PHP and will connect to SQL databases. The project is called _LibDBDatabase_, which will be implemented as a library where users can add, remove, and find items. Items in the library consist of books, catalogs, peer-reviewed journals, novels, music CDs, educational and entertainment DVDs, and other media. Items in the database will have a weight attributed with them that represents its ratings. When a customer has an item for check-out or searches for an item, the library will make a recommendation to him or her based on ratings and relevance of other similar items.
+
+The application will implement several criteria listed below:
+
+    * A Search function, where one can search the library database using various criteria (subject, data, author, publisher, publish date, rating, price) to find a specific book or a series of books matching the query. 
+
+    * Several usertypes, which consists of admin (database managers), teller (sales person), and customer (adult, child, and senior citizen). 
+
+    * Abilities of the three usertypes defined below:
+         # *Admin* has the ability to add, remove, and search items in the database.
+         # *Teller* has the ability to search items in the database and make requests to the admins to add and remove items.
+         # *Customer* has the ability to search the database and purchase items. He or she can also check-out and check-in items. Add items to a hold list. Can request items that are currently not in the library stock. 
+
+    * A fee system, which fees a customer if a book or rental is overdue. Also there are rental fees to check-out certain types of media (DVDs, CDs, etc...). 
+
+    * Book recommendations will be offered. Books may be recommended based on the subject, data, author, publisher, publish date, ratings, price, and user reviews. 
+
+    * Books will be categorized in the database by various criterions mentioned above. 
+
+    * Customers will be able to add checked-out books to a hold list so that they may check them out once they are returned. 
+
+    * The library may decide to purchase a requested book if enough users have a request for it. 
+
+    * The library database will have a GUI that allows users to easily perform the available actions as appropriate to their usertype. The library database may also have a text-based interface for admin testing.
