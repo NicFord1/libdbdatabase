@@ -1,9 +1,22 @@
 #summary We will keep links to resources we are given or plan to use here.
+#labels Featured
 
 = Details =
 
 Below is a list of the reources for this project:
 
+== Project ==
     * Project Description -- http://userpages.umbc.edu/~vick/432/assignments/Summer09/Programming/
+    * LibDBDatabase on Nicks-Net (as of 2009.06.16 this is just a working example of what the GUI would feel like, if we go with PHP)  -- http://LibDBDatabase.Nicks-Net.us
+
+== Tools ==
     * BOUML (free/Open Source UML 2 tool box) -- http://bouml.sourceforge.net/
-    * Hibernate (Relational Persistence for Java) -- https://www.hibernate.org/ 
+    * SCPlugin (integrates SVN into Mac OS X Finder) -- http://scplugin.tigris.org/
+
+== PHP Related ==
+    * PHP 5 Object-Oriented section of PHP Manual -- http://us.php.net/manual/en/language.oop5.php
+    * PHP 5 Reflection -- http://us.php.net/manual/en/language.oop5.reflection.php
+    * PHP 5 Patterns -- http://us.php.net/manual/en/language.oop5.patterns.php
+
+== Java Related ==
+    * Hibernate (Relational Persistence for Java) -- https://www.hibernate.org/
