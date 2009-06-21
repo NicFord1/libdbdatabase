@@ -4,7 +4,7 @@
  *
  * This is the Admin Center page. Only administrators are allowed to view this page. This page displays the
  * database table of users and banned users. Admins can choose to delete specific users, delete inactive users,
- * ban users, update user levels, etc.
+ * ban users, edit user accounts, etc.
  */
 include("../include/session.php");
 
@@ -221,45 +221,6 @@ if($form->num_errors > 0) {
        <tr>
         <td>
          <br />
-<?
-/**
- * Update User Level
- */
-?>
-         <h3>Update User Level</h3>
-         <?=$form->error("upduser");?>
-         <table>
-          <form action="adminprocess.php" method="POST">
-           <tr>
-            <td>
-             Username:<br />
-             <input type="text" name="upduser" maxlength="30" value="<?=$form->value("upduser");?>" />
-            </td>
-            <td>
-             Level:<br />
-             <select name="updlevel">
-              <option value="<?=CUST_LEVEL?>">Customer</option>
-              <option value="<?=TELLER_LEVEL?>">Teller</option>
-              <option value="<?=ADMIN_LEVEL?>">Administrator</option>
-             </select>
-            </td>
-            <td>
-             <br />
-             <input type="hidden" name="subupdlevel" value="1" />
-             <input type="submit" value="Update Level" />
-            </td>
-           </tr>
-          </form>
-         </table>
-        </td>
-       </tr>
-       <tr>
-        <td>
-         <hr />
-        </td>
-       </tr>
-       <tr>
-        <td>
 <?
 /**
  * Display Banned Users Table
