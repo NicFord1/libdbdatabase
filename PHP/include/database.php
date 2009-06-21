@@ -184,7 +184,7 @@ class MySQLDB {
     */
    function getNumAdmins() {
       if($this->num_admins < 0) {
-         $q = "SELECT * FROM ".DB_TBL_USERS." WHERE ulevel = ".ADMIN_LEVEL;
+         $q = "SELECT * FROM ".DB_TBL_USERS." WHERE userlevel = '".ADMIN_LEVEL."'";
          $result = mysql_query($q, $this->connection);
          $this->num_admins = mysql_numrows($result);
       }
