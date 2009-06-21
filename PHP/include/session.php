@@ -297,6 +297,7 @@ class Session {
          }
       }
    }
+
    /**
     * editAccount - Attempts to edit the user's account information including the
     * password, which it first makes sure is correct if entered, if so and the new
@@ -372,12 +373,11 @@ class Session {
          $database->updateUserField($this->uid,"sex",$subsex);
       }
 
-      /* Change Phone */
-      if($subphone) {
+      if($subphone) { /* Change Phone */
          $database->updateUserField($this->uid,"phone",$subphone);
       }
 
-      if($subulevel) { /* Change Name */
+      if($subulevel) { /* Change User Level */
          $database->updateUserField($this->uid,"userlevel",$subulevel);
       }
       return true; /* Success! */

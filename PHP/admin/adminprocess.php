@@ -19,7 +19,9 @@ class AdminProcess
          return;
       }
     
-      if(isset($_POST['subupdlevel'])) { /* Admin submitted update user level form */
+      if(isset($_POST['subedit'])) { /* Admin submitted edit user form */
+         $this->procEditAccount();
+      } else if(isset($_POST['subupdlevel'])) { /* Admin submitted update user level form */
          $this->procUpdateLevel();
       } else if(isset($_POST['subdeluser'])) { /* Admin submitted delete user form */
          $this->procDeleteUser();
@@ -35,6 +37,29 @@ class AdminProcess
    }
 
    /**
+    * procEditAccount - Attempts to edit the user's account information, including the
+    * the password, which must be verified before a change is made.
+    */
+   function procEditAccount() {
+      global $session, $form;
+
+      /* Convert birthdate into timestamp */
+      $edbirth = mktime(0, 0, 0, $_POST['edbirthmonth'], $_POST['edbirthday'], $_POST['edbirthyear']);
+
+      /* Account edit attempt */
+      $retval = $this->editAccount($_POST['eduid'], $_POST['eduser'], $_POST['ednewpass'], $_POST['edemail'], $_POST['edname'], $edbirth, $_POST['edaddr'], $_POST['edsex'], $_POST['edphone'], $_POST['edulevel']);
+
+      /* Account edit successful */
+      if($retval) {
+         $_SESSION['edituser'] = true;
+      } else { /* Error found with form */
+         $_SESSION['value_array'] = $_POST;
+         $_SESSION['error_array'] = $form->getErrorArray();
+      }
+      header("Location: ".$session->referrer."?uid=".$_POST['eduid']);
+   }
+
+   /**
     * procUpdateLevel - If the submitted username is correct, their user level is updated
     * according to the admin's request.
     */
@@ -43,15 +68,22 @@ class AdminProcess
 
       /* Username error checking */
       $field = "upduser";
-      $subuser = $this->checkUsername($field);
+      $subuid = $database->getUID($this->checkUsername($field));
+
+      if(!$subuid) {
+         $form->setError($field, "* User doesn't exist!<br />");
+      }
 
       //if admin, check for other admins
+      if(($session->uid == $subuid) && $session->isAdmin() && ($database->getNumAdmins() < 2)) {
+         $form->setError($field, "* You are the only admin in the system.<br />");
+      }
 
       if($form->num_errors > 0) { /* Errors exist, have user correct them */
          $_SESSION['value_array'] = $_POST;
          $_SESSION['error_array'] = $form->getErrorArray();
       } else { /* Update user level */
-         $database->updateUserField($subuser, "userlevel", (int)$_POST['updlevel']);
+         $database->updateUserField($subuid, "userlevel", (int)$_POST['updlevel']);
       }
       header("Location: ".$session->referrer);
    }
@@ -128,7 +160,75 @@ class AdminProcess
       }
       header("Location: ".$session->referrer);
    }
-   
+
+   /**
+    * editAccount - Attempts to edit the user's account information including the
+    * password, which it first makes sure is correct if entered, if so and the new
+    * password is in the right format, the change is made. All other fields are changed
+    * automatically.
+    */
+   function editAccount($subuid, $subuser, $subnewpass, $subemail, $subname, $subbirth, $subaddr, $subsex, $subphone, $subulevel) {
+      global $database, $form, $session;  //The database and form object
+
+      /* New Password error checking */
+      if($subnewpass) {
+         $field = "ednewpass";  //Use field name for new password
+
+         /* Spruce up password*/
+         $subnewpass = stripslashes($subnewpass);
+
+         /* Check if password is not alphanumeric */
+         if(!eregi("^([0-9a-z])+$", ($subnewpass = trim($subnewpass)))) {
+            $form->setError($field, "* New Password not alphanumeric");
+         }
+      }
+      
+      /* Email error checking */
+      if($subemail && strlen($subemail = trim($subemail)) > 0) {
+         $field = "edemail";  //Use field name for email
+
+         $subemail = stripslashes($subemail);
+      }
+
+      if($form->num_errors > 0) { /* Errors exist, have user correct them */
+         return false;
+      }
+
+      /* Update password since there were no errors */
+      if($subnewpass) {
+         $database->updateUserField($subuid,"password",$session->hashPassword($subnewpass));
+      }
+
+      if($subemail) { /* Change Email */
+         $database->updateUserField($subuid,"email",$subemail);
+      }
+
+      if($subname) { /* Change Name */
+         $database->updateUserField($subuid,"fullname",$subname);
+      }
+
+      if($subbirth) { /* Change Birthdate */
+         $database->updateUserField($subuid,"birthdate",$subbirth);
+      }
+
+      if($subaddr) { /* Change Address */
+         $database->updateUserField($subuid,"address",$subaddr);
+      }
+
+      if($subsex) { /* Change Sex */
+         $database->updateUserField($subuid,"sex",$subsex);
+      }
+
+      if($subphone) { /* Change Phone */
+         $database->updateUserField($subuid,"phone",$subphone);
+      }
+
+      if($subulevel && $session->isAdmin()) { /* Change User Level */
+         $database->updateUserField($subuid,"userlevel",(int)$subulevel);
+      }
+      return true; /* Success! */
+   }
+
    /**
     * checkUsername - Helper function for the above processing, it makes sure the
     * submitted username is valid, if not, it adds the appropritate error to the form.

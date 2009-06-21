@@ -44,10 +44,6 @@ if(!$session->logged_in) {
         // validate edit form on keyup and submit
         $("#edituser").validate({
            rules: {
-              edcurpass: {
-                 required: true,
-                 minlength: 5
-              },
               edemail: {
                  required: true,
                  email: true
@@ -63,14 +59,10 @@ if(!$session->logged_in) {
               }
            },
            messages: {
-              edcurpass: {
-                 required: "Please provide a password",
-                 minlength: "Your password must be at least 5 characters long"
-              },
               edemail: "Please enter a valid email address",
-              edbirthmonth: "Please select your birth month",
-              edbirthday: "Please select your birth day",
-              edbirthyear: "Please select your birth year"
+              edbirthmonth: "Please select a birth month",
+              edbirthday: "Please select a birth day",
+              edbirthyear: "Please select a birth year"
            }
         });
      });
@@ -129,20 +121,36 @@ if(!$session->logged_in) {
       </font>
       <br /><br />
 <?php
-if($form->num_errors > 0) {
-   echo "      <font size=\"2\" color=\"#ff0000\">".$form->num_errors." error(s) found</font>\n";
-}
+if(!isset($_GET['uid']) && !isset($_SESSION['edituser'])) {
+   echo "<font size=\"2\" color=\"#ff0000\">Target user not identified.</font>\n";
+} else {
+   if($_GET['uid']) {
+      $subuserinfo = $database->getUserInfo($_GET['uid']);
+   } else {
+      $subuserinfo = $database->getUserInfo($form->value("eduid"));
+   }
 
-/* The user has submitted form without errors and user's account has been updated. */
-if(isset($_SESSION['edituser'])) {
-   unset($_SESSION['edituser']);
+   if($form->num_errors > 0) {
+      echo "<font size=\"2\" color=\"#ff0000\">".$form->num_errors." error(s) found</font>\n";
+   }
 
-   echo "      <h1>User Account Edit Success!</h1>";
-   echo "      <p><b>$session->username</b>, your account has been successfully updated.</p>";
-}
+   /* The user has submitted form without errors and user's account has been updated. */
+   if(isset($_SESSION['edituser'])) {
+      unset($_SESSION['edituser']);
+
+      echo "<h1>User Account Edit Success!</h1>";
+      echo "<p><b>".$subuserinfo['username']."</b>'s account has been successfully updated.</p>";
+   }
 ?>
       <h1>Update Account</h1>
       <form action="adminprocess.php" method="POST" id="edituser">
+       <input type="hidden" name="eduid" value="<?php
+   if($form->value("eduid") == "") {
+      echo $subuserinfo['uid'];
+   } else {
+      echo $form->value("eduid");
+   }
+?>" />
        <table align="left" border="0" cellspacing="0" cellpadding="3">
         <tr>
          <td>
@@ -151,23 +159,13 @@ if(isset($_SESSION['edituser'])) {
          <td>
           <input class="field" type="text" name="eduser" maxlength="30" value="<?php
    if($form->value("eduser") == "") {
-      echo $session->userinfo['username'];
+      echo $subuserinfo['username'];
    } else {
       echo $form->value("eduser");
    }
 ?>" readonly />
          </td>
          <td><?=$form->error("eduser")?></td>
-        </tr>
-
-        <tr>
-         <td>
-          <label for="edcurpass" class="grey required">Current Password:</label>
-         </td>
-         <td>
-          <input type="password" name="edcurpass" maxlength="30" value="<?=$form->value("edcurpass")?>" />
-         </td>
-         <td><?=$form->error("edcurpass")?></td>
         </tr>
 
         <tr>
@@ -188,7 +186,7 @@ if(isset($_SESSION['edituser'])) {
           <input class="field" type="text" name="edemail" maxlength="96" value="
 <?php
    if($form->value("edemail") == "") {
-      echo $session->userinfo['email'];
+      echo $subuserinfo['email'];
    } else {
       echo $form->value("edemail");
    }
@@ -204,7 +202,7 @@ if(isset($_SESSION['edituser'])) {
          <td>
           <input class="field" type="text" name="edname" maxlength="50" value="<?php
    if($form->value("edname") == "") {
-      echo $session->userinfo['fullname'];
+      echo $subuserinfo['fullname'];
    } else {
       echo $form->value("edname");
    }
@@ -218,17 +216,17 @@ if(isset($_SESSION['edituser'])) {
           <label class="grey required">Birthdate:</label>
 <?php
    if($form->value("edbirthmonth") == "") {
-      $subbirthmonth = date("n", $session->userinfo['birthdate']);
+      $subbirthmonth = date("n", $subuserinfo['birthdate']);
    } else {
       $subbirthmonth = $form->value("edbirthmonth");
    }
    if($form->value("edbirthday") == "") {
-      $subbirthday = date("j", $session->userinfo['birthdate']);
+      $subbirthday = date("j", $subuserinfo['birthdate']);
    } else {
       $subbirthday = $form->value("edbirthday");
    }
    if($form->value("edbirthyear") == "") {
-      $subbirthyear = date("o", $session->userinfo['birthdate']);
+      $subbirthyear = date("o", $subuserinfo['birthdate']);
    } else {
       $subbirthyear = $form->value("edbirthyear");
    }
@@ -258,7 +256,7 @@ if(isset($_SESSION['edituser'])) {
               <option value=""></option>
 <?php
       for ($i = 1; $i <= 31; $i++) {
-         echo "              <option value='$i'".($subbirthday==$i ? ' selected' : '').">$i</option>";
+         echo "<option value='$i'".($subbirthday==$i ? ' selected' : '').">$i</option>";
       }
 ?>
              </select>
@@ -267,7 +265,7 @@ if(isset($_SESSION['edituser'])) {
               <option value=""></option>
 <?php
       for ($i = date("Y"); $i >= date("Y")-120; $i--) {
-         echo "              <option value='$i'".($subbirthyear==$i ? ' selected' : '').">$i</option>";
+         echo "<option value='$i'".($subbirthyear==$i ? ' selected' : '').">$i</option>";
       }
 ?>
              </select>
@@ -286,7 +284,7 @@ if(isset($_SESSION['edituser'])) {
           <label for="male"><input type="radio" name="edsex" id="male" value="M"
 <?php
    if($form->value("edsex") == "") {
-      if($session->userinfo['sex'] == "M") {
+      if($subuserinfo['sex'] == "M") {
          echo "checked ";
       }
    } else {
@@ -297,7 +295,7 @@ if(isset($_SESSION['edituser'])) {
 ?>/>Male</label>
           <label for="female"><input type="radio" name="edsex" id="female" value="F" <?php
    if($form->value("edsex") == "") {
-      if($session->userinfo['sex'] == "F") {
+      if($subuserinfo['sex'] == "F") {
          echo "checked ";
       }
    } else {
@@ -317,7 +315,7 @@ if(isset($_SESSION['edituser'])) {
          <td>
           <input class="field" type="text" name="edaddr" maxlength="160" value="<?php
    if($form->value("edaddr") == "") {
-      echo $session->userinfo['address'];
+      echo $subuserinfo['address'];
    } else {
       echo $form->value("edaddr");
    }
@@ -333,7 +331,7 @@ if(isset($_SESSION['edituser'])) {
          <td>
           <input class="field" type="text" name="edphone" maxlength="26" value="<?php
    if($form->value("edphone") == "") {
-      echo $session->userinfo['phone'];
+      echo $subuserinfo['phone'];
    } else {
       echo $form->value("edphone");
    }
@@ -347,10 +345,10 @@ if(isset($_SESSION['edituser'])) {
           <label class="grey">User Level:</label>
          </td>
          <td>
-          <select name="edulevel" disabled>
-           <option value="<?=CUST_LEVEL?>"<?=($session->userlevel == CUST_LEVEL) ? ' selected' : '' ?>>Customer</option>
-           <option value="<?=TELLER_LEVEL?>"<?=($session->userlevel == TELLER_LEVEL) ? ' selected' : '' ?>>Teller</option>
-           <option value="<?=ADMIN_LEVEL?>"<?=($session->userlevel == ADMIN_LEVEL) ? ' selected' : '' ?>>Administrator</option>
+          <select name="edulevel"<?=($session->isAdmin() ? '' : ' disabled')?>>
+           <option value="<?=CUST_LEVEL?>"<?=($subuserlevel == CUST_LEVEL) ? ' selected' : '' ?>>Customer</option>
+           <option value="<?=TELLER_LEVEL?>"<?=($subuserlevel == TELLER_LEVEL) ? ' selected' : '' ?>>Teller</option>
+           <option value="<?=ADMIN_LEVEL?>"<?=($subuserlevel == ADMIN_LEVEL) ? ' selected' : '' ?>>Administrator</option>
           </select>
          </td>
          <td><?=$form->error("edulevel")?></td>
@@ -365,7 +363,9 @@ if(isset($_SESSION['edituser'])) {
 
        </table>
       </form>
-
+<?php
+} //end uid specified
+?>
       <p class="hide"><a href="#top">Back to top</a></p>
      </div>
     </div>
