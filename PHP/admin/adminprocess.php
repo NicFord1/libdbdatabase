@@ -21,8 +21,6 @@ class AdminProcess
     
       if(isset($_POST['subedit'])) { /* Admin submitted edit user form */
          $this->procEditAccount();
-      } else if(isset($_POST['subupdlevel'])) { /* Admin submitted update user level form */
-         $this->procUpdateLevel();
       } else if(isset($_POST['subdeluser'])) { /* Admin submitted delete user form */
          $this->procDeleteUser();
       } else if(isset($_POST['subdelinact'])) { /* Admin submitted delete inactive users form */
@@ -57,35 +55,6 @@ class AdminProcess
          $_SESSION['error_array'] = $form->getErrorArray();
       }
       header("Location: ".$session->referrer."?uid=".$_POST['eduid']);
-   }
-
-   /**
-    * procUpdateLevel - If the submitted username is correct, their user level is updated
-    * according to the admin's request.
-    */
-   function procUpdateLevel() {
-      global $session, $database, $form;
-
-      /* Username error checking */
-      $field = "upduser";
-      $subuid = $database->getUID($this->checkUsername($field));
-
-      if(!$subuid) {
-         $form->setError($field, "* User doesn't exist!<br />");
-      }
-
-      //if admin, check for other admins
-      if(($session->uid == $subuid) && $session->isAdmin() && ($database->getNumAdmins() < 2)) {
-         $form->setError($field, "* You are the only admin in the system.<br />");
-      }
-
-      if($form->num_errors > 0) { /* Errors exist, have user correct them */
-         $_SESSION['value_array'] = $_POST;
-         $_SESSION['error_array'] = $form->getErrorArray();
-      } else { /* Update user level */
-         $database->updateUserField($subuid, "userlevel", (int)$_POST['updlevel']);
-      }
-      header("Location: ".$session->referrer);
    }
    
    /**
@@ -190,6 +159,16 @@ class AdminProcess
          $subemail = stripslashes($subemail);
       }
 
+      /* User Level error checking */
+      $field = "edulevel"; //Use field name for user level
+      if($subulevel && $session->isAdmin()) {
+         $form->setError($field, "* You must be an Administrator to do that<br />");
+      }
+
+      if($subulevel && $database->getNumAdmins < 2) {
+         $form->setError($field, "* You are the only Administrator in the system<br />");
+      }
+
       if($form->num_errors > 0) { /* Errors exist, have user correct them */
          return false;
       }
@@ -223,7 +202,7 @@ class AdminProcess
          $database->updateUserField($subuid,"phone",$subphone);
       }
 
-      if($subulevel && $session->isAdmin()) { /* Change User Level */
+      if($subulevel) { /* Change User Level */
          $database->updateUserField($subuid,"userlevel",(int)$subulevel);
       }
       return true; /* Success! */

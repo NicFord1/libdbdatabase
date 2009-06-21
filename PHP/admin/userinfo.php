@@ -346,9 +346,9 @@ if(!isset($_GET['uid']) && !isset($_SESSION['edituser'])) {
          </td>
          <td>
           <select name="edulevel"<?=($session->isAdmin() ? '' : ' disabled')?>>
-           <option value="<?=CUST_LEVEL?>"<?=($subuserlevel == CUST_LEVEL) ? ' selected' : '' ?>>Customer</option>
-           <option value="<?=TELLER_LEVEL?>"<?=($subuserlevel == TELLER_LEVEL) ? ' selected' : '' ?>>Teller</option>
-           <option value="<?=ADMIN_LEVEL?>"<?=($subuserlevel == ADMIN_LEVEL) ? ' selected' : '' ?>>Administrator</option>
+           <option value="<?=CUST_LEVEL?>"<?=($subuserinfo['userlevel'] == CUST_LEVEL) ? ' selected' : '' ?>>Customer</option>
+           <option value="<?=TELLER_LEVEL?>"<?=($subuserinfo['userlevel'] == TELLER_LEVEL) ? ' selected' : '' ?>>Teller</option>
+           <option value="<?=ADMIN_LEVEL?>"<?=($subuserinfo['userlevel'] == ADMIN_LEVEL) ? ' selected' : '' ?>>Administrator</option>
           </select>
          </td>
          <td><?=$form->error("edulevel")?></td>
