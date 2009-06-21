@@ -161,11 +161,7 @@ class AdminProcess
 
       /* User Level error checking */
       $field = "edulevel"; //Use field name for user level
-      if($subulevel && $session->isAdmin()) {
-         $form->setError($field, "* You must be an Administrator to do that<br />");
-      }
-
-      if($subulevel && $database->getNumAdmins < 2) {
+      if(($subuid == $session->uid) && $subulevel && $database->getNumAdmins < 2) {
          $form->setError($field, "* You are the only Administrator in the system<br />");
       }
 
