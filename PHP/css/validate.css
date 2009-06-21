@@ -1,0 +1,81 @@
+form label {
+   padding:0px 10px;
+   width: 200px;
+}
+
+form label.error,
+form input.submit {
+   margin-left:10px !important;
+}
+
+
+/*** FORM BLOCK ELEMENTS ***/
+
+form label {
+   padding:0px 10px;
+   width: 200px;
+   float: left;
+}
+
+form .error {
+   color: #c00;
+}
+
+form label.error {
+   color: #c00;
+
+   font-size: 100%;
+   font-weight: bold;
+   font-variant:small-caps;
+
+   width:200px;
+   display: none;
+
+   margin:8px 0px 0px 10px;
+   padding:3px 0px 0px 5px;
+   border-top:1px dotted #ccc;
+
+   clear:both;
+}
+
+form label.info {
+   font-size: 100%;
+   font-weight: bold;
+   font-variant:small-caps;
+
+   margin:8px 0px 0px 200px;
+   padding:3px 0px 0px 5px;
+}
+
+form label label.error {
+   margin-left:0px;
+}
+
+form label.centered {
+   padding:0px 0px;
+   width:200px !important;
+}
+
+/*** SUPPORTING CLASSES ***/
+
+form label.required {
+   background-image:url(../img/required_star.gif);
+   background-position:left;
+   background-repeat:no-repeat;
+}
+
+form span.required {
+   padding-right:15px;
+}
+
+form label.disabled {
+   color:#aaa;
+}
+
+.off {
+   display:none !important;
+}
+
+.clear {
+   clear:both;
+}
