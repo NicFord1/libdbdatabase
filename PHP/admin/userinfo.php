@@ -103,7 +103,7 @@ if(!$session->logged_in) {
        <span class="hide">Currently viewing: </span>
        <a href="<?=SITE_BASE_URL?>/index.php">LibDBDatabase</a> &raquo;
        <a href="<?=SITE_BASE_URL?>/admin/admin.php">Admin Center</a> &raquo;
-       <a href="<?=$_SERVER['PHP_SELF']?>">User Center</a>
+       <a href="<?=$_SERVER['PHP_SELF']?>?uid=<?=$_GET['uid']?>">User Center</a>
       </strong>
      </div>
 
