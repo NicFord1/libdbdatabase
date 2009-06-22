@@ -1,0 +1,92 @@
+format 66
+
+classcanvas 128084 class_ref 131924 // CustomerActor
+  class_drawing_mode default show_context_mode default show_stereotype_properties default
+  xyz 38 186 2000
+end
+classcanvas 128212 class_ref 132052 // TellerActor
+  class_drawing_mode default show_context_mode default show_stereotype_properties default
+  xyz 450 163 2000
+end
+usecasecanvas 128340 usecase_ref 129236 // authenticate
+  xyzwh 183 47 3005 64 32 label_xy 185 79
+end
+usecasecanvas 128468 usecase_ref 129364 // payfine
+  xyzwh 401 80 3005 64 32 label_xy 415 112
+end
+usecasecanvas 128596 usecase_ref 129492 // listmybooks
+  xyzwh 182 108 3005 64 32 label_xy 186 140
+end
+usecasecanvas 128724 usecase_ref 129620 // searchbooks
+  xyzwh 271 106 3005 64 32 label_xy 271 138
+end
+usecasecanvas 128852 usecase_ref 129748 // viewbook
+  xyzwh 183 172 3005 64 32 label_xy 191 204
+end
+usecasecanvas 128980 usecase_ref 129876 // recommendbooks
+  xyzwh 271 169 3005 64 32 label_xy 261 201
+end
+usecasecanvas 129108 usecase_ref 130004 // renewbook
+  xyzwh 185 240 3005 64 32 label_xy 189 272
+end
+usecasecanvas 129236 usecase_ref 130132 // viewfines
+  xyzwh 270 242 3005 64 32 label_xy 278 274
+end
+usecasecanvas 129364 usecase_ref 130260 // requestbook
+  xyzwh 183 306 3005 64 32 label_xy 185 338
+end
+usecasecanvas 129492 usecase_ref 130388 // checkoutbook
+  xyzwh 509 80 3005 64 32 label_xy 508 112
+end
+usecasecanvas 129620 usecase_ref 130516 // getbookstatus
+  xyzwh 517 246 3005 64 32 label_xy 515 278
+end
+usecasecanvas 129748 usecase_ref 130644 // getholdlist
+  xyzwh 421 249 3010 64 32 label_xy 429 281
+end
+usecasecanvas 129876 usecase_ref 130772 // checkinbook
+  xyzwh 457 314 3005 64 32 label_xy 459 346
+end
+line 130004 --->
+  from ref 128084 z 3006 to ref 128340
+line 130132 --->
+  from ref 128084 z 3006 to ref 128596
+line 130260 --->
+  from ref 128084 z 3006 to ref 128852
+line 130388 --->
+  from ref 128084 z 3006 to ref 129108
+line 130516 --->
+  from ref 128084 z 3006 to ref 129364
+line 130644 --->
+  from ref 128084 z 3006 to ref 128724
+line 130772 --->
+  from ref 128084 z 3006 to ref 128980
+line 130900 --->
+  from ref 128084 z 3006 to ref 129236
+line 131028 --->
+  from ref 128212 z 3006 to ref 128468
+line 131156 --->
+  from ref 128212 z 3006 to ref 128724
+line 131284 --->
+  from ref 128212 z 3006 to ref 128980
+line 131412 --->
+  from ref 128212 z 3006 to ref 129236
+line 131540 --->
+  from ref 128212 z 3006 to ref 129492
+line 131668 --->
+  from ref 128212 z 3006 to ref 128340
+line 131796 --->
+  from ref 128212 z 3006 to ref 128596
+line 131924 --->
+  from ref 128212 z 3006 to ref 128852
+line 132052 --->
+  from ref 128212 z 3006 to ref 129108
+line 132180 --->
+  from ref 128212 z 3006 to ref 129364
+line 132308 --->
+  from ref 128212 z 3011 to ref 129748
+line 132436 --->
+  from ref 128212 z 3006 to ref 129620
+line 132564 --->
+  from ref 128212 z 3006 to ref 129876
+end
