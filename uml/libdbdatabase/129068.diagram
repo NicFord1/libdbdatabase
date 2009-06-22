@@ -1,9 +1,5 @@
 format 66
 
-classcanvas 128044 class_ref 129836 // Media
-  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
-  xyz 206 98 2000
-end
 classcanvas 128172 class_ref 129964 // Book
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
   xyz 70 237 2000
@@ -32,33 +28,8 @@ note 129708 "Genres to be set for above, along with author, etc..."
   xyzwh 64 295 2000 283 35
 note 129836 "Show only Media in this class rated for people under 18 years of age"
   xyzwh 396 34 2000 201 58
-relationcanvas 128684 relation_ref 129068 // <composition>
-  from ref 128044 z 2001 to ref 128172
-  no_role_a no_role_b
-  no_multiplicity_a no_multiplicity_b
-end
-relationcanvas 128812 relation_ref 129196 // <composition>
-  from ref 128044 z 2001 to ref 128300
-  no_role_a no_role_b
-  no_multiplicity_a no_multiplicity_b
-end
-relationcanvas 128940 relation_ref 129324 // <composition>
-  from ref 128044 z 2001 to ref 128428
-  no_role_a no_role_b
-  no_multiplicity_a no_multiplicity_b
-end
-relationcanvas 129068 relation_ref 129452 // <composition>
-  from ref 128044 z 2001 to ref 128556
-  no_role_a no_role_b
-  no_multiplicity_a no_multiplicity_b
-end
-relationcanvas 129324 relation_ref 129580 // <composition>
-  from ref 128044 z 2001 to ref 129196
-  no_role_a no_role_b
-  no_multiplicity_a no_multiplicity_b
-end
-relationcanvas 129580 relation_ref 129708 // <generalisation>
-  from ref 128044 z 2001 to ref 129452
+relationcanvas 128084 relation_ref 129836 // <composition>
+  from ref 129452 z 2001 to ref 129196
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
