@@ -1,0 +1,52 @@
+format 66
+
+classinstance 128084 class_ref 129236 // Session
+  name ""   xyz 101 4 2000 life_line_z 2000
+classinstance 128212 class_ref 129492 // DatabaseInterface
+  name ""   xyz 280 4 2000 life_line_z 2000
+classinstance 128340 class_ref 128394 // GUI
+  name ""   xyz 487 4 2000 life_line_z 2000
+durationcanvas 128468 classinstance_ref 128084 // :Session
+  xyzwh 122 94 2010 11 195
+end
+durationcanvas 128596 classinstance_ref 128212 // :DatabaseInterface
+  xyzwh 326 94 2010 11 38
+end
+durationcanvas 128980 classinstance_ref 128212 // :DatabaseInterface
+  xyzwh 326 155 2010 11 36
+end
+durationcanvas 129364 classinstance_ref 128340 // :GUI
+  xyzwh 506 218 2010 11 33
+end
+msg 128724 asynchronous
+  from durationcanvas_ref 128468
+  to durationcanvas_ref 128596
+  yz 94 2015 explicitmsg "isUserValid"
+  show_full_operations_definition default drawing_language default
+  label_xy 202 80
+msg 128852 return
+  from durationcanvas_ref 128596
+  to durationcanvas_ref 128468
+  yz 121 2020 explicitmsg "boolean_isUserValid"
+  show_full_operations_definition default drawing_language default
+  label_xy 180 107
+msg 129108 asynchronous
+  from durationcanvas_ref 128468
+  to durationcanvas_ref 128980
+  yz 155 2015 explicitmsg "getUserPrivilegesList"
+  show_full_operations_definition default drawing_language default
+  label_xy 179 141
+msg 129236 return
+  from durationcanvas_ref 128980
+  to durationcanvas_ref 128468
+  yz 180 2020 explicitmsg "privilegesList"
+  show_full_operations_definition default drawing_language default
+  label_xy 198 166
+msg 129492 asynchronous
+  from durationcanvas_ref 128468
+  to durationcanvas_ref 129364
+  yz 221 2015 explicitmsg "presentUserWithAllowableActions"
+  show_full_operations_definition default drawing_language default
+  args "privilegesList"
+  label_xy 260 207
+end

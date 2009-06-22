@@ -1,0 +1,34 @@
+window_sizes 1024 719 240 720 512 82
+diagrams
+  objectdiagram_ref 128010 // Diagram
+    618 450 100 4 0 0
+  classdiagram_ref 128556 // UserAuthenticationTree
+    618 450 100 4 0 0
+  classdiagram_ref 128812 // LibraryCore
+    618 450 100 4 0 0
+  classdiagram_ref 129068 // Item
+    618 450 100 4 120 0
+  classdiagram_ref 128428 // UserTree
+    618 450 100 4 0 0
+  classdiagram_ref 129236 // System
+    618 450 100 4 0 0
+  classdiagram_ref 129364 // DatabaseView
+    778 563 100 4 360 0
+  classdiagram_ref 130314 // User
+    618 450 100 4 480 0
+  usecasediagram_ref 130516 // UseCaseDiagram
+    778 563 100 4 0 1
+  sequencediagram_ref 131668 // authenticatesequence
+    778 563 100 4 0 0
+  active  sequencediagram_ref 132820 // listmybookssequence
+    778 563 100 4 0 0
+end
+show_stereotypes
+selected sequencediagram_ref 132820 // listmybookssequence
+open
+  classview_ref 128010 // sketch
+  classview_ref 129162 // OO Data Design
+  usecase_ref 129236 // authenticate
+  usecase_ref 129492 // listmybooks
+end
+end
