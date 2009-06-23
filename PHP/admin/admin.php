@@ -198,7 +198,7 @@ if(!$session->isAdmin()) { /* User not an administrator, redirect to front page 
       </font>
       <br /><br />
 <?
-if($form->num_errors > 0) {
+if($session->form->num_errors > 0) {
    echo "      <font size=\"4\" color=\"#ff0000\">"
        ."!*** Error with request, please fix ***!</font><br /><br />";
 }
@@ -213,8 +213,8 @@ if($form->num_errors > 0) {
  */
 ?>
          <h3>Users Table Contents:</h3>
-         <?=$form->error("deluser");?>
-         <?=$form->error("banuser");?>
+         <?=$session->form->error("deluser");?>
+         <?=$session->form->error("banuser");?>
          <?=displayUsers();?>
         </td>
        </tr>

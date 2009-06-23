@@ -139,20 +139,20 @@ if($session->logged_in && !($session->isAdmin() || $session->isTeller())) {
       </font>
       <br /><br />
 <?php
-if($form->num_errors > 0) {
-   echo "      <font size=\"2\" color=\"#ff0000\">".$form->num_errors." error(s) found</font>\n";
+if($session->form->num_errors > 0) {
+   echo "      <font size=\"2\" color=\"#ff0000\">".$session->form->num_errors." error(s) found</font>\n";
 
    //registration errors
-   if($form->value("subreg") == "1") {
+   if($session->form->value("subreg") == "1") {
       echo "      <p>Registration:</p>\n";
-      echo "      <label for=\"reguser\">".$form->error("reguser")."</label>\n";
-      echo "      <label for=\"regpass\">".$form->error("regpass")."</label>\n";
-      echo "      <label for=\"regemail\">".$form->error("regemail")."</label>\n";
-      echo "      <label for=\"regname\">".$form->error("regname")."</label>\n";
-      echo "      <label for=\"regbirth\">".$form->error("regbirth")."</label>\n";
-      echo "      <label for=\"regsex\">".$form->error("regsex")."</label>\n";
-      echo "      <label for=\"regaddr\">".$form->error("regaddr")."</label>\n";
-      echo "      <label for=\"regphone\">".$form->error("regphone")."</label>\n";
+      echo "      <label for=\"reguser\">".$session->form->error("reguser")."</label>\n";
+      echo "      <label for=\"regpass\">".$session->form->error("regpass")."</label>\n";
+      echo "      <label for=\"regemail\">".$session->form->error("regemail")."</label>\n";
+      echo "      <label for=\"regname\">".$session->form->error("regname")."</label>\n";
+      echo "      <label for=\"regbirth\">".$session->form->error("regbirth")."</label>\n";
+      echo "      <label for=\"regsex\">".$session->form->error("regsex")."</label>\n";
+      echo "      <label for=\"regaddr\">".$session->form->error("regaddr")."</label>\n";
+      echo "      <label for=\"regphone\">".$session->form->error("regphone")."</label>\n";
    }
 }
 ?>
@@ -199,7 +199,7 @@ if($form->num_errors > 0) {
           <label for="reguser" class="grey required">Username:</label>
          </td>
          <td>
-          <input class="field" type="text" name="reguser" maxlength="30" value="<?=$form->value("reguser")?>" />
+          <input class="field" type="text" name="reguser" maxlength="30" value="<?=$session->form->value("reguser")?>" />
          </td>
         </tr>
 
@@ -208,7 +208,7 @@ if($form->num_errors > 0) {
           <label for="regpass" class="grey required">Password:</label>
          </td>
          <td>
-          <input class="field" type="password" name="regpass" maxlength="30" value="<?=$form->value("regpass")?>" />
+          <input class="field" type="password" name="regpass" maxlength="30" value="<?=$session->form->value("regpass")?>" />
          </td>
         </tr>
 
@@ -217,7 +217,7 @@ if($form->num_errors > 0) {
           <label for="regemail" class="grey required">Email:</label>
          </td>
          <td>
-          <input class="field" type="text" name="regemail" maxlength="96" value="<?=$form->value("regemail")?>" />
+          <input class="field" type="text" name="regemail" maxlength="96" value="<?=$session->form->value("regemail")?>" />
          </td>
         </tr>
 
@@ -226,7 +226,7 @@ if($form->num_errors > 0) {
           <label for="regname" class="grey">Fullname:</label>
          </td>
          <td>
-          <input class="field" type="text" name="regname" maxlength="50" value="<?=$form->value("regname")?>" />
+          <input class="field" type="text" name="regname" maxlength="50" value="<?=$session->form->value("regname")?>" />
          </td>
         </tr>
 
@@ -292,7 +292,7 @@ if($form->num_errors > 0) {
           <label for="regaddr" class="grey">Address:</label>
          </td>
          <td>
-          <input class="field" type="text" name="regaddr" maxlength="160" value="<?=$form->value("regaddr");?>" />
+          <input class="field" type="text" name="regaddr" maxlength="160" value="<?=$session->form->value("regaddr");?>" />
          </td>
         </tr>
 
@@ -301,7 +301,7 @@ if($form->num_errors > 0) {
           <label for="regphone" class="grey">Phone:</label>
          </td>
          <td>
-          <input class="field" type="text" name="regphone" maxlength="26" value="<?=$form->value("regphone");?>" />
+          <input class="field" type="text" name="regphone" maxlength="26" value="<?=$session->form->value("regphone");?>" />
          </td>
         </tr>
 

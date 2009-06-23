@@ -10,9 +10,9 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'session.php') !== false) {
    header("Location: ".SITE_BASE_URL."/index.php"); //Gracefully leave page
 }
 
-include("database.php");
-include("mailer.php");
-include("form.php");
+require_once("database.php");
+require_once("mailer.php");
+require_once("form.php");
 
 class Session {
    var $username;            //Username given on sign-up
@@ -23,6 +23,7 @@ class Session {
    var $userinfo = array();  //The array holding all user info
    var $url;                 //The page url current being viewed
    var $referrer;            //Last recorded site page viewed
+   var $form;
    /**
     * Note: referrer should really only be considered the actual page
     * referrer in process.php, any other time it may be inaccurate.
@@ -32,6 +33,7 @@ class Session {
    function Session() {
       $this->time = time();
       $this->startSession();
+      $this->form = new Form;
    }
 
    /**
@@ -89,7 +91,7 @@ class Session {
       if(isset($_SESSION['username']) && isset($_SESSION['uid']) &&
          $_SESSION['username'] != GUEST_NAME) {
          /* Confirm that username and uid are valid */
-         if($database->confirmUID($_SESSION['username'], $_SESSION['uid']) != 0) {
+         if($database->confirmUserUID($_SESSION['username'], $_SESSION['uid'], DB_TBL_USERS) != 0) {
             /* Variables are incorrect, user not logged in */
             unset($_SESSION['username']);
             unset($_SESSION['uid']);
@@ -97,7 +99,7 @@ class Session {
          }
 
          /* User is logged in, set class variables */
-         $this->userinfo = $database->getUserInfo($_SESSION['uid']);
+         $this->userinfo = $database->getUserInfo($_SESSION['uid'], DB_TBL_USERS);
          $this->username = $this->userinfo['username'];
          $this->uid = $this->userinfo['uid'];
          $this->userlevel = $this->userinfo['userlevel'];
@@ -128,39 +130,39 @@ class Session {
     * and creates the session. Effectively logging in the user if all goes well.
     */
    function login($subuser, $subpass, $subremember) {
-      global $database, $form;  //The database and form object
+      global $database;  //The database and form object
 
       /* Username error checking */
       $field = "user";  //Use field name for username
 
       if(!$subuser || strlen($subuser = trim($subuser)) == 0) {
-         $form->setError($field, "* Username not entered");
+         $this->form->setError($field, "* Username not entered");
       } else {
          /* Check if username is not alphanumeric */
          if(!eregi("^([0-9a-z])*$", $subuser)) {
-            $form->setError($field, "* Username not alphanumeric");
+            $this->form->setError($field, "* Username not alphanumeric");
          }
       }
 
       /* Password error checking */
       $field = "pass";  //Use field name for password
       if(!$subpass) {
-         $form->setError($field, "* Password not entered");
+         $this->form->setError($field, "* Password not entered");
       }
       
       /* Return if form errors exist */
-      if($form->num_errors > 0) {
+      if($this->form->num_errors > 0) {
          return false;
       }
 
       /* Checks that username is in database and password is correct */
       $subuser = stripslashes($subuser);
-      $this->userinfo  = $database->getUserInfo($database->getUID($subuser));
+      $this->userinfo = $database->getUserInfo($database->getUID($subuser), DB_TBL_USERS);
 
       if($this->userinfo != null) {
          $salt = substr($this->userinfo['password'], 0, SALT_LENGTH);
          $salted = $this->hashPassword($subpass, $salt);
-         $result = $database->confirmUserPass($subuser, $salted);
+         $result = $database->confirmUserPass($subuser, $salted, DB_TBL_USERS);
       } else {
          $result = 1;
       }
@@ -168,14 +170,14 @@ class Session {
       /* Check error codes */
       if($result == 1) {
          $field = "user";
-         $form->setError($field, "* Username not found");
+         $this->form->setError($field, "* Username not found");
       } else if($result == 2) {
          $field = "pass";
-         $form->setError($field, "* Invalid password");
+         $this->form->setError($field, "* Invalid password");
       }
       
     
-      if($form->num_errors > 0) { /* Return if form errors exist */
+      if($this->form->num_errors > 0) { /* Return if form errors exist */
          return false;
       }
 
@@ -242,7 +244,7 @@ class Session {
     * and returns 0. Returns 2 if registration failed.
     */
    function register($subuser, $subpass, $subemail, $subname, $subbirth, $subaddr, $subsex, $subphone, $subulevel) {
-      global $database, $form, $mailer;  //The database, form and mailer object
+      global $database, $mailer;  //The database and mailer object
       
       /* Username error checking */
       $field = "reguser";  //Use field name for username
@@ -251,16 +253,16 @@ class Session {
 
       /* Check if username is not alphanumeric */
       if(!eregi("^([0-9a-z])+$", $subuser)) {
-         $form->setError($field, "* Username not alphanumeric");
+         $this->form->setError($field, "* Username not alphanumeric");
       } else if(strcasecmp($subuser, GUEST_NAME) == 0) {
       /* Check if username is reserved */
-         $form->setError($field, "* Username reserved word");
+         $this->form->setError($field, "* Username reserved word");
       } else if($database->usernameTaken($subuser)) {
       /* Check if username is already in use */
-         $form->setError($field, "* Username already in use");
+         $this->form->setError($field, "* Username already in use");
       } else if($database->usernameBanned($subuser)) {
       /* Check if username is banned */
-         $form->setError($field, "* Username banned");
+         $this->form->setError($field, "* Username banned");
       }
 
       /* Password error checking */
@@ -271,13 +273,13 @@ class Session {
 
       /* Check if password is not alphanumeric */
       if(!eregi("^([0-9a-z])+$", ($subpass = trim($subpass)))) {
-         $form->setError($field, "* Password not alphanumeric");
+         $this->form->setError($field, "* Password not alphanumeric");
       }
       
       $subemail = stripslashes($subemail);
 
       /* Errors exist, have user correct them */
-      if($form->num_errors > 0) {
+      if($this->form->num_errors > 0) {
          return 1;  //Errors with form
       } else { /* No errors, add the new account to the */
          /* The first user to register will default to an administrator. */
@@ -305,22 +307,22 @@ class Session {
     * automatically.
     */
    function editAccount($subuser, $subcurpass, $subnewpass, $subemail, $subname, $subbirth, $subaddr, $subsex, $subphone, $subulevel) {
-      global $database, $form;  //The database and form object
+      global $database;  //The database object
 
       /* Current Password error checking */
       $field = "edcurpass";  //Use field name for current password
 
       /* Current Password entered */
       if(!$subcurpass) {
-         $form->setError($field, "* Current Password not entered");
+         $this->form->setError($field, "* Current Password not entered");
       } else {
          $subcurpass = stripslashes($subcurpass);
 
          $salt = substr($this->userinfo['password'], 0, SALT_LENGTH);
-         $result = $database->confirmUserPass($this->username, $this->hashPassword($subcurpass, $salt));
+         $result = $database->confirmUserPass($this->username, $this->hashPassword($subcurpass, $salt), DB_TBL_USERS);
 
          if($result != 0) { /* Password entered is incorrect */
-            $form->setError($field, "* Current Password incorrect");
+            $this->form->setError($field, "* Current Password incorrect");
          }
       }
 
@@ -333,7 +335,7 @@ class Session {
 
          /* Check if password is not alphanumeric */
          if(!eregi("^([0-9a-z])+$", ($subnewpass = trim($subnewpass)))) {
-            $form->setError($field, "* New Password not alphanumeric");
+            $this->form->setError($field, "* New Password not alphanumeric");
          }
       }
       
@@ -344,41 +346,41 @@ class Session {
          $subemail = stripslashes($subemail);
       }
 
-      if($form->num_errors > 0) { /* Errors exist, have user correct them */
+      if($this->form->num_errors > 0) { /* Errors exist, have user correct them */
          return false;
       }
 
       /* Update password since there were no errors */
       if($subcurpass && $subnewpass) {
-         $database->updateUserField($this->uid,"password",$this->hashPassword($subnewpass));
+         $database->updateUserField($this->uid,DB_TBL_USERS,"password",$this->hashPassword($subnewpass));
       }
 
       if($subemail) { /* Change Email */
-         $database->updateUserField($this->uid,"email",$subemail);
+         $database->updateUserField($this->uid,DB_TBL_USERS,"email",$subemail);
       }
 
       if($subname) { /* Change Name */
-         $database->updateUserField($this->uid,"fullname",$subname);
+         $database->updateUserField($this->uid,DB_TBL_USERS,"fullname",$subname);
       }
 
       if($subbirth) { /* Change Birthdate */
-         $database->updateUserField($this->uid,"birthdate",$subbirth);
+         $database->updateUserField($this->uid,DB_TBL_USERS,"birthdate",$subbirth);
       }
 
       if($subaddr) { /* Change Address */
-         $database->updateUserField($this->uid,"address",$subaddr);
+         $database->updateUserField($this->uid,DB_TBL_USERS,"address",$subaddr);
       }
 
       if($subsex) { /* Change Sex */
-         $database->updateUserField($this->uid,"sex",$subsex);
+         $database->updateUserField($this->uid,DB_TBL_USERS,"sex",$subsex);
       }
 
       if($subphone) { /* Change Phone */
-         $database->updateUserField($this->uid,"phone",$subphone);
+         $database->updateUserField($this->uid,DB_TBL_USERS,"phone",$subphone);
       }
 
       if($subulevel) { /* Change User Level */
-         $database->updateUserField($this->uid,"userlevel",$subulevel);
+         $database->updateUserField($this->uid,DB_TBL_USERS,"userlevel",$subulevel);
       }
       return true; /* Success! */
    }
@@ -439,7 +441,4 @@ class Session {
  * form uses session variables, which cannot be accessed unless the session has started.
  */
 $session = new Session;
-
-/* Initialize form object */
-$form = new Form;
 ?>
