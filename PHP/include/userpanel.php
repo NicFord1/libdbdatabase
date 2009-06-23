@@ -21,9 +21,9 @@ if($session->logged_in) {
 ?>
     <ul class="login">
      <li class="left">&nbsp;</li>
-     <li>Welcome <?=$session->username?>!</li>
+     <li>Welcome <?php echo $session->username?>!</li>
      <li class="sep">|</li>
-     <li><a href="<?=SITE_BASE_URL?>/process.php?logout">Logout</a></li>
+     <li><a href="<?php echo SITE_BASE_URL?>/process.php?logout">Logout</a></li>
      <li class="right">&nbsp;</li>
     </ul>
 <?php
@@ -34,7 +34,7 @@ if($session->logged_in) {
 ?>
     <ul class="login">
      <li class="left">&nbsp;</li>
-     <li>Hello <?=$session->username?>!</li>
+     <li>Hello <?php echo $session->username?>!</li>
      <li class="right">&nbsp;</li>
     </ul>
 <?php

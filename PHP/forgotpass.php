@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * forgotpass.php
  *
@@ -22,24 +22,24 @@ include("include/session.php");
   <meta name="description" content="LibDBDatabase: Library Database" />
   <meta name="keywords" content="library,database" />
   <meta name="author" content="LibDBDatabase / Original design: Andreas Viklund - http://andreasviklund.com/" />
-  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/andreas06.css" type="text/css" media="screen,projection" />
-  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/slide.css"  type="text/css" media="screen,projection" />
-  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/validate.css"  type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/andreas06.css" type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/slide.css"  type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/validate.css"  type="text/css" media="screen,projection" />
 
   <!-- javascripts -->
   <!-- PNG FIX for IE6 -->
   <!-- http://24ways.org/2007/supersleight-transparent-png-in-ie6 -->
   <!--[if lte IE 6]>
-   <script type="text/javascript" src="<?=SITE_BASE_URL?>/js/pngfix/supersleight-min.js"></script>
+   <script type="text/javascript" src="<?php echo SITE_BASE_URL?>/js/pngfix/supersleight-min.js"></script>
   <![endif]-->
- 
+
   <!-- jQuery -->
-  <script src="<?=SITE_BASE_URL?>/js/jquery-1.3.2.min.js" type="text/javascript"></script>
-  <script src="<?=SITE_BASE_URL?>/js/jquery.validate.min.js" type="text/javascript"></script>
-  <script src="<?=SITE_BASE_URL?>/js/jquery.metadata.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery-1.3.2.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery.validate.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery.metadata.js" type="text/javascript"></script>
 
   <!-- Sliding effect -->
-  <script src="<?=SITE_BASE_URL?>/js/slide.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/slide.js" type="text/javascript"></script>
 
  </head>
 
@@ -63,15 +63,15 @@ include("include/session.php");
    </div>
 
    <?php include_once("include/topmenu.php"); ?>
- 
+
    <div id="wrap1">
     <div id="wrap2">
 
      <div id="topbox">
       <strong>
        <span class="hide">Currently viewing: </span>
-       <a href="<?=SITE_BASE_URL?>/index.php">LibDBDatabase</a> &raquo;
-       <a href="<?=$_SERVER['PHP_SELF']?>">Forgotten Password Center</a>
+       <a href="<?php echo SITE_BASE_URL?>/index.php">LibDBDatabase</a> &raquo;
+       <a href="<?php echo $_SERVER['PHP_SELF']?>">Forgotten Password Center</a>
       </strong>
      </div>
 
@@ -82,13 +82,13 @@ include("include/session.php");
      <a id="main"></a>
      <div id="contentalt">
       <h1>Forgotten Password Center</h1>
-      <img src="<?=SITE_BASE_URL?>/img/gravatar-help.png" height="80" width="80" alt="Help Gravatar" />
+      <img src="<?php echo SITE_BASE_URL?>/img/gravatar-help.png" height="80" width="80" alt="Help Gravatar" />
 
       <font size="5" color="#ff0000">
        <b>::::::::::::::::::::::::::::::::::::::::::::</b>
       </font>
       <br /><br />
-<?
+<?php
 /**
  * Forgot Password form has been submitted and no errors were found with the
  * form (the username is in the database)
@@ -110,13 +110,13 @@ if(isset($_SESSION['forgotpass'])) {
       <h1>Forgot Password</h1>
       A new password will be generated for you and sent to the email address<br />
       associated with your account, all you have to do is enter your username.<br /><br />
-      <?=$session->form->error("user")?>
+      <?php echo $session->form->error("user")?>
       <form action="process.php" method="POST">
-       <b>Username:</b> <input type="text" name="user" maxlength="30" value="<?=$session->form->value("user")?>">
+       <b>Username:</b> <input type="text" name="user" maxlength="30" value="<?php echo $session->form->value("user")?>">
        <input type="hidden" name="subforgot" value="1">
        <input type="submit" value="Get New Password">
       </form>
-<?
+<?php
 }
 ?>
 

@@ -1,7 +1,7 @@
-<?
+<?php
 /**
  * Session.php
- * 
+ *
  * The Session class is meant to simplify the task of keeping track of logged in
  * users and also guests.
  */
@@ -56,12 +56,12 @@ class Session {
       } else { /* Update users last active timestamp */
          $database->addActiveUser($this->uid, $this->time);
       }
-      
+
       /* Remove inactive visitors from database */
       $database->removeInactiveUsers();
       $database->removeInactiveGuests();
-      
-    
+
+
       if(isset($_SESSION['url'])) { /* Set referrer page */
          $this->referrer = $_SESSION['url'];
       } else {
@@ -149,7 +149,7 @@ class Session {
       if(!$subpass) {
          $this->form->setError($field, "* Password not entered");
       }
-      
+
       /* Return if form errors exist */
       if($this->form->num_errors > 0) {
          return false;
@@ -175,8 +175,8 @@ class Session {
          $field = "pass";
          $this->form->setError($field, "* Invalid password");
       }
-      
-    
+
+
       if($this->form->num_errors > 0) { /* Return if form errors exist */
          return false;
       }
@@ -185,7 +185,7 @@ class Session {
       $this->username  = $_SESSION['username'] = $this->userinfo['username'];
       $this->uid    = $_SESSION['uid']   = $this->userinfo['uid'];
       $this->userlevel = $this->userinfo['userlevel'];
-      
+
       $database->addActiveUser($this->uid, $this->time);
       $database->removeActiveGuest($_SERVER['REMOTE_ADDR']);
 
@@ -227,11 +227,11 @@ class Session {
 
       /* Reflect fact that user has logged out */
       $this->logged_in = false;
-      
+
       /* Remove from active users table and add to active guests tables. */
       $database->removeActiveUser($this->username);
       $database->addActiveGuest($_SERVER['REMOTE_ADDR'], $this->time);
-      
+
       /* Set user level to guest */
       $this->username  = GUEST_NAME;
       $this->userlevel = GUEST_LEVEL;
@@ -245,7 +245,7 @@ class Session {
     */
    function register($subuser, $subpass, $subemail, $subname, $subbirth, $subaddr, $subsex, $subphone, $subulevel) {
       global $database, $mailer;  //The database and mailer object
-      
+
       /* Username error checking */
       $field = "reguser";  //Use field name for username
 
@@ -275,7 +275,7 @@ class Session {
       if(!eregi("^([0-9a-z])+$", ($subpass = trim($subpass)))) {
          $this->form->setError($field, "* Password not alphanumeric");
       }
-      
+
       $subemail = stripslashes($subemail);
 
       /* Errors exist, have user correct them */
@@ -338,7 +338,7 @@ class Session {
             $this->form->setError($field, "* New Password not alphanumeric");
          }
       }
-      
+
       /* Email error checking */
       if($subemail && strlen($subemail = trim($subemail)) > 0) {
          $field = "edemail";  //Use field name for email
@@ -384,14 +384,14 @@ class Session {
       }
       return true; /* Success! */
    }
-   
+
    /**
     * isAdmin - Returns true if currently logged in user is an administrator, false otherwise.
     */
    function isAdmin() {
       return ($this->userlevel == ADMIN_LEVEL);
    }
-   
+
    /**
     * isTeller - Returns true if currently logged in user is a teller, false otherwise.
     */
@@ -414,7 +414,7 @@ class Session {
    function generateRandID() {
       return md5($this->generateRandStr(16));
    }
-   
+
    /**
     * generateRandStr - Generates a string made up of randomized
     * letters (lower and upper case) and digits, the length

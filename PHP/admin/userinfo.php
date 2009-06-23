@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * userinfo.php
  *
@@ -21,21 +21,21 @@ if(!$session->logged_in) {
   <meta name="description" content="LibDBDatabase: Library Database" />
   <meta name="keywords" content="library,database" />
   <meta name="author" content="LibDBDatabase / Original design: Andreas Viklund - http://andreasviklund.com/" />
-  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/andreas06.css" type="text/css" media="screen,projection" />
-  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/slide.css"  type="text/css" media="screen,projection" />
-  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/validate.css"  type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/andreas06.css" type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/slide.css"  type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/validate.css"  type="text/css" media="screen,projection" />
 
   <!-- javascripts -->
   <!-- PNG FIX for IE6 -->
   <!-- http://24ways.org/2007/supersleight-transparent-png-in-ie6 -->
   <!--[if lte IE 6]>
-   <script type="text/javascript" src="<?=SITE_BASE_URL?>/js/pngfix/supersleight-min.js"></script>
+   <script type="text/javascript" src="<?php echo SITE_BASE_URL?>/js/pngfix/supersleight-min.js"></script>
   <![endif]-->
- 
+
   <!-- jQuery -->
-  <script src="<?=SITE_BASE_URL?>/js/jquery-1.3.2.min.js" type="text/javascript"></script>
-  <script src="<?=SITE_BASE_URL?>/js/jquery.validate.min.js" type="text/javascript"></script>
-  <script src="<?=SITE_BASE_URL?>/js/jquery.metadata.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery-1.3.2.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery.validate.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery.metadata.js" type="text/javascript"></script>
 
   <script type="text/javascript">
      $.metadata.setType("attr", "validate");
@@ -70,7 +70,7 @@ if(!$session->logged_in) {
 
 
   <!-- Sliding effect -->
-  <script src="<?=SITE_BASE_URL?>/js/slide.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/slide.js" type="text/javascript"></script>
 
  </head>
 
@@ -94,16 +94,16 @@ if(!$session->logged_in) {
    </div>
 
    <?php include_once("../include/topmenu.php"); ?>
- 
+
    <div id="wrap1">
     <div id="wrap2">
 
      <div id="topbox">
       <strong>
        <span class="hide">Currently viewing: </span>
-       <a href="<?=SITE_BASE_URL?>/index.php">LibDBDatabase</a> &raquo;
-       <a href="<?=SITE_BASE_URL?>/admin/admin.php">Admin Center</a> &raquo;
-       <a href="<?=$_SERVER['PHP_SELF']?>?uid=<?=$_GET['uid']?>">User Center</a>
+       <a href="<?php echo SITE_BASE_URL?>/index.php">LibDBDatabase</a> &raquo;
+       <a href="<?php echo SITE_BASE_URL?>/admin/admin.php">Admin Center</a> &raquo;
+       <a href="<?php echo $_SERVER['PHP_SELF']?>?uid=<?php echo $_GET['uid']?>">User Center</a>
       </strong>
      </div>
 
@@ -114,7 +114,7 @@ if(!$session->logged_in) {
      <a id="main"></a>
      <div id="contentalt">
       <h1>User Center</h1>
-      <img src="<?=SITE_BASE_URL?>/img/gravatar-edituser.png" height="80" width="80" alt="Edit User Gravatar" />
+      <img src="<?php echo SITE_BASE_URL?>/img/gravatar-edituser.png" height="80" width="80" alt="Edit User Gravatar" />
 
       <font size="5" color="#ff0000">
        <b>::::::::::::::::::::::::::::::::::::::::::::</b>
@@ -165,7 +165,7 @@ if(!isset($_GET['uid']) && !isset($_SESSION['edituser'])) {
    }
 ?>" readonly />
          </td>
-         <td><?=$session->form->error("eduser")?></td>
+         <td><?php echo $session->form->error("eduser")?></td>
         </tr>
 
         <tr>
@@ -173,9 +173,9 @@ if(!isset($_GET['uid']) && !isset($_SESSION['edituser'])) {
           <label for="ednewpass" class="grey">New Password:</label>
          </td>
          <td>
-          <input type="password" name="ednewpass" maxlength="30" value="<?=$session->form->value("ednewpass")?>" />
+          <input type="password" name="ednewpass" maxlength="30" value="<?php echo $session->form->value("ednewpass")?>" />
          </td>
-         <td><?=$session->form->error("ednewpass")?></td>
+         <td><?php echo $session->form->error("ednewpass")?></td>
         </tr>
 
         <tr>
@@ -192,7 +192,7 @@ if(!isset($_GET['uid']) && !isset($_SESSION['edituser'])) {
    }
 ?>" />
          </td>
-         <td><?=$session->form->error("edemail")?></td>
+         <td><?php echo $session->form->error("edemail")?></td>
         </tr>
 
         <tr>
@@ -208,7 +208,7 @@ if(!isset($_GET['uid']) && !isset($_SESSION['edituser'])) {
    }
 ?>" />
          </td>
-         <td><?=$session->form->error("edname")?></td>
+         <td><?php echo $session->form->error("edname")?></td>
         </tr>
 
         <tr>
@@ -238,18 +238,18 @@ if(!isset($_GET['uid']) && !isset($_SESSION['edituser'])) {
             <td>
              <select name="edbirthmonth">
               <option value=""></option>
-              <option value="1"<?=($subbirthmonth==1 ? ' selected' : '')?>>January</option>
-              <option value="2"<?=($subbirthmonth==2 ? ' selected' : '')?>>February</option>
-              <option value="3"<?=($subbirthmonth==3 ? ' selected' : '')?>>March</option>
-              <option value="4"<?=($subbirthmonth==4 ? ' selected' : '')?>>April</option>
-              <option value="5"<?=($subbirthmonth==5 ? ' selected' : '')?>>May</option>
-              <option value="6"<?=($subbirthmonth==6 ? ' selected' : '')?>>June</option>
-              <option value="7"<?=($subbirthmonth==7 ? ' selected' : '')?>>July</option>
-              <option value="8"<?=($subbirthmonth==8 ? ' selected' : '')?>>August</option>
-              <option value="9"<?=($subbirthmonth==9 ? ' selected' : '')?>>September</option>
-              <option value="10"<?=($subbirthmonth==10 ? ' selected' : '')?>>October</option>
-              <option value="11"<?=($subbirthmonth==11 ? ' selected' : '')?>>November</option>
-              <option value="12"<?=($subbirthmonth==12 ? ' selected' : '')?>>December</option>
+              <option value="1"<?php echo ($subbirthmonth==1 ? ' selected' : '')?>>January</option>
+              <option value="2"<?php echo ($subbirthmonth==2 ? ' selected' : '')?>>February</option>
+              <option value="3"<?php echo ($subbirthmonth==3 ? ' selected' : '')?>>March</option>
+              <option value="4"<?php echo ($subbirthmonth==4 ? ' selected' : '')?>>April</option>
+              <option value="5"<?php echo ($subbirthmonth==5 ? ' selected' : '')?>>May</option>
+              <option value="6"<?php echo ($subbirthmonth==6 ? ' selected' : '')?>>June</option>
+              <option value="7"<?php echo ($subbirthmonth==7 ? ' selected' : '')?>>July</option>
+              <option value="8"<?php echo ($subbirthmonth==8 ? ' selected' : '')?>>August</option>
+              <option value="9"<?php echo ($subbirthmonth==9 ? ' selected' : '')?>>September</option>
+              <option value="10"<?php echo ($subbirthmonth==10 ? ' selected' : '')?>>October</option>
+              <option value="11"<?php echo ($subbirthmonth==11 ? ' selected' : '')?>>November</option>
+              <option value="12"<?php echo ($subbirthmonth==12 ? ' selected' : '')?>>December</option>
              </select>
 
              <select name="edbirthday">
@@ -273,7 +273,7 @@ if(!isset($_GET['uid']) && !isset($_SESSION['edituser'])) {
            </tr>
           </table>
          </td>
-         <td><?=$session->form->error("edbirth")?></td>
+         <td><?php echo $session->form->error("edbirth")?></td>
         </tr>
 
         <tr>
@@ -305,7 +305,7 @@ if(!isset($_GET['uid']) && !isset($_SESSION['edituser'])) {
    }
 ?>/>Female</label>
          </td>
-         <td><?=$session->form->error("edsex")?></td>
+         <td><?php echo $session->form->error("edsex")?></td>
         </tr>
 
         <tr>
@@ -321,7 +321,7 @@ if(!isset($_GET['uid']) && !isset($_SESSION['edituser'])) {
    }
 ?>" />
          </td>
-         <td><?=$session->form->error("edaddr")?></td>
+         <td><?php echo $session->form->error("edaddr")?></td>
         </tr>
 
         <tr>
@@ -337,7 +337,7 @@ if(!isset($_GET['uid']) && !isset($_SESSION['edituser'])) {
    }
 ?>" />
          </td>
-         <td><?=$session->form->error("edphone")?></td>
+         <td><?php echo $session->form->error("edphone")?></td>
         </tr>
 
         <tr>
@@ -345,13 +345,13 @@ if(!isset($_GET['uid']) && !isset($_SESSION['edituser'])) {
           <label class="grey">User Level:</label>
          </td>
          <td>
-          <select name="edulevel"<?=($session->isAdmin() ? '' : ' disabled')?>>
-           <option value="<?=CUST_LEVEL?>"<?=($subuserinfo['userlevel'] == CUST_LEVEL) ? ' selected' : '' ?>>Customer</option>
-           <option value="<?=TELLER_LEVEL?>"<?=($subuserinfo['userlevel'] == TELLER_LEVEL) ? ' selected' : '' ?>>Teller</option>
-           <option value="<?=ADMIN_LEVEL?>"<?=($subuserinfo['userlevel'] == ADMIN_LEVEL) ? ' selected' : '' ?>>Administrator</option>
+          <select name="edulevel"<?php echo ($session->isAdmin() ? '' : ' disabled')?>>
+           <option value="<?php echo CUST_LEVEL?>"<?php echo ($subuserinfo['userlevel'] == CUST_LEVEL) ? ' selected' : '' ?>>Customer</option>
+           <option value="<?php echo TELLER_LEVEL?>"<?php echo ($subuserinfo['userlevel'] == TELLER_LEVEL) ? ' selected' : '' ?>>Teller</option>
+           <option value="<?php echo ADMIN_LEVEL?>"<?php echo ($subuserinfo['userlevel'] == ADMIN_LEVEL) ? ' selected' : '' ?>>Administrator</option>
           </select>
          </td>
-         <td><?=$session->form->error("edulevel")?></td>
+         <td><?php echo $session->form->error("edulevel")?></td>
         </tr>
 
         <tr>

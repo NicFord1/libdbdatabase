@@ -1,11 +1,11 @@
-<? 
+<?php
 /**
  * Form.php
  *
  * The Form class is meant to simplify the task of keeping track of errors in user
  * submitted forms and the form field values that were entered correctly.
  */
- 
+
 class Form {
    var $values = array();  //Holds submitted form field values
    var $errors = array();  //Holds submitted form error messages
