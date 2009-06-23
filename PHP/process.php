@@ -33,7 +33,7 @@ class Process {
     * redirected to correct the information, if not, the user is effectively logged in to the system.
     */
    function procLogin() {
-      global $session, $form;
+      global $session;
 
       /* Login attempt */
       $retval = $session->login($_POST['user'], $_POST['pass'], isset($_POST['remember']));
@@ -42,7 +42,7 @@ class Process {
          header("Location: ".$session->referrer);
       } else { /* Login failed */
          $_SESSION['value_array'] = $_POST;
-         $_SESSION['error_array'] = $form->getErrorArray();
+         $_SESSION['error_array'] = $session->form->getErrorArray();
          header("Location: ".$session->referrer);
       }
    }
@@ -63,7 +63,7 @@ class Process {
     * with the system and an email is (optionally) sent to the newly created user.
     */
    function procRegister() {
-      global $session, $form;
+      global $session;
 
       if(ALL_LOWERCASE) { /* Convert username to all lowercase (by option) */
          $_POST['reguser'] = strtolower($_POST['reguser']);
@@ -86,7 +86,7 @@ class Process {
          header("Location: ".$session->referrer);
       } else if($retval == 1) { /* Error found with form */
          $_SESSION['value_array'] = $_POST;
-         $_SESSION['error_array'] = $form->getErrorArray();
+         $_SESSION['error_array'] = $session->form->getErrorArray();
          header("Location: ".$session->referrer);
       } else if($retval == 2) { /* Registration attempt failed */
          $_SESSION['reguname'] = $_POST['reguser'];
@@ -100,35 +100,35 @@ class Process {
     * password is generated and emailed to the address the user gave on sign up.
     */
    function procForgotPass() {
-      global $database, $session, $mailer, $form;
+      global $database, $session, $mailer;
 
       /* Username error checking */
       $subuser = $_POST['user'];
       $field = "user";  //Use field name for username
 
       if(!$subuser || strlen($subuser = trim($subuser)) == 0) {
-         $form->setError($field, "* Username not entered<br>");
+         $session->form->setError($field, "* Username not entered<br>");
       } else { /* Make sure username is in database */
          $subuser = stripslashes($subuser);
          if(strlen($subuser) < 5 || strlen($subuser) > 30 ||
             !eregi("^([0-9a-z])+$", $subuser) ||
             (!$database->usernameTaken($subuser))) {
-            $form->setError($field, "* Username does not exist<br />");
+            $session->form->setError($field, "* Username does not exist<br />");
          }
       }
 
-      if($form->num_errors > 0) { /* Errors exist, have user correct them */
+      if($session->form->num_errors > 0) { /* Errors exist, have user correct them */
          $_SESSION['value_array'] = $_POST;
-         $_SESSION['error_array'] = $form->getErrorArray();
+         $_SESSION['error_array'] = $session->form->getErrorArray();
       } else { /* Generate new password and email it to user */
          $newpass = $session->generateRandStr(8);
 
-         $userinfo = $database->getUserInfo($database->getUID($subuser));
+         $userinfo = $database->getUserInfo($database->getUID($subuser), DB_TBL_USERS);
          $email  = $userinfo['email'];
 
          if($mailer->sendNewPass($subuser,$email,$newpass)) { /* Attempt to send the email with new password */
             /* Email sent, update database */
-            $database->updateUserField($database->getUID($subuser), "password", $session->hashPassword($newpass));
+            $database->updateUserField($database->getUID($subuser),DB_TBL_USERS,"password",$session->hashPassword($newpass));
             $_SESSION['forgotpass'] = true;
          } else { /* Email failure, do not change password */
             $_SESSION['forgotpass'] = false;
@@ -142,7 +142,7 @@ class Process {
     * the password, which must be verified before a change is made.
     */
    function procEditAccount() {
-      global $session, $form;
+      global $session;
 
       /* Convert birthdate into timestamp */
       $edbirth = mktime(0, 0, 0, $_POST['edbirthmonth'], $_POST['edbirthday'], $_POST['edbirthyear']);
@@ -155,7 +155,7 @@ class Process {
          $_SESSION['edituser'] = true;
       } else { /* Error found with form */
          $_SESSION['value_array'] = $_POST;
-         $_SESSION['error_array'] = $form->getErrorArray();
+         $_SESSION['error_array'] = $session->form->getErrorArray();
       }
       header("Location: ".$session->referrer);
    }

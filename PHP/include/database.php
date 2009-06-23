@@ -10,8 +10,8 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'database.php') !== false) {
    header("Location: ".SITE_BASE_URL."/index.php"); //Gracefully leave page
 }
 
-include("db-config.php");
-include("config.php");
+require_once("db-config.php");
+require_once("config.php");
       
 class MySQLDB {
    var $connection;         //The MySQL database connection
@@ -46,13 +46,13 @@ class MySQLDB {
     * user. If the user doesn't exist or if the passwords don't match up, it returns an
     * error code (1 or 2). On success it returns 0.
     */
-   function confirmUserPass($username, $password) {
+   function confirmUserPass($username, $password, $table) {
       if(!get_magic_quotes_gpc()) {
          $username = addslashes($username);
       }
 
       /* Verify that user is in database */
-      $q = "SELECT password FROM ".DB_TBL_USERS." WHERE username = '$username'";
+      $q = "SELECT password FROM $table WHERE username = '$username'";
       $result = mysql_query($q, $this->connection);
       if(!$result || (mysql_numrows($result) < 1)) {
          return 1; //Indicates username failure
@@ -71,17 +71,17 @@ class MySQLDB {
    }
    
    /**
-    * confirmUID - Checks whether or not the given username is in the database, if so it checks if the
+    * confirmUserUID - Checks whether or not the given username is in the database, if so it checks if the
     * given uid is the same uid in the database for that user. If the user doesn't exist or if the
     * uids don't match up, it returns an error code (1 or 2). On success it returns 0.
     */
-   function confirmUID($username, $uid) {
+   function confirmUserUID($username, $uid, $table) {
       if(!get_magic_quotes_gpc()) {
 	      $username = addslashes($username);
       }
 
       /* Verify that user is in database */
-      $q = "SELECT uid FROM ".DB_TBL_USERS." WHERE username = '$username'";
+      $q = "SELECT uid FROM $table WHERE username = '$username'";
       $result = mysql_query($q, $this->connection);
       if(!$result || (mysql_numrows($result) < 1)) {
          return 1; //Indicates username failure
@@ -92,11 +92,25 @@ class MySQLDB {
       $dbarray['uid'] = stripslashes($dbarray['uid']);
       $uid = stripslashes($uid);
 
-    
       if($uid == $dbarray['uid']) { /* Validate that uid is correct */
          return 0; //Success! UID confirmed
       } else {
          return 2; //Indicates UID invalid
+      }
+   }
+
+   /**
+    * confirmUID - Checks whether or not the given uid is in the database. If the user doesn't exist or if the
+    * uids don't match up, it returns an error code. On success it returns 0.
+    */
+   function confirmUID($uid, $table) {
+      /* Verify that user is in database */
+      $q = "SELECT * FROM $table WHERE uid = '$uid'";
+      $result = mysql_query($q, $this->connection);
+      if(!$result || (mysql_numrows($result) < 1)) {
+         return false; //Indicates uid failure
+      } else {
+         return true; //Success! UID confirmed
       }
    }
    
@@ -138,10 +152,11 @@ class MySQLDB {
    }
    
    /**
-    * updateUserField - Updates a field, specified by the field parameter, in the user's row of the database.
+    * updateUserField - Updates a field, specified by the field parameter, in the user's row
+    * in the given table in the database.
     */
-   function updateUserField($uid, $field, $value) {
-      $q = "UPDATE ".DB_TBL_USERS." SET ".$field." = '$value' WHERE uid = '$uid'";
+   function updateUserField($uid, $table, $field, $value) {
+      $q = "UPDATE ".$table." SET ".$field." = '$value' WHERE uid = '$uid'";
       return mysql_query($q, $this->connection);
    }
    
@@ -164,8 +179,8 @@ class MySQLDB {
     * getUserInfo - Returns the result array from a mysql query asking for all information stored
     * regarding the given UID. If query fails, NULL is returned.
     */
-   function getUserInfo($uid) {
-      $q = "SELECT * FROM ".DB_TBL_USERS." WHERE uid = '$uid'";
+   function getUserInfo($uid, $table) {
+      $q = "SELECT * FROM $table WHERE uid = '$uid'";
       $result = mysql_query($q, $this->connection);
 
       if(!$result || (mysql_numrows($result) < 1)) { /* Error occurred, return given name by default */

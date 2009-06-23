@@ -39,4 +39,9 @@ define("DB_TBL_ACTIVE_USERS",  DB_TBL_PRFX."activeusers");
 define("DB_TBL_ACTIVE_GUESTS", DB_TBL_PRFX."activeguests");
 define("DB_TBL_BANNED_USERS",  DB_TBL_PRFX."bannedusers");
 
+//NEW Tables -- Added 2009.06.23
+define("DB_TBL_CUSTOMERS", DB_TBL_PRFX."customers");
+define("DB_TBL_TELLERS",   DB_TBL_PRFX."tellers");
+define("DB_TBL_ADMINS",    DB_TBL_PRFX."admins");
+
 ?>

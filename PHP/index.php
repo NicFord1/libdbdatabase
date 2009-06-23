@@ -91,14 +91,14 @@ if(!$session->logged_in) {
       </p>
 
 <?php
-   if($form->num_errors > 0) {
-      echo "      <font size=\"2\" color=\"#ff0000\">".$form->num_errors." error(s) found</font>\n";
+   if($session->form->num_errors > 0) {
+      echo "      <font size=\"2\" color=\"#ff0000\">".$session->form->num_errors." error(s) found</font>\n";
 
       //login errors
-      if($form->value("sublogin") == "1") {
+      if($session->form->value("sublogin") == "1") {
          echo "      <p>Login Credentials:</p>\n";
-         echo "      <label for=\"user\">".$form->error("user")."</label>\n";
-         echo "      <label for=\"pass\">".$form->error("pass")."</label>\n";
+         echo "      <label for=\"user\">".$session->form->error("user")."</label>\n";
+         echo "      <label for=\"pass\">".$session->form->error("pass")."</label>\n";
       }
    }
 ?>
@@ -110,7 +110,7 @@ if(!$session->logged_in) {
        <h1>Member Login</h1>
 
        <label class="grey required" for="user">Username:</label>
-       <input class="field" type="text" name="user" id="user" value="<?=$form->value("user")?>" size="23" />
+       <input class="field" type="text" name="user" id="user" value="<?=$session->form->value("user")?>" size="23" />
 
        <label class="grey required" for="pass">Password:</label>
        <input class="field" type="password" name="pass" id="pass" value="" size="23" />
@@ -202,7 +202,7 @@ if(!$session->logged_in) {
 
      <div id="leftside">
 <?php
-if($form->num_errors > 0) {
+if($session->form->num_errors > 0) {
    echo "      <strong>";
    echo "       <font size=\"2\" color=\"#ff0000\">Login failed.</font>\n";
    echo "      </strong>";

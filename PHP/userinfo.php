@@ -128,8 +128,8 @@ if(!$session->logged_in) {
       </font>
       <br /><br />
 <?php
-if($form->num_errors > 0) {
-   echo "      <font size=\"2\" color=\"#ff0000\">".$form->num_errors." error(s) found</font>\n";
+if($session->form->num_errors > 0) {
+   echo "      <font size=\"2\" color=\"#ff0000\">".$session->form->num_errors." error(s) found</font>\n";
 }
 
 /**
@@ -151,14 +151,14 @@ if(isset($_SESSION['edituser'])) {
          </td>
          <td>
           <input class="field" type="text" name="eduser" maxlength="30" value="<?php
-   if($form->value("eduser") == "") {
+   if($session->form->value("eduser") == "") {
       echo $session->userinfo['username'];
    } else {
-      echo $form->value("eduser");
+      echo $session->form->value("eduser");
    }
 ?>" readonly />
          </td>
-         <td><?=$form->error("eduser")?></td>
+         <td><?=$session->form->error("eduser")?></td>
         </tr>
 
         <tr>
@@ -166,9 +166,9 @@ if(isset($_SESSION['edituser'])) {
           <label for="edcurpass" class="grey required">Current Password:</label>
          </td>
          <td>
-          <input type="password" name="edcurpass" maxlength="30" value="<?=$form->value("edcurpass")?>" />
+          <input type="password" name="edcurpass" maxlength="30" value="<?=$session->form->value("edcurpass")?>" />
          </td>
-         <td><?=$form->error("edcurpass")?></td>
+         <td><?=$session->form->error("edcurpass")?></td>
         </tr>
 
         <tr>
@@ -176,9 +176,9 @@ if(isset($_SESSION['edituser'])) {
           <label for="ednewpass" class="grey">New Password:</label>
          </td>
          <td>
-          <input type="password" name="ednewpass" maxlength="30" value="<?=$form->value("ednewpass")?>" />
+          <input type="password" name="ednewpass" maxlength="30" value="<?=$session->form->value("ednewpass")?>" />
          </td>
-         <td><?=$form->error("ednewpass")?></td>
+         <td><?=$session->form->error("ednewpass")?></td>
         </tr>
 
         <tr>
@@ -188,14 +188,14 @@ if(isset($_SESSION['edituser'])) {
          <td>
           <input class="field" type="text" name="edemail" maxlength="96" value="
 <?php
-   if($form->value("edemail") == "") {
+   if($session->form->value("edemail") == "") {
       echo $session->userinfo['email'];
    } else {
-      echo $form->value("edemail");
+      echo $session->form->value("edemail");
    }
 ?>" />
          </td>
-         <td><?=$form->error("edemail")?></td>
+         <td><?=$session->form->error("edemail")?></td>
         </tr>
 
         <tr>
@@ -204,34 +204,34 @@ if(isset($_SESSION['edituser'])) {
          </td>
          <td>
           <input class="field" type="text" name="edname" maxlength="50" value="<?php
-   if($form->value("edname") == "") {
+   if($session->form->value("edname") == "") {
       echo $session->userinfo['fullname'];
    } else {
-      echo $form->value("edname");
+      echo $session->form->value("edname");
    }
 ?>" />
          </td>
-         <td><?=$form->error("edname")?></td>
+         <td><?=$session->form->error("edname")?></td>
         </tr>
 
         <tr>
          <td>
           <label class="grey required">Birthdate:</label>
 <?php
-   if($form->value("edbirthmonth") == "") {
+   if($session->form->value("edbirthmonth") == "") {
       $subbirthmonth = date("n", $session->userinfo['birthdate']);
    } else {
-      $subbirthmonth = $form->value("edbirthmonth");
+      $subbirthmonth = $session->form->value("edbirthmonth");
    }
-   if($form->value("edbirthday") == "") {
+   if($session->form->value("edbirthday") == "") {
       $subbirthday = date("j", $session->userinfo['birthdate']);
    } else {
-      $subbirthday = $form->value("edbirthday");
+      $subbirthday = $session->form->value("edbirthday");
    }
-   if($form->value("edbirthyear") == "") {
+   if($session->form->value("edbirthyear") == "") {
       $subbirthyear = date("o", $session->userinfo['birthdate']);
    } else {
-      $subbirthyear = $form->value("edbirthyear");
+      $subbirthyear = $session->form->value("edbirthyear");
    }
 ?>
          </td>
@@ -276,7 +276,7 @@ if(isset($_SESSION['edituser'])) {
            </tr>
           </table>
          </td>
-         <td><?=$form->error("edbirth")?></td>
+         <td><?=$session->form->error("edbirth")?></td>
         </tr>
 
         <tr>
@@ -286,29 +286,29 @@ if(isset($_SESSION['edituser'])) {
          <td>
           <label for="male"><input type="radio" name="edsex" id="male" value="M"
 <?php
-   if($form->value("edsex") == "") {
+   if($session->form->value("edsex") == "") {
       if($session->userinfo['sex'] == "M") {
          echo "checked ";
       }
    } else {
-      if($form->value("edsex") == "M") {
+      if($session->form->value("edsex") == "M") {
          echo "checked ";
       }
    }
 ?>/>Male</label>
           <label for="female"><input type="radio" name="edsex" id="female" value="F" <?php
-   if($form->value("edsex") == "") {
+   if($session->form->value("edsex") == "") {
       if($session->userinfo['sex'] == "F") {
          echo "checked ";
       }
    } else {
-      if($form->value("edsex") == "F") {
+      if($session->form->value("edsex") == "F") {
          echo "checked ";
       }
    }
 ?>/>Female</label>
          </td>
-         <td><?=$form->error("edsex")?></td>
+         <td><?=$session->form->error("edsex")?></td>
         </tr>
 
         <tr>
@@ -317,14 +317,14 @@ if(isset($_SESSION['edituser'])) {
          </td>
          <td>
           <input class="field" type="text" name="edaddr" maxlength="160" value="<?php
-   if($form->value("edaddr") == "") {
+   if($session->form->value("edaddr") == "") {
       echo $session->userinfo['address'];
    } else {
-      echo $form->value("edaddr");
+      echo $session->form->value("edaddr");
    }
 ?>" />
          </td>
-         <td><?=$form->error("edaddr")?></td>
+         <td><?=$session->form->error("edaddr")?></td>
         </tr>
 
         <tr>
@@ -333,14 +333,14 @@ if(isset($_SESSION['edituser'])) {
          </td>
          <td>
           <input class="field" type="text" name="edphone" maxlength="26" value="<?php
-   if($form->value("edphone") == "") {
+   if($session->form->value("edphone") == "") {
       echo $session->userinfo['phone'];
    } else {
-      echo $form->value("edphone");
+      echo $session->form->value("edphone");
    }
 ?>" />
          </td>
-         <td><?=$form->error("edphone")?></td>
+         <td><?=$session->form->error("edphone")?></td>
         </tr>
 
         <tr>
@@ -354,7 +354,7 @@ if(isset($_SESSION['edituser'])) {
            <option value="<?=ADMIN_LEVEL?>"<?=($session->userlevel == ADMIN_LEVEL) ? ' selected' : '' ?>>Administrator</option>
           </select>
          </td>
-         <td><?=$form->error("edulevel")?></td>
+         <td><?=$session->form->error("edulevel")?></td>
         </tr>
 
         <tr>
