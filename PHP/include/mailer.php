@@ -1,11 +1,11 @@
-<? 
+<?php
 /**
  * Mailer.php
  *
  * The Mailer class is meant to simplify the task of sending emails to users.
  * Note: this email system won't work if your server is not setup to send mail.
  */
- 
+
 class Mailer {
    /**
     * sendWelcome - Sends a welcome message to the newly registered user,
@@ -28,7 +28,7 @@ class Mailer {
 
       return mail($email,$subject,$body,$from);
    }
-   
+
    /**
     * sendNewPass - Sends the newly generated password to the user's
     * email address that was specified at sign-up.
@@ -47,7 +47,7 @@ class Mailer {
              ."can be done by going to the My Account page "
              ."after signing in.\n\n"
              ."- LibDBDatabase";
-             
+
       return mail($email,$subject,$body,$from);
    }
 };

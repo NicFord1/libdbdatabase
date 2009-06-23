@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * index.php
  */
@@ -15,21 +15,21 @@ require_once("include/session.php");
   <meta name="author" content="LibDBDatabase / Original design: Andreas Viklund - http://andreasviklund.com/" />
 
   <!-- stylesheets -->
-  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/andreas06.css" type="text/css" media="screen,projection" />
-  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/slide.css"  type="text/css" media="screen,projection" />
-  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/validate.css"  type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/andreas06.css" type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/slide.css"  type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/validate.css"  type="text/css" media="screen,projection" />
 
   <!-- javascripts -->
   <!-- PNG FIX for IE6 -->
   <!-- http://24ways.org/2007/supersleight-transparent-png-in-ie6 -->
   <!--[if lte IE 6]>
-   <script type="text/javascript" src="<?=SITE_BASE_URL?>/js/pngfix/supersleight-min.js"></script>
+   <script type="text/javascript" src="<?php echo SITE_BASE_URL?>/js/pngfix/supersleight-min.js"></script>
   <![endif]-->
- 
+
   <!-- jQuery -->
-  <script src="<?=SITE_BASE_URL?>/js/jquery-1.3.2.min.js" type="text/javascript"></script>
-  <script src="<?=SITE_BASE_URL?>/js/jquery.validate.min.js" type="text/javascript"></script>
-  <script src="<?=SITE_BASE_URL?>/js/jquery.metadata.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery-1.3.2.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery.validate.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery.metadata.js" type="text/javascript"></script>
 
   <script type="text/javascript">
      $.metadata.setType("attr", "validate");
@@ -63,7 +63,7 @@ require_once("include/session.php");
 
 
   <!-- Sliding effect -->
-  <script src="<?=SITE_BASE_URL?>/js/slide.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/slide.js" type="text/javascript"></script>
  </head>
 
  <body>
@@ -110,7 +110,7 @@ if(!$session->logged_in) {
        <h1>Member Login</h1>
 
        <label class="grey required" for="user">Username:</label>
-       <input class="field" type="text" name="user" id="user" value="<?=$session->form->value("user")?>" size="23" />
+       <input class="field" type="text" name="user" id="user" value="<?php echo $session->form->value("user")?>" size="23" />
 
        <label class="grey required" for="pass">Password:</label>
        <input class="field" type="password" name="pass" id="pass" value="" size="23" />
@@ -123,7 +123,7 @@ if(!$session->logged_in) {
        <div class="clear"></div>
        <input type="hidden" name="sublogin" value="1">
        <input type="submit" name="submit" value="Login" class="bt_login" />
-       <a class="lost-pass" href="<?=SITE_BASE_URL?>/forgotpass.php">Lost your password?</a>
+       <a class="lost-pass" href="<?php echo SITE_BASE_URL?>/forgotpass.php">Lost your password?</a>
       </form>
      </div>
 
@@ -131,7 +131,7 @@ if(!$session->logged_in) {
       <h1>Not a member yet?  Sign-up!</h1>
       <p>
        We welcome new members to our library.  All we ask is that you provide some details so that we can
-       get you started with a new account.  Sign-up <a href="<?=SITE_BASE_URL?>/newuser.php">here</a>!
+       get you started with a new account.  Sign-up <a href="<?php echo SITE_BASE_URL?>/newuser.php">here</a>!
       </p>
      </div>
     </div>
@@ -140,7 +140,7 @@ if(!$session->logged_in) {
    <div class="tab">
     <ul class="login">
      <li class="left">&nbsp;</li>
-     <li>Hello <?=$session->username?>!</li>
+     <li>Hello <?php echo $session->username?>!</li>
      <li class="sep">|</li>
      <li id="toggle">
       <a id="open" class="open" href="#">Log In | Register</a>
@@ -159,9 +159,9 @@ if(!$session->logged_in) {
    <div class="tab">
     <ul class="login">
      <li class="left">&nbsp;</li>
-     <li>Welcome <?=$session->username?>!</li>
+     <li>Welcome <?php echo $session->username?>!</li>
      <li class="sep">|</li>
-     <li><a href="<?=SITE_BASE_URL?>/process.php?logout">Logout</a></li>
+     <li><a href="<?php echo SITE_BASE_URL?>/process.php?logout">Logout</a></li>
      <li class="right">&nbsp;</li>
     </ul>
    </div>
@@ -195,8 +195,8 @@ if(!$session->logged_in) {
      <div id="topbox">
       <strong>
        <span class="hide">Currently viewing: </span>
-       <a href="<?=SITE_BASE_URL?>/index.php">LibDBDatabase</a> &raquo;
-       <a href="<?=$_SERVER['PHP_SELF']?>">Front page</a>
+       <a href="<?php echo SITE_BASE_URL?>/index.php">LibDBDatabase</a> &raquo;
+       <a href="<?php echo $_SERVER['PHP_SELF']?>">Front page</a>
       </strong>
      </div>
 
@@ -235,7 +235,7 @@ if($session->form->num_errors > 0) {
      <a id="main"></a>
      <div id="content">
       <h1>Welcome to "LibDBDatabase"...</h1>
-      <img src="<?=SITE_BASE_URL?>/img/gravatar-books.png" height="80" width="80" alt="Gravatar example" />
+      <img src="<?php echo SITE_BASE_URL?>/img/gravatar-books.png" height="80" width="80" alt="Gravatar example" />
 
       <p class="intro">
        ...an open source library database app by a group of UMBC students. This was created for a project

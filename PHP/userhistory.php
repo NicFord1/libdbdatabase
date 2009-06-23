@@ -21,24 +21,24 @@ if(!$session->logged_in) {
   <meta name="description" content="LibDBDatabase: Library Database" />
   <meta name="keywords" content="library,database" />
   <meta name="author" content="LibDBDatabase / Original design: Andreas Viklund - http://andreasviklund.com/" />
-  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/andreas06.css" type="text/css" media="screen,projection" />
-  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/slide.css"  type="text/css" media="screen,projection" />
-  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/validate.css"  type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/andreas06.css" type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/slide.css"  type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/validate.css"  type="text/css" media="screen,projection" />
 
   <!-- javascripts -->
   <!-- PNG FIX for IE6 -->
   <!-- http://24ways.org/2007/supersleight-transparent-png-in-ie6 -->
   <!--[if lte IE 6]>
-   <script type="text/javascript" src="<?=SITE_BASE_URL?>/js/pngfix/supersleight-min.js"></script>
+   <script type="text/javascript" src="<?php echo SITE_BASE_URL?>/js/pngfix/supersleight-min.js"></script>
   <![endif]-->
- 
+
   <!-- jQuery -->
-  <script src="<?=SITE_BASE_URL?>/js/jquery-1.3.2.min.js" type="text/javascript"></script>
-  <script src="<?=SITE_BASE_URL?>/js/jquery.validate.min.js" type="text/javascript"></script>
-  <script src="<?=SITE_BASE_URL?>/js/jquery.metadata.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery-1.3.2.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery.validate.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery.metadata.js" type="text/javascript"></script>
 
   <!-- Sliding effect -->
-  <script src="<?=SITE_BASE_URL?>/js/slide.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/slide.js" type="text/javascript"></script>
 
  </head>
 
@@ -62,14 +62,14 @@ if(!$session->logged_in) {
    </div>
 
    <?php include_once("include/topmenu.php"); ?>
- 
+
    <div id="wrap1">
     <div id="wrap2">
 
      <div id="topbox">
       <strong>
        <span class="hide">Currently viewing: </span>
-       <a href="<?=SITE_BASE_URL?>/index.php">LibDBDatabase</a> &raquo; <a href="<?=$_SERVER['PHP_SELF']?>">History Center</a>
+       <a href="<?php echo SITE_BASE_URL?>/index.php">LibDBDatabase</a> &raquo; <a href="<?php echo $_SERVER['PHP_SELF']?>">History Center</a>
       </strong>
      </div>
 
@@ -80,7 +80,7 @@ if(!$session->logged_in) {
      <a id="main"></a>
      <div id="contentalt">
       <h1>History Center</h1>
-      <img src="<?=SITE_BASE_URL?>/img/gravatar-history.png" height="80" width="80" alt="History Gravatar" />
+      <img src="<?php echo SITE_BASE_URL?>/img/gravatar-history.png" height="80" width="80" alt="History Gravatar" />
 
       <font size="5" color="#ff0000">
        <b>::::::::::::::::::::::::::::::::::::::::::::</b>

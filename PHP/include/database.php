@@ -1,7 +1,7 @@
-<?
+<?php
 /**
  * database.php
- * 
+ *
  * The Database class is meant to simplify the task of accessing
  * information from the website's database.
  */
@@ -12,7 +12,7 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'database.php') !== false) {
 
 require_once("db-config.php");
 require_once("config.php");
-      
+
 class MySQLDB {
    var $connection;         //The MySQL database connection
    var $num_active_users;   //Number of active users viewing site
@@ -26,14 +26,14 @@ class MySQLDB {
       /* Make connection to database */
       $this->connection = mysql_connect(DB_SERVER, DB_USER, DB_PASS) or die(mysql_error());
       mysql_select_db(DB_NAME, $this->connection) or die(mysql_error());
-      
+
       /**
        * Only query database to find out number of members when getNumMembers() is
        * called for the first time, until then, default value set.
        */
       $this->num_admins = -1;
       $this->num_members = -1;
-      
+
       if(TRACK_VISITORS) { /* Calculate number of users & guests on site. */
          $this->calcNumActiveUsers();
          $this->calcNumActiveGuests();
@@ -69,7 +69,7 @@ class MySQLDB {
          return 2; //Indicates password failure
       }
    }
-   
+
    /**
     * confirmUserUID - Checks whether or not the given username is in the database, if so it checks if the
     * given uid is the same uid in the database for that user. If the user doesn't exist or if the
@@ -113,7 +113,7 @@ class MySQLDB {
          return true; //Success! UID confirmed
       }
    }
-   
+
    /**
     * usernameTaken - Returns true if the username has been taken by another user, false otherwise.
     */
@@ -126,7 +126,7 @@ class MySQLDB {
       $result = mysql_query($q, $this->connection);
       return (mysql_numrows($result) > 0);
    }
-   
+
    /**
     * usernameBanned - Returns true if the username has been banned by the administrator.
     */
@@ -139,7 +139,7 @@ class MySQLDB {
       $result = mysql_query($q, $this->connection);
       return (mysql_numrows($result) > 0);
    }
-   
+
    /**
     * addNewUser - Inserts the given (username, password, email, etc) info into the
     * database. Appropriate user level is set. Returns true on success, false otherwise.
@@ -150,7 +150,7 @@ class MySQLDB {
 
       return mysql_query($q, $this->connection);
    }
-   
+
    /**
     * updateUserField - Updates a field, specified by the field parameter, in the user's row
     * in the given table in the database.
@@ -159,7 +159,7 @@ class MySQLDB {
       $q = "UPDATE ".$table." SET ".$field." = '$value' WHERE uid = '$uid'";
       return mysql_query($q, $this->connection);
    }
-   
+
    /**
     * getUID - Returns the result array from a mysql query asking for the uid for the given
     * username. If query fails, NULL is returned.
@@ -191,7 +191,7 @@ class MySQLDB {
       $dbarray = mysql_fetch_array($result);
       return $dbarray;
    }
-   
+
    /**
     * getNumAdmins - Returns the number of administrators users. The first time the function is called
     * on page load, the database is queried, on subsequent calls, the store result is returned.
@@ -220,7 +220,7 @@ class MySQLDB {
       }
       return $this->num_members;
    }
-   
+
    /**
     * calcNumActiveUsers - Finds out how many active users are viewing site and sets
     * class variable accordingly.
@@ -231,7 +231,7 @@ class MySQLDB {
       $result = mysql_query($q, $this->connection);
       $this->num_active_users = mysql_numrows($result);
    }
-   
+
    /**
     * calcNumActiveGuests - Finds out how many active guests are viewing site and sets
     * class variable accordingly.
@@ -242,7 +242,7 @@ class MySQLDB {
       $result = mysql_query($q, $this->connection);
       $this->num_active_guests = mysql_numrows($result);
    }
-   
+
    /**
     * addActiveUser - Updates user's last active timestamp in the database, and also
     * adds them to the table of active users, or updates timestamp if already there.
@@ -250,13 +250,13 @@ class MySQLDB {
    function addActiveUser($uid, $time) {
       $q = "UPDATE ".DB_TBL_USERS." SET lastvisit = '$time' WHERE uid = '$uid'";
       mysql_query($q, $this->connection);
-      
+
       if(!TRACK_VISITORS) return;
       $q = "REPLACE INTO ".DB_TBL_ACTIVE_USERS." VALUES ('$uid', '$time')";
       mysql_query($q, $this->connection);
       $this->calcNumActiveUsers();
    }
-   
+
    /* addActiveGuest - Adds guest to active guests table */
    function addActiveGuest($ip, $time) {
       if(!TRACK_VISITORS) return;
@@ -264,7 +264,7 @@ class MySQLDB {
       mysql_query($q, $this->connection);
       $this->calcNumActiveGuests();
    }
-   
+
    /* removeActiveUser */
    function removeActiveUser($uid) {
       if(!TRACK_VISITORS) return;

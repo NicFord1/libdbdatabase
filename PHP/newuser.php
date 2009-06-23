@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * newuser.php
  *
@@ -8,7 +8,7 @@
  */
 include("include/session.php");
 
-   
+
 /**
  * User logged in and not an administrator or teller, redirect to main page automatically.
  */
@@ -24,21 +24,21 @@ if($session->logged_in && !($session->isAdmin() || $session->isTeller())) {
   <meta name="description" content="LibDBDatabase: Library Database" />
   <meta name="keywords" content="library,database" />
   <meta name="author" content="LibDBDatabase / Original design: Andreas Viklund - http://andreasviklund.com/" />
-  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/andreas06.css" type="text/css" media="screen,projection" />
-  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/slide.css"  type="text/css" media="screen,projection" />
-  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/validate.css"  type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/andreas06.css" type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/slide.css"  type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/validate.css"  type="text/css" media="screen,projection" />
 
   <!-- javascripts -->
   <!-- PNG FIX for IE6 -->
   <!-- http://24ways.org/2007/supersleight-transparent-png-in-ie6 -->
   <!--[if lte IE 6]>
-   <script type="text/javascript" src="<?=SITE_BASE_URL?>/js/pngfix/supersleight-min.js"></script>
+   <script type="text/javascript" src="<?php echo SITE_BASE_URL?>/js/pngfix/supersleight-min.js"></script>
   <![endif]-->
- 
+
   <!-- jQuery -->
-  <script src="<?=SITE_BASE_URL?>/js/jquery-1.3.2.min.js" type="text/javascript"></script>
-  <script src="<?=SITE_BASE_URL?>/js/jquery.validate.min.js" type="text/javascript"></script>
-  <script src="<?=SITE_BASE_URL?>/js/jquery.metadata.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery-1.3.2.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery.validate.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery.metadata.js" type="text/javascript"></script>
 
   <script type="text/javascript">
      $.metadata.setType("attr", "validate");
@@ -89,7 +89,7 @@ if($session->logged_in && !($session->isAdmin() || $session->isTeller())) {
 
 
   <!-- Sliding effect -->
-  <script src="<?=SITE_BASE_URL?>/js/slide.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/slide.js" type="text/javascript"></script>
 
  </head>
 
@@ -113,15 +113,15 @@ if($session->logged_in && !($session->isAdmin() || $session->isTeller())) {
    </div>
 
    <?php include_once("include/topmenu.php"); ?>
- 
+
    <div id="wrap1">
     <div id="wrap2">
 
      <div id="topbox">
       <strong>
        <span class="hide">Currently viewing: </span>
-       <a href="<?=SITE_BASE_URL?>/index.php">LibDBDatabase</a> &raquo;
-       <a href="<?=$_SERVER['PHP_SELF']?>">Registration Center</a>
+       <a href="<?php echo SITE_BASE_URL?>/index.php">LibDBDatabase</a> &raquo;
+       <a href="<?php echo $_SERVER['PHP_SELF']?>">Registration Center</a>
       </strong>
      </div>
 
@@ -132,7 +132,7 @@ if($session->logged_in && !($session->isAdmin() || $session->isTeller())) {
      <a id="main"></a>
      <div id="contentalt">
       <h1>Registration Center</h1>
-      <img src="<?=SITE_BASE_URL?>/img/gravatar-newuser.png" height="80" width="80" alt="New User Gravatar" />
+      <img src="<?php echo SITE_BASE_URL?>/img/gravatar-newuser.png" height="80" width="80" alt="New User Gravatar" />
 
       <font size="5" color="#ff0000">
        <b>::::::::::::::::::::::::::::::::::::::::::::</b>
@@ -199,7 +199,7 @@ if($session->form->num_errors > 0) {
           <label for="reguser" class="grey required">Username:</label>
          </td>
          <td>
-          <input class="field" type="text" name="reguser" maxlength="30" value="<?=$session->form->value("reguser")?>" />
+          <input class="field" type="text" name="reguser" maxlength="30" value="<?php echo $session->form->value("reguser")?>" />
          </td>
         </tr>
 
@@ -208,7 +208,7 @@ if($session->form->num_errors > 0) {
           <label for="regpass" class="grey required">Password:</label>
          </td>
          <td>
-          <input class="field" type="password" name="regpass" maxlength="30" value="<?=$session->form->value("regpass")?>" />
+          <input class="field" type="password" name="regpass" maxlength="30" value="<?php echo $session->form->value("regpass")?>" />
          </td>
         </tr>
 
@@ -217,7 +217,7 @@ if($session->form->num_errors > 0) {
           <label for="regemail" class="grey required">Email:</label>
          </td>
          <td>
-          <input class="field" type="text" name="regemail" maxlength="96" value="<?=$session->form->value("regemail")?>" />
+          <input class="field" type="text" name="regemail" maxlength="96" value="<?php echo $session->form->value("regemail")?>" />
          </td>
         </tr>
 
@@ -226,7 +226,7 @@ if($session->form->num_errors > 0) {
           <label for="regname" class="grey">Fullname:</label>
          </td>
          <td>
-          <input class="field" type="text" name="regname" maxlength="50" value="<?=$session->form->value("regname")?>" />
+          <input class="field" type="text" name="regname" maxlength="50" value="<?php echo $session->form->value("regname")?>" />
          </td>
         </tr>
 
@@ -292,7 +292,7 @@ if($session->form->num_errors > 0) {
           <label for="regaddr" class="grey">Address:</label>
          </td>
          <td>
-          <input class="field" type="text" name="regaddr" maxlength="160" value="<?=$session->form->value("regaddr");?>" />
+          <input class="field" type="text" name="regaddr" maxlength="160" value="<?php echo $session->form->value("regaddr");?>" />
          </td>
         </tr>
 
@@ -301,7 +301,7 @@ if($session->form->num_errors > 0) {
           <label for="regphone" class="grey">Phone:</label>
          </td>
          <td>
-          <input class="field" type="text" name="regphone" maxlength="26" value="<?=$session->form->value("regphone");?>" />
+          <input class="field" type="text" name="regphone" maxlength="26" value="<?php echo $session->form->value("regphone");?>" />
          </td>
         </tr>
 
@@ -314,9 +314,9 @@ if($session->form->num_errors > 0) {
          </td>
          <td>
           <select name="regulevel">
-           <option value="<?=CUST_LEVEL?>">Customer</option>
-           <option value="<?=TELLER_LEVEL?>">Teller</option>
-           <option value="<?=ADMIN_LEVEL?>">Administrator</option>
+           <option value="<?php echo CUST_LEVEL?>">Customer</option>
+           <option value="<?php echo TELLER_LEVEL?>">Teller</option>
+           <option value="<?php echo ADMIN_LEVEL?>">Administrator</option>
           </select>
          </td>
         </tr>

@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * admin.php
  *
@@ -119,7 +119,7 @@ function displayBannedUsers() {
 
    echo "</table><br />\n";
 }
-   
+
 
 if(!$session->isAdmin()) { /* User not an administrator, redirect to front page automatically. */
    header("Location: ".SITE_BASE_URL."/index.php");
@@ -133,24 +133,24 @@ if(!$session->isAdmin()) { /* User not an administrator, redirect to front page 
   <meta name="description" content="LibDBDatabase: Library Database" />
   <meta name="keywords" content="library,database" />
   <meta name="author" content="LibDBDatabase / Original design: Andreas Viklund - http://andreasviklund.com/" />
-  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/andreas06.css" type="text/css" media="screen,projection" />
-  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/slide.css"  type="text/css" media="screen,projection" />
-  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/validate.css"  type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/andreas06.css" type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/slide.css"  type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/validate.css"  type="text/css" media="screen,projection" />
 
   <!-- javascripts -->
   <!-- PNG FIX for IE6 -->
   <!-- http://24ways.org/2007/supersleight-transparent-png-in-ie6 -->
   <!--[if lte IE 6]>
-   <script type="text/javascript" src="<?=SITE_BASE_URL?>/js/pngfix/supersleight-min.js"></script>
+   <script type="text/javascript" src="<?php echo SITE_BASE_URL?>/js/pngfix/supersleight-min.js"></script>
   <![endif]-->
- 
+
   <!-- jQuery -->
-  <script src="<?=SITE_BASE_URL?>/js/jquery-1.3.2.min.js" type="text/javascript"></script>
-  <script src="<?=SITE_BASE_URL?>/js/jquery.validate.min.js" type="text/javascript"></script>
-  <script src="<?=SITE_BASE_URL?>/js/jquery.metadata.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery-1.3.2.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery.validate.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery.metadata.js" type="text/javascript"></script>
 
   <!-- Sliding effect -->
-  <script src="<?=SITE_BASE_URL?>/js/slide.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/slide.js" type="text/javascript"></script>
  </head>
 
  <body>
@@ -173,14 +173,14 @@ if(!$session->isAdmin()) { /* User not an administrator, redirect to front page 
    </div>
 
    <?php include_once("../include/topmenu.php"); ?>
- 
+
    <div id="wrap1">
     <div id="wrap2">
 
      <div id="topbox">
       <strong>
        <span class="hide">Currently viewing: </span>
-       <a href="<?=SITE_BASE_URL?>/index.php">LibDBDatabase</a> &raquo; <a href="<?=$_SERVER['PHP_SELF']?>">Admin Center</a>
+       <a href="<?php echo SITE_BASE_URL?>/index.php">LibDBDatabase</a> &raquo; <a href="<?php echo $_SERVER['PHP_SELF']?>">Admin Center</a>
       </strong>
      </div>
 
@@ -191,13 +191,13 @@ if(!$session->isAdmin()) { /* User not an administrator, redirect to front page 
      <a id="main"></a>
      <div id="contentalt">
       <h1>Admin Center</h1>
-      <img src="<?=SITE_BASE_URL?>/img/gravatar-admin.png" height="80" width="80" alt="Admin Gravatar" />
+      <img src="<?php echo SITE_BASE_URL?>/img/gravatar-admin.png" height="80" width="80" alt="Admin Gravatar" />
 
       <font size="5" color="#ff0000">
        <b>::::::::::::::::::::::::::::::::::::::::::::</b>
       </font>
       <br /><br />
-<?
+<?php
 if($session->form->num_errors > 0) {
    echo "      <font size=\"4\" color=\"#ff0000\">"
        ."!*** Error with request, please fix ***!</font><br /><br />";
@@ -207,27 +207,27 @@ if($session->form->num_errors > 0) {
       <table align="left" border="0" cellspacing="5" cellpadding="5">
        <tr>
         <td>
-<?
+<?php
 /**
  * Display Users Table
  */
 ?>
          <h3>Users Table Contents:</h3>
-         <?=$session->form->error("deluser");?>
-         <?=$session->form->error("banuser");?>
-         <?=displayUsers();?>
+         <?php echo $session->form->error("deluser");?>
+         <?php echo $session->form->error("banuser");?>
+         <?php echo displayUsers();?>
         </td>
        </tr>
        <tr>
         <td>
          <br />
-<?
+<?php
 /**
  * Display Banned Users Table
  */
 ?>
          <h3>Banned Users Table Contents:</h3>
-         <?=displayBannedUsers();?>
+         <?php echo displayBannedUsers();?>
         </td>
        </tr>
        <tr>
@@ -247,4 +247,4 @@ if($session->form->num_errors > 0) {
   </div>
  </body>
 </html>
-<? } ?>
+<?php } ?>

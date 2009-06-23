@@ -1,7 +1,7 @@
-<?
+<?php
 /**
  * adminprocess.php
- * 
+ *
  * The adminprocess class is meant to simplify the task of processing
  * admin submitted forms from the admin center, these deal with
  * member system adjustments.
@@ -13,12 +13,12 @@ class AdminProcess
    /* Class constructor */
    function AdminProcess() {
       global $session;
-    
+
       if(!$session->isAdmin()) { /* Make sure administrator is accessing page */
          header("Location: ".SITE_BASE_URL."/index.php");
          return;
       }
-    
+
       if(isset($_POST['subedit'])) { /* Admin submitted edit user form */
          $this->procEditAccount();
       } else if(isset($_POST['subdeluser'])) { /* Admin submitted delete user form */
@@ -56,7 +56,7 @@ class AdminProcess
       }
       header("Location: ".$session->referrer."?uid=".$_POST['eduid']);
    }
-   
+
    /**
     * procDeleteUser - If submitted username is correct, user is deleted from the database.
     */
@@ -79,7 +79,7 @@ class AdminProcess
       }
       header("Location: ".$session->referrer);
    }
-   
+
    /**
     * procBanUser - If the submitted username is correct, the user is banned from the member
     * system, which entails removing the username from the users table and adding it to the
@@ -108,7 +108,7 @@ class AdminProcess
       }
       header("Location: ".$session->referrer);
    }
-   
+
    /**
     * procDeleteBannedUser - If the submitted username is correct, the user is deleted from
     * the banned users table, which enables someone to register with that username again.
@@ -119,7 +119,7 @@ class AdminProcess
       /* Username error checking */
       $field = "delbanuser";  //Use field name for username
       $subuser = $this->checkUsername($field, true);
-   
+
       if($session->form->num_errors > 0) { /* Errors exist, have user correct them */
          $_SESSION['value_array'] = $_POST;
          $_SESSION['error_array'] = $session->form->getErrorArray();
@@ -151,7 +151,7 @@ class AdminProcess
             $session->form->setError($field, "* New Password not alphanumeric");
          }
       }
-      
+
       /* Email error checking */
       if($subemail && strlen($subemail = trim($subemail)) > 0) {
          $field = "edemail";  //Use field name for email

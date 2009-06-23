@@ -10,8 +10,8 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'topmenu.php') !== false) {
 ?>
    <div id="nav">
     <ul>
-     <li <?=($_SERVER['PHP_SELF'] == '/index.php' || $_SERVER['PHP_SELF'] == '/' ? 'id="current"' : '')?>>
-      <a href="<?=SITE_BASE_URL?>/index.php">Front page</a>
+     <li <?php echo ($_SERVER['PHP_SELF'] == '/index.php' || $_SERVER['PHP_SELF'] == '/' ? 'id="current"' : '')?>>
+      <a href="<?php echo SITE_BASE_URL?>/index.php">Front page</a>
      </li>
 <?php
 /**
