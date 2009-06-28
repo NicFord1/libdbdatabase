@@ -104,52 +104,65 @@ if($trimmed == "") {
   echo "<p>We dont seem to have a search parameter!</p>";
   exit;
 } else {
-   $q = "SELECT * FROM ldb_books WHERE author LIKE \"%$trimmed%\" OR "
-       ."description LIKE \"%$trimmed%\" OR title LIKE \"%$trimmed%\""
-       ." ORDER BY author";
+   // Load media plugins which will perform search for us.
+   require_once("plugins/book.php");
 
-   $results = mysql_query($q);
-   if($results) {
- 	   $numresults = mysql_num_rows($results);
+   // Tell plugins to search for items
+   $searchresults = performFunctionOnAllPlugins("search", $trimmed, $database);
+
+   // begin to show results set
+   $count = 1 + $s ;
+   echo "<br /><table border='1'><tr>";
+
+   // Aggregate all column names that we need
+   foreach($searchresults as $aresultlist)
+   {
+     foreach($aresultlist as $aresult)
+     {
+       $columnsForThisItem = array_keys($aresult);
+
+       foreach($columnsForThisItem as $newcolumn)
+       {
+         if(!array_key_exists($newcolumn, $results))
+         {
+           $results[$newcolumn][0] = $newcolumn;
+           echo "Added $newcolumn<br>";
+         }
+       }
+     }
    }
-
-   if ($numresults == 0) {
-      echo "<p>Sorry, your search: &quot;".$trimmed."&quot; returned zero results</p>";
-   } else {
-	   if(empty($s)) {
-	      $s = 0;
-	   }
-
-	   // get results
-	   $q .= " limit $s,$limit";
-	   $result = $database->query($q);
-
-	   // begin to show results set
-	   $count = 1 + $s ;
-		echo "<br /><table border='1'><tr>";
-
-		$itemFields = array("ISBN", "Title", "Author", "Publisher", "ReleaseDate", "Rating", "Description");
+   $itemFields = array_keys($results);//array("ISBN", "Title", "Author", "Publisher", "ReleaseDate", "Rating", "Description");
 		for($i=0; $i<count($itemFields); $i++)
 		{
 		    //$field = mysql_fetch_field($result);
 		    echo "<td>$itemFields[$i]</td>";
 		}
 
-	   while ($row = mysql_fetch_array($result)) {
-			echo "<tr>";
-			echo "<td>".$row["isbn"]."</td>";
-			echo "<td>".$row["title"]."</td>";
-			echo "<td>".$row["author"]."</td>";
-			echo "<td>".$row["publisher"]."</td>";
-			echo "<td>".$row["releasedate"]."</td>";
-			echo "<td>".$row["rating"]."</td>";
-			echo "<td>".$row["description"]."</td>";
-			echo "</tr>";
-	      $count++ ;
-	   }
-	   echo "</table><br />";
+   foreach($searchresults as $aresultlist)
+   {
+     foreach($aresultlist as $aresult)
+     {
+       echo "<tr>";
 
-	   $currPage = (($s/$limit) + 1);
+       foreach($itemFields as $field)
+       {
+         if(array_key_exists($field, $results))
+         {
+           $text = $aresult[$field];
+         } else {
+           $text = "n/a";
+         }
+         echo "<td>".$text."</td>";
+       }
+     }
+   }
+   echo "</tr>";
+   $count++ ;
+
+
+   echo "</table><br />";
+
+   $currPage = (($s/$limit) + 1);
 
 	   // create links for more results
 	   if ($s>=1) { // bypass PREV link if s is 0
@@ -175,7 +188,7 @@ if($trimmed == "") {
 	   }
 	   $b = $s + 1 ;
 	   echo "<p>Showing results $b to $a of $numresults</p>";
-   }
+
 }
 ?>
       <p class="hide"><a href="#top">Back to top</a></p>
