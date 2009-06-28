@@ -10,8 +10,8 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'database.php') !== false) {
    header("Location: ".SITE_BASE_URL."/index.php"); //Gracefully leave page
 }
 
-require_once("db-config.php");
-require_once("config.php");
+require_once("include/db-config.php");
+require_once("include/config.php");
 
 class MySQLDB {
    var $connection;         //The MySQL database connection

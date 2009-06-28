@@ -10,9 +10,10 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'session.php') !== false) {
    header("Location: ".SITE_BASE_URL."/index.php"); //Gracefully leave page
 }
 
-require_once("database.php");
-require_once("mailer.php");
-require_once("form.php");
+require_once("include/config.php");
+require_once("include/database.php");
+require_once("include/mailer.php");
+require_once("include/form.php");
 
 class Session {
    var $username;            //Username given on sign-up
