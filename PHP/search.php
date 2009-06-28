@@ -106,6 +106,7 @@ if($trimmed == "") {
 } else {
    // Load media plugins which will perform search for us.
    require_once("plugins/book.php");
+   require_once("plugins/cd.php");
 
    // Tell plugins to search for items
    $searchresults = performFunctionOnAllPlugins("search", $trimmed, $database);
@@ -117,6 +118,10 @@ if($trimmed == "") {
    // Aggregate all column names that we need
    foreach($searchresults as $aresultlist)
    {
+     if(!is_array($aresultlist))
+     {
+       continue;
+     }
      foreach($aresultlist as $aresult)
      {
        $columnsForThisItem = array_keys($aresult);
@@ -140,13 +145,18 @@ if($trimmed == "") {
 
    foreach($searchresults as $aresultlist)
    {
+     if(!is_array($aresultlist))
+     {
+       continue;
+     }
+
      foreach($aresultlist as $aresult)
      {
        echo "<tr>";
 
        foreach($itemFields as $field)
        {
-         if(array_key_exists($field, $results))
+         if(array_key_exists($field, $aresult))
          {
            $text = $aresult[$field];
          } else {
