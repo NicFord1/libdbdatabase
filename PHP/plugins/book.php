@@ -34,7 +34,7 @@ class BookPlugin
 
 	   // begin to show results set
 	   $count = 1 + $s ;
-		echo "<br /><table border='1'><tr>";
+//                echo "<br /><table border='1'><tr>";
 
 		$itemFields = array("ISBN", "Title", "Author", "Publisher", "ReleaseDate", "Rating", "Description");
 //                for($i=0; $i<count($itemFields); $i++)
@@ -44,7 +44,15 @@ class BookPlugin
 //                }
 
 	   while ($row = mysql_fetch_array($result)) {
-             $resultslist[$index] = $row;
+             $resultslist[$index]["ISBN"] = $row["isbn"];
+             $resultslist[$index]["Title"] = $row["title"];
+             $resultslist[$index]["Author"] = $row["author"];
+             $resultslist[$index]["Publisher"] = $row["publisher"];
+             $resultslist[$index]["Release Date"] = $row["releasedate"];
+             $resultslist[$index]["Rating"] = $row["rating"];
+             $resultslist[$index]["Description"] = $row["description"];
+
+
 //                        echo "<tr>";
 //                        echo "<td>".$row["isbn"]."</td>";
  //                       echo "<td>".$row["title"]."</td>";
