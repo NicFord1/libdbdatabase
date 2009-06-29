@@ -105,16 +105,22 @@ if($trimmed == "") {
   exit;
 } else {
    // Load media plugins which will perform search for us.
-   require_once("plugins/book.php");
-   require_once("plugins/cd.php");
+   opendir("plugins");
+   while($file = readdir())
+   {
+     if(is_file("plugins/$file"))
+     {
+       require_once("plugins/$file");
+     }
+   }
 
    // Tell plugins to search for items
+   // $searchresults is a list of lists of items. An item is a map from
+   // column name to data.
    $searchresults = performFunctionOnAllPlugins("search", $trimmed, $database);
 
-   // begin to show results set
-   $count = 1 + $s ;
-   echo "<br /><table border='1'><tr>";
 
+   $numresults = 0;
    // Aggregate all column names that we need
    foreach($searchresults as $aresultlist)
    {
@@ -124,50 +130,55 @@ if($trimmed == "") {
      }
      foreach($aresultlist as $aresult)
      {
+       // Copy results to a flat list
+       $results[$numresults++] = $aresult;
+
+       // Now aggregate the columns
        $columnsForThisItem = array_keys($aresult);
 
        foreach($columnsForThisItem as $newcolumn)
        {
-         if(!array_key_exists($newcolumn, $results))
+         if(!array_key_exists($newcolumn, $column_names))
          {
-           $results[$newcolumn][0] = $newcolumn;
+           $column_names[$newcolumn] = 1;
            echo "Added $newcolumn<br>";
          }
        }
      }
    }
-   $itemFields = array_keys($results);//array("ISBN", "Title", "Author", "Publisher", "ReleaseDate", "Rating", "Description");
-		for($i=0; $i<count($itemFields); $i++)
-		{
-		    //$field = mysql_fetch_field($result);
-		    echo "<td>$itemFields[$i]</td>";
-		}
+   $itemFields = array_keys($column_names);
 
-   foreach($searchresults as $aresultlist)
+
+   // begin to show results set
+   $count = 1 + $s ;
+   echo "<br /><table border='1'><tr>";
+
+
+   // Print first row of table, showing the column names
+   for($i=0; $i<count($itemFields); $i++)
    {
-     if(!is_array($aresultlist))
-     {
-       continue;
-     }
-
-     foreach($aresultlist as $aresult)
-     {
-       echo "<tr>";
-
-       foreach($itemFields as $field)
-       {
-         if(array_key_exists($field, $aresult))
-         {
-           $text = $aresult[$field];
-         } else {
-           $text = "n/a";
-         }
-         echo "<td>".$text."</td>";
-       }
-     }
+     echo "<td>$itemFields[$i]</td>";
    }
-   echo "</tr>";
-   $count++ ;
+
+   // Print item rows
+   foreach($results as $aresult)
+   {
+    echo "<tr>";
+
+    foreach($itemFields as $field)
+    {
+      if(array_key_exists($field, $aresult))
+      {
+        $text = $aresult[$field];
+      } else {
+        $text = "n/a";
+      }
+      echo "<td>".$text."</td>";
+    }
+
+    echo "</tr>";
+   }
+ $count++ ;
 
 
    echo "</table><br />";
