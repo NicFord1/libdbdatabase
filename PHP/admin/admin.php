@@ -6,7 +6,8 @@
  * database table of users and banned users. Admins can choose to delete specific users, delete inactive users,
  * ban users, edit user accounts, etc.
  */
-include("../include/session.php");
+require_once("../include/session.php");
+require_once("../include/users.php");
 
 /**
  * displayUsers - Displays the users database table in a nicely formatted html table.
@@ -14,7 +15,7 @@ include("../include/session.php");
 function displayUsers() {
    global $database;
 
-   $q = "SELECT uid,username,userlevel,regtime,lastvisit FROM ".DB_TBL_USERS." ORDER BY userlevel DESC,username";
+   $q = "SELECT uid,username,regtime,lastvisit FROM ".DB_TBL_CUSTOMERS." ORDER BY regtime ASC,username";
    $result = $database->query($q);
 
    /* Error occurred, return given name by default */
@@ -34,46 +35,51 @@ function displayUsers() {
    echo "<table align=\"left\" border=\"1\" cellspacing=\"0\" cellpadding=\"3\">\n";
    echo "<tr><td><b>Username</b></td><td><b>User Type</b></td><td><b>Registration Time</b></td><td><b>Last Active</b></td><td><b>Actions</b></td></tr>\n";
 
-   for($i=0; $i<$num_rows; $i++) {
-      $uid    = mysql_result($result,$i,"uid");
-      $uname  = mysql_result($result,$i,"username");
-      $ulevel = mysql_result($result,$i,"userlevel");
+   while($usersinfo = mysql_fetch_array($result, MYSQL_ASSOC)) {
+   	$user = NULL;
+
+      if($database->confirmUID($usersinfo['uid'], DB_TBL_ADMINS)) {
+         $qry = "SELECT * FROM ".DB_TBL_ADMINS." WHERE uid='".$usersinfo['uid']."'";
+         $qresult = $database->query($qry);
+         $empsinfo = mysql_fetch_array($qresult, MYSQL_ASSOC);
+      	$user = new Administrator($usersinfo);
+      } else if ($database->confirmUID($usersinfo['uid'], DB_TBL_TELLERS)) {
+         $qry = "SELECT * FROM ".DB_TBL_TELLERS." WHERE uid='".$usersinfo['uid']."'";
+         $qresult = $database->query($qry);
+         $empsinfo = mysql_fetch_array($qresult, MYSQL_ASSOC);
+      	$user = new Teller($usersinfo);
+      } else {
+      	$user = new Customer($usersinfo);
+      }
+
       date_default_timezone_set('EST');
-      $rtime   = date("r", mysql_result($result,$i,"regtime"));
-      $lvtime = mysql_result($result,$i,"lastvisit");
+      $rtime = date("r", $user->getRegistrationTime());
+      $lvtime = $user->getLastVisit();
       if($lvtime) {
-         $lvtime   = date("r", $lvtime);
+         $lvtime = date("r", $lvtime);
       } else {
          $lvtime = "Never";
       }
 
-      if($ulevel == ADMIN_LEVEL) {
-         $usertype = "Administrator";
-      } else if($ulevel == TELLER_LEVEL) {
-         $usertype = "Teller";
-      } else if($ulevel == CUST_LEVEL) {
-         $usertype = "Customer";
-      }
+		echo "<tr><td>".$user->username."</td><td>".get_class($user)."</td>"
+		    ."<td>".$rtime."</td><td>".$lvtime."</td>"
+		    ."<td><a href=\"userinfo.php?uid=".$user->getUID()."\">"
+          ."<img class=\"clearimg\" src=\"".SITE_BASE_URL."/img/user_edit.png\" alt=\"Edit\" /></a> "
 
-      echo "<tr><td>$uname</td><td>$usertype</td><td>$rtime</td><td>$lvtime</td><td>"
+		    ."<form action=\"adminprocess.php\" method=\"POST\">"
+			 ."<input type=\"hidden\" name=\"deluser\" value=\"".$user->getUID()."\" />"
+			 ."<input type=\"hidden\" name=\"subdeluser\" value=\"1\" />"
+			 ."<input type=\"image\" src=\"".SITE_BASE_URL."/img/user_delete.png\" alt=\"Delete\">"
+			 ."</form>"
 
-          ."<a href=\"userinfo.php?uid=$uid\"><img class=\"clearimg\" src=\"".SITE_BASE_URL."/img/user_edit.png\" alt=\"Edit\" /></a> "
+			 ."<form action=\"adminprocess.php\" method=\"POST\">"
+			 ."<input type=\"hidden\" name=\"banuser\" value=\"".$user->username."\" />"
+			 ."<input type=\"hidden\" name=\"subbanuser\" value=\"1\" />"
+			 ."<input type=\"image\" src=\"".SITE_BASE_URL."/img/user_ban.png\" alt=\"Ban\" />"
+			 ."</form>"
 
-          ."<form action=\"adminprocess.php\" method=\"POST\">"
-          ."<input type=\"hidden\" name=\"deluser\" value=\"$uname\" />"
-          ."<input type=\"hidden\" name=\"subdeluser\" value=\"1\" />"
-          ."<input type=\"image\" src=\"".SITE_BASE_URL."/img/user_delete.png\" alt=\"Delete\">"
-          ."</form>"
-
-          ."<form action=\"adminprocess.php\" method=\"POST\">"
-          ."<input type=\"hidden\" name=\"banuser\" value=\"$uname\" />"
-          ."<input type=\"hidden\" name=\"subbanuser\" value=\"1\" />"
-          ."<input type=\"image\" src=\"".SITE_BASE_URL."/img/user_ban.png\" alt=\"Ban\" />"
-          ."</form>"
-
-          ."</td></tr>\n";
+			 ."</td></tr>\n";
    }
-
    echo "</table><br>\n";
 }
 
@@ -93,7 +99,6 @@ function displayBannedUsers() {
       echo "Error displaying info";
       return;
    }
-
    if($num_rows == 0) {
       echo "Database table empty";
       return;
@@ -103,10 +108,10 @@ function displayBannedUsers() {
    echo "<table align=\"left\" border=\"1\" cellspacing=\"0\" cellpadding=\"3\">\n";
    echo "<tr><td><b>Username</b></td><td><b>Time Banned</b></td><td><b>Actions</b></td></tr>\n";
 
-   for($i=0; $i<$num_rows; $i++) {
-      $uname = mysql_result($result,$i,"username");
+   while($usersinfo = mysql_fetch_array($result, MYSQL_ASSOC)) {
+      $uname = $usersinfo['username'];
       date_default_timezone_set('EST');
-      $time  = date("r", mysql_result($result,$i,"timestamp"));
+      $time  = date("r", $usersinfo['timestamp']);
 
       echo "<tr><td>$uname</td><td>$time</td><td>"
           ."<form action=\"adminprocess.php\" method=\"POST\">"
@@ -116,7 +121,6 @@ function displayBannedUsers() {
           ."</form>"
           ."</td></tr>\n";
    }
-
    echo "</table><br />\n";
 }
 
@@ -145,9 +149,10 @@ if(!$session->isAdmin()) { /* User not an administrator, redirect to front page 
   <![endif]-->
 
   <!-- jQuery -->
-  <script src="<?php echo SITE_BASE_URL?>/js/jquery-1.3.2.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery.min.js" type="text/javascript"></script>
   <script src="<?php echo SITE_BASE_URL?>/js/jquery.validate.min.js" type="text/javascript"></script>
-  <script src="<?php echo SITE_BASE_URL?>/js/jquery.metadata.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery.metadata.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery.maskedinput.min.js" type="text/javascript"></script>
 
   <!-- Sliding effect -->
   <script src="<?php echo SITE_BASE_URL?>/js/slide.js" type="text/javascript"></script>

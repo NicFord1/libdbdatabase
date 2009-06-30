@@ -34,7 +34,6 @@ define("DB_NAME", "LibDBDatabase");
  * These hold the names of all the database tables used in the script.
  */
 define("DB_TBL_PRFX", "ldb_");
-define("DB_TBL_USERS", DB_TBL_PRFX."users");
 define("DB_TBL_ACTIVE_USERS",  DB_TBL_PRFX."activeusers");
 define("DB_TBL_ACTIVE_GUESTS", DB_TBL_PRFX."activeguests");
 define("DB_TBL_BANNED_USERS",  DB_TBL_PRFX."bannedusers");

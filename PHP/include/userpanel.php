@@ -7,39 +7,28 @@
 if (strpos(strtolower($_SERVER['PHP_SELF']), 'userpanel.php') !== false) {
    header("Location: ".SITE_BASE_URL."/index.php"); //Gracefully leave page
 }
-
+require_once("session.php");
 ?>
 
   <!-- Sliding Panel -->
   <div id="toppanel">
    <div class="tab">
+    <ul class="login">
+     <li class="left">&nbsp;</li>
+     <li>Welcome <?php echo $session->user->username; ?>!</li>
 <?php
 /**
- * User has already logged.  Greet user and provide logout link.
+ * User has already logged.  Provide logout link.
  */
 if($session->logged_in) {
 ?>
-    <ul class="login">
-     <li class="left">&nbsp;</li>
-     <li>Welcome <?php echo $session->username?>!</li>
      <li class="sep">|</li>
-     <li><a href="<?php echo SITE_BASE_URL?>/process.php?logout">Logout</a></li>
-     <li class="right">&nbsp;</li>
-    </ul>
-<?php
-} else {
-/**
- * Greet the guest.
- */
-?>
-    <ul class="login">
-     <li class="left">&nbsp;</li>
-     <li>Hello <?php echo $session->username?>!</li>
-     <li class="right">&nbsp;</li>
-    </ul>
+     <li><a href="<?php echo SITE_BASE_URL; ?>/process.php?logout">Logout</a></li>
 <?php
 }
 ?>
+     <li class="right">&nbsp;</li>
+    </ul>
    </div>
   </div>
   <!-- /Sliding Panel -->

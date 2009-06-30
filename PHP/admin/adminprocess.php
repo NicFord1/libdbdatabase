@@ -11,7 +11,7 @@ include("../include/session.php");
 class AdminProcess
 {
    /* Class constructor */
-   function AdminProcess() {
+   function __construct() {
       global $session;
 
       if(!$session->isAdmin()) { /* Make sure administrator is accessing page */
@@ -38,35 +38,115 @@ class AdminProcess
     * procEditAccount - Attempts to edit the user's account information, including the
     * the password, which must be verified before a change is made.
     */
-   function procEditAccount() {
+   public function procEditAccount() {//IF time permits, re-implement using new User classes
       global $session;
 
-      /* Convert birthdate into timestamp */
-      $edbirth = mktime(0, 0, 0, $_POST['edbirthmonth'], $_POST['edbirthday'], $_POST['edbirthyear']);
+      $edUserInfo = array("uid"=>$_POST['uid'], "username"=>$_POST['username']);
 
       /* Account edit attempt */
-      $retval = $this->editAccount($_POST['eduid'], $_POST['eduser'], $_POST['ednewpass'], $_POST['edemail'], $_POST['edname'], $edbirth, $_POST['edaddr'], $_POST['edsex'], $_POST['edphone'], $_POST['edulevel']);
+      /* New Password error checking */
+      if(isset($_POST['newpass']) && !empty($_POST['newpass'])) {
+         if($_POST['newpass'] == $_POST['newpassconf']) {
+            $edUserInfo['newpass'] = $session->hashPassword($_POST['newpass']);
+         } else {
+            $session->form->setError("newpassconf", "* Must match new password entered above");
+         }
+      }
+
+      /* Email error checking */
+      if(isset($_POST['edemail']) && !empty($_POST['edemail'])) {
+         $edUserInfo['edemail'] = stripslashes(trim($_POST['edemail']));
+      } else {
+         $session->form->setError("edemail", "* An email is required");
+      }
+
+      $edUserInfo['edfname'] = $_POST['edfname'];
+      $edUserInfo['edlname'] = $_POST['edlname'];
+
+      if(isset($_POST['edbirthmonth']) && !empty($_POST['edbirthmonth']) &&
+         isset($_POST['edbirthday']) && !empty($_POST['edbirthday']) &&
+         isset($_POST['edbirthyear']) && !empty($_POST['edbirthyear'])) {
+         /* Convert birthdate into timestamp */
+         date_default_timezone_set('America/New_York');
+         $edbirth = mktime(0, 0, 0, $_POST['edbirthmonth'], $_POST['edbirthday'],
+                        $_POST['edbirthyear']);
+         $edUserInfo['edbirthdate'] = $edbirth;
+      } else {
+         $session->form->setError("edbirth", "* Must specifiy birthdate");
+      }
+
+      $edUserInfo['edgender'] = $_POST['edgender'];
+      $edUserInfo['edaddrline1'] = $_POST['edaddrline1'];
+      $edUserInfo['edaddrline2'] = $_POST['edaddrline2'];
+      $edUserInfo['edcity'] = $_POST['edcity'];
+      $edUserInfo['edstate'] = $_POST['edstate'];
+      $edUserInfo['edzip'] = $_POST['edzip'];
+      $edUserInfo['edphone'] = $_POST['edphone'];
+      $edUserInfo['edutype'] = $_POST['edutype'];
+
+      /* Usertype error checking */
+      $field = "edutype"; //Use field name for usertype
+      if(($edUserInfo['uid'] == $session->uid) &&
+         ($edUserInfo['edutype'] != ADMIN) && $session->database->getNumAdmins < 2) {
+         $session->form->setError($field, "* You are the only Administrator in the system<br />");
+      }
+
+      if($session->form->num_errors == 0) { /* No errors exist */
+         if($session->database->confirmUID($edUserInfo['uid'], DB_TBL_ADMINS)) {
+            $user = new Administrator($edUserInfo);
+            $retval = $user->update($edUserInfo);
+            if(($retval == 0) && ($edUserInfo['edutype'] != ADMIN)) {
+               if(!$user->updateUserType($edUserInfo['edutype'])) {
+                  $session->form->setError("edutype", "* Usertype has remained the same");
+                  $retval = 1;
+               }
+            }
+         } else if($session->database->confirmUID($edUserInfo['uid'], DB_TBL_TELLERS)) {
+            $user = new Teller($edUserInfo);
+            $retval = $user->update($edUserInfo);
+            if(($retval == 0) && ($edUserInfo['edutype'] != TELLER)) {
+               if(!$user->updateUserType($edUserInfo['edutype'])) {
+                  $session->form->setError("edutype", "* Usertype has remained the same");
+                  $retval = 1;
+               }
+            }
+         } else if($session->database->confirmUID($edUserInfo['uid'], DB_TBL_CUSTOMERS)) {
+            $user = new Customer($edUserInfo);
+            $retval = $user->update($edUserInfo);
+            if(($retval == 0) && ($edUserInfo['edutype'] != CUSTOMER)) {
+               if(!$user->updateUserType($edUserInfo['edutype'])) {
+                  $session->form->setError("edutype", "* Usertype has remained the same");
+               	$retval = 1;
+               }
+            }
+         } else {
+            $session->form->setError("edutype", "* Invalid Usertype");
+            $retval = 1;
+         }
+      } else {
+      	$retval = 1;
+      }
 
       /* Account edit successful */
-      if($retval) {
+      if(isset($retval) && ($retval == 0)) {
          $_SESSION['edituser'] = true;
       } else { /* Error found with form */
          $_SESSION['value_array'] = $_POST;
          $_SESSION['error_array'] = $session->form->getErrorArray();
       }
-      header("Location: ".$session->referrer."?uid=".$_POST['eduid']);
+      header("Location: ".$session->referrer."?uid=".$_POST['uid']);
    }
 
    /**
     * procDeleteUser - If submitted username is correct, user is deleted from the database.
     */
-   function procDeleteUser() {
-      global $session, $database;
+   public function procDeleteUser() {//IF time permits, re-implement using new User classes
+      global $session;
 
-      /* Username error checking */
-      $field = "deluser"; //Use the field for username
-      $subuser = $this->checkUsername($field);
-      if($subuser == $session->username) { /* Make sure no one tries and delete themselves */
+      /* uid error checking */
+      $field = "deluser"; //Use the field for uid
+      $subuid = $_POST[$field];
+      if($subuid == $session->user->getUID()) { /* Make sure no one tries and delete themselves */
          $session->form->setError($field, "* You can't delete yourself!<br />");
       }
 
@@ -74,8 +154,9 @@ class AdminProcess
          $_SESSION['value_array'] = $_POST;
          $_SESSION['error_array'] = $session->form->getErrorArray();
       } else { /* Delete user from database */
-         $q = "DELETE FROM ".DB_TBL_USERS." WHERE username = '$subuser'";
-         $database->query($q);
+         $session->database->removeUser($subuid, DB_TBL_ADMINS);
+         $session->database->removeUser($subuid, DB_TBL_TELLERS);
+         $session->database->removeUser($subuid, DB_TBL_CUSTOMERS);
       }
       header("Location: ".$session->referrer);
    }
@@ -85,14 +166,14 @@ class AdminProcess
     * system, which entails removing the username from the users table and adding it to the
     * banned users table.
     */
-   function procBanUser() {
-      global $session, $database;
+   public function procBanUser() {//IF time permits, re-implement using new User classes
+      global $session;
 
       /* Username error checking */
       $field = "banuser"; //Use the field for username
-      $subuser = $this->checkUsername($field);
+      $subuser = $this->_checkUsername($field);
 
-      if($subuser == $session->username) { /* Make sure no one tries and ban themselves */
+      if($subuser == $session->user->username) { /* Make sure no one tries and ban themselves */
          $session->form->setError($field, "* You can't ban yourself!<br />");
       }
 
@@ -100,11 +181,13 @@ class AdminProcess
          $_SESSION['value_array'] = $_POST;
          $_SESSION['error_array'] = $session->form->getErrorArray();
       } else { /* Ban user from member system */
-         $q = "DELETE FROM ".DB_TBL_USERS." WHERE username = '$subuser'";
-         $database->query($q);
+      	$uid = $session->database->getUID($subuser);
+         $session->database->removeUser($uid, DB_TBL_ADMINS);
+         $session->database->removeUser($uid, DB_TBL_TELLERS);
+         $session->database->removeUser($uid, DB_TBL_CUSTOMERS);
 
          $q = "INSERT INTO ".DB_TBL_BANNED_USERS." VALUES ('$subuser', $session->time)";
-         $database->query($q);
+         $session->database->query($q);
       }
       header("Location: ".$session->referrer);
    }
@@ -113,103 +196,29 @@ class AdminProcess
     * procDeleteBannedUser - If the submitted username is correct, the user is deleted from
     * the banned users table, which enables someone to register with that username again.
     */
-   function procDeleteBannedUser() {
-      global $session, $database;
+   public function procDeleteBannedUser() {
+      global $session;
 
       /* Username error checking */
       $field = "delbanuser";  //Use field name for username
-      $subuser = $this->checkUsername($field, true);
+      $subuser = $this->_checkUsername($field, true);
 
       if($session->form->num_errors > 0) { /* Errors exist, have user correct them */
          $_SESSION['value_array'] = $_POST;
          $_SESSION['error_array'] = $session->form->getErrorArray();
       } else { /* Delete user from database */
          $q = "DELETE FROM ".DB_TBL_BANNED_USERS." WHERE username = '$subuser'";
-         $database->query($q);
+         $session->database->query($q);
       }
       header("Location: ".$session->referrer);
    }
 
    /**
-    * editAccount - Attempts to edit the user's account information including the
-    * password, which it first makes sure is correct if entered, if so and the new
-    * password is in the right format, the change is made. All other fields are changed
-    * automatically.
-    */
-   function editAccount($subuid, $subuser, $subnewpass, $subemail, $subname, $subbirth, $subaddr, $subsex, $subphone, $subulevel) {
-      global $database, $session;  //The database and form object
-
-      /* New Password error checking */
-      if($subnewpass) {
-         $field = "ednewpass";  //Use field name for new password
-
-         /* Spruce up password*/
-         $subnewpass = stripslashes($subnewpass);
-
-         /* Check if password is not alphanumeric */
-         if(!eregi("^([0-9a-z])+$", ($subnewpass = trim($subnewpass)))) {
-            $session->form->setError($field, "* New Password not alphanumeric");
-         }
-      }
-
-      /* Email error checking */
-      if($subemail && strlen($subemail = trim($subemail)) > 0) {
-         $field = "edemail";  //Use field name for email
-
-         $subemail = stripslashes($subemail);
-      }
-
-      /* User Level error checking */
-      $field = "edulevel"; //Use field name for user level
-      if(($subuid == $session->uid) && $subulevel && $database->getNumAdmins < 2) {
-         $session->form->setError($field, "* You are the only Administrator in the system<br />");
-      }
-
-      if($session->form->num_errors > 0) { /* Errors exist, have user correct them */
-         return false;
-      }
-
-      /* Update password since there were no errors */
-      if($subnewpass) {
-         $database->updateUserField($subuid,DB_TBL_USERS,"password",$session->hashPassword($subnewpass));
-      }
-
-      if($subemail) { /* Change Email */
-         $database->updateUserField($subuid,DB_TBL_USERS,"email",$subemail);
-      }
-
-      if($subname) { /* Change Name */
-         $database->updateUserField($subuid,DB_TBL_USERS,"fullname",$subname);
-      }
-
-      if($subbirth) { /* Change Birthdate */
-         $database->updateUserField($subuid,DB_TBL_USERS,"birthdate",$subbirth);
-      }
-
-      if($subaddr) { /* Change Address */
-         $database->updateUserField($subuid,DB_TBL_USERS,"address",$subaddr);
-      }
-
-      if($subsex) { /* Change Sex */
-         $database->updateUserField($subuid,DB_TBL_USERS,"sex",$subsex);
-      }
-
-      if($subphone) { /* Change Phone */
-         $database->updateUserField($subuid,DB_TBL_USERS,"phone",$subphone);
-      }
-
-      if($subulevel) { /* Change User Level */
-         $database->updateUserField($subuid,DB_TBL_USERS,"userlevel",(int)$subulevel);
-      }
-      return true; /* Success! */
-   }
-
-   /**
-    * checkUsername - Helper function for the above processing, it makes sure the
+    * _checkUsername - Helper function for the above processing, it makes sure the
     * submitted username is valid, if not, it adds the appropritate error to the form.
     */
-   function checkUsername($uname, $ban=false) {
-      global $database, $session;
+   private function _checkUsername($uname, $ban=false) {
+      global $session;
 
       /* Username error checking */
       $subuser = $_POST[$uname];
@@ -223,7 +232,7 @@ class AdminProcess
 
          if(strlen($subuser) < 5 || strlen($subuser) > 30 ||
             !eregi("^([0-9a-z])+$", $subuser) ||
-            (!$ban && !$database->usernameTaken($subuser))) {
+            (!$ban && !$session->database->usernameTaken($subuser))) {
             $session->form->setError($field, "* Username does not exist<br />");
          }
       }
