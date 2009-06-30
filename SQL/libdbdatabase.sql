@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 25, 2009 at 07:02 PM
+-- Generation Time: Jun 30, 2009 at 04:03 PM
 -- Server version: 5.1.33
 -- PHP Version: 5.2.9-2
 
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `ldb_activeusers` (
 --
 
 INSERT INTO `ldb_activeusers` (`uid`, `timestamp`) VALUES
-(13, 1245882628);
+(13, 1246391947);
 
 -- --------------------------------------------------------
 
@@ -128,24 +128,28 @@ INSERT INTO `ldb_books` (`itemid`, `isbn`, `title`, `author`, `genre`, `publishe
 --
 
 CREATE TABLE IF NOT EXISTS `ldb_borroweditems` (
+  `histnum` int(11) NOT NULL AUTO_INCREMENT COMMENT 'A history number to differentiate otherwise identical rows.',
   `itemid` mediumint(8) NOT NULL,
   `uid` mediumint(8) NOT NULL,
   `duedate` int(11) NOT NULL,
+  PRIMARY KEY (`histnum`),
   KEY `itemid` (`itemid`),
   KEY `uid` (`uid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
 
 --
 -- Dumping data for table `ldb_borroweditems`
 --
 
-INSERT INTO `ldb_borroweditems` (`itemid`, `uid`, `duedate`) VALUES
-(7, 9, 1248973200),
-(8, 9, 1248109200),
-(8, 9, 1246035600),
-(3, 13, 1249405200),
-(16, 9, 1245517200),
-(19, 9, 1246294800);
+INSERT INTO `ldb_borroweditems` (`histnum`, `itemid`, `uid`, `duedate`) VALUES
+(1, 7, 9, 1248973200),
+(2, 8, 9, 1248109200),
+(3, 8, 9, 1246035600),
+(4, 16, 9, 1245517200),
+(5, 19, 9, 1246294800),
+(12, 3, 13, 1),
+(14, 3, 13, 2),
+(13, 3, 13, 1);
 
 -- --------------------------------------------------------
 
@@ -264,14 +268,14 @@ CREATE TABLE IF NOT EXISTS `ldb_items` (
 
 INSERT INTO `ldb_items` (`itemid`, `itemtype`, `quantity`) VALUES
 (2, 'BOOK', 3),
-(3, 'BOOK', 2),
+(3, 'BOOK', 16),
 (4, 'PERIODICAL', 5),
 (5, 'PERIODICAL', 6),
 (6, 'BOOK', 1),
 (7, 'PERIODICAL', 2),
 (8, 'BOOK', 8),
 (9, 'BOOK', 5),
-(10, 'PERIODICAL', 16),
+(10, 'PERIODICAL', 18),
 (11, 'DVD', 2),
 (12, 'PERIODICAL', 0),
 (13, 'DVD', 3),
@@ -293,8 +297,8 @@ INSERT INTO `ldb_items` (`itemid`, `itemtype`, `quantity`) VALUES
 CREATE TABLE IF NOT EXISTS `ldb_periodicals` (
   `itemid` mediumint(8) NOT NULL,
   `isbn` varchar(13) DEFAULT NULL,
-  `issn` varchar(8) DEFAULT NULL,
-  `sici` varchar(100) DEFAULT NULL,
+  `issn` varchar(8) NOT NULL DEFAULT '',
+  `sici` varchar(100) NOT NULL DEFAULT '',
   `title` varchar(160) NOT NULL,
   `editor` varchar(80) NOT NULL,
   `genre` varchar(30) NOT NULL,
@@ -304,7 +308,7 @@ CREATE TABLE IF NOT EXISTS `ldb_periodicals` (
   `description` varchar(512) NOT NULL,
   `cost` decimal(6,2) NOT NULL,
   `latefee` decimal(6,2) NOT NULL,
-  PRIMARY KEY (`itemid`)
+  PRIMARY KEY (`issn`,`sici`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -312,11 +316,11 @@ CREATE TABLE IF NOT EXISTS `ldb_periodicals` (
 --
 
 INSERT INTO `ldb_periodicals` (`itemid`, `isbn`, `issn`, `sici`, `title`, `editor`, `genre`, `publisher`, `issuedate`, `rating`, `description`, `cost`, `latefee`) VALUES
-(4, '', '0040781X', '', 'TIME', 'Richard Stengel', 'News', 'Time Inc.', 1245641827, 3, 'TIME gives you more than just a weekly news summary. TIME provides insightful analysis of today''s important events and what they mean to you and your family--from politics to scientific breakthroughs to human achievement. Plus, TIME helps you keep up with the arts, business, and society. That''s why 30 million people worldwide choose TIME.', '4.95', '0.50'),
-(5, '', '00279358', '', 'National Geographic', 'Chris Johns', 'Geography', 'National Geographic Society', 1245037027, 4, 'NATIONAL GEOGRAPHIC, the flagship magazine of the National Geographic Society, chronicles exploration and adventure, as well as changes that impact life on Earth. Editorial coverage encompasses people and places of the world, with an emphasis on human involvement in a changing universe. Major topics include culture, nature, geography, ecology, science and technology.', '3.95', '0.50'),
-(7, '', '0037301X', '', 'Seventeen', 'Ann Shoket', 'Teen', 'Hearst Corporation', 1240803427, 4, 'Seventeen is your handbook to life! Full of great fashion tips that keep you ahead of the trends... the hottest makeup, the best products for beautiful skin, must have jeans, the best shoes, belts & bags, and those great little dresses that keep you looking your best at school, parties... or just about anywhere!', '2.99', '0.50'),
-(10, '', '01908286', '', 'The Washington Post', 'Marcus Brauchli', 'News', 'Katharine Weymouth', 1231126627, NULL, 'The Washington Post National Weekly edition is a digest of news, politics, and commentary. Each week is filled with incisive reporting, in-depth political analysis, and facts and figures from the most skilled, most seasoned news and editorial pros in Washington.', '1.99', '0.50'),
-(12, '', '00999660', '', 'The Wall Street Journal', 'Robert Thomson', 'News', 'Les Hinton', 1243827427, NULL, 'This daily newspaper published the latest in news from the business and finance world. Additionally, it strives to connect current domestic and international news events to business fluctuations and market changes. It also seeks to inform the educated reader about pressing economic changes and evolution.', '1.10', '0.50');
+(4, '', '0040781X', 'asdfd', 'TIME', 'Richard Stengel', 'News', 'Time Inc.', 1245641827, 3, 'TIME gives you more than just a weekly news summary. TIME provides insightful analysis of today''s important events and what they mean to you and your family--from politics to scientific breakthroughs to human achievement. Plus, TIME helps you keep up with the arts, business, and society. That''s why 30 million people worldwide choose TIME.', '4.95', '0.50'),
+(5, '', '00279358', 'xcvb', 'National Geographic', 'Chris Johns', 'Geography', 'National Geographic Society', 1245037027, 4, 'NATIONAL GEOGRAPHIC, the flagship magazine of the National Geographic Society, chronicles exploration and adventure, as well as changes that impact life on Earth. Editorial coverage encompasses people and places of the world, with an emphasis on human involvement in a changing universe. Major topics include culture, nature, geography, ecology, science and technology.', '3.95', '0.50'),
+(7, '', '0037301X', 'weqrweq', 'Seventeen', 'Ann Shoket', 'Teen', 'Hearst Corporation', 1240803427, 4, 'Seventeen is your handbook to life! Full of great fashion tips that keep you ahead of the trends... the hottest makeup, the best products for beautiful skin, must have jeans, the best shoes, belts & bags, and those great little dresses that keep you looking your best at school, parties... or just about anywhere!', '2.99', '0.50'),
+(10, '', '01908286', 'oiuy', 'The Washington Post', 'Marcus Brauchli', 'News', 'Katharine Weymouth', 1231126627, NULL, 'The Washington Post National Weekly edition is a digest of news, politics, and commentary. Each week is filled with incisive reporting, in-depth political analysis, and facts and figures from the most skilled, most seasoned news and editorial pros in Washington.', '1.99', '0.50'),
+(12, '', '00999660', 'jmnb', 'The Wall Street Journal', 'Robert Thomson', 'News', 'Les Hinton', 1243827427, NULL, 'This daily newspaper published the latest in news from the business and finance world. Additionally, it strives to connect current domestic and international news events to business fluctuations and market changes. It also seeks to inform the educated reader about pressing economic changes and evolution.', '1.10', '0.50');
 
 -- --------------------------------------------------------
 
@@ -355,6 +359,7 @@ CREATE TABLE IF NOT EXISTS `ldb_users` (
   `address` varchar(160) NOT NULL,
   `phone` varchar(26) DEFAULT NULL,
   PRIMARY KEY (`uid`),
+  UNIQUE KEY `username_2` (`username`),
   KEY `username` (`username`,`email`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='basic user data' AUTO_INCREMENT=17 ;
 
@@ -364,7 +369,7 @@ CREATE TABLE IF NOT EXISTS `ldb_users` (
 
 INSERT INTO `ldb_users` (`uid`, `username`, `fullname`, `password`, `userlevel`, `email`, `regtime`, `lastvisit`, `birthdate`, `sex`, `address`, `phone`) VALUES
 (1, 'NicFord1', 'Nicholas Ford', 'd6641a0d3ca7692b30d04e73bdbb6817af22aab612bd57e7d8920a0df', 9, 'Nicholas+LibDBDatabase@Nicks-Net.us', 1245411247, 1245787760, 499503600, 'M', '8131 Silo CT Severn, MD 21144', '(410) 419-5997'),
-(13, 'dbergman', 'Drew Bergman', '11fce37a79abd95b75b2e69f25640071cf6345bf59756537da90f9459', 9, 'dbergman3@gmail.com', 1245526523, 1245882628, 486630000, 'M', '923 Chestnut Ridge Drive', '201-561-3853'),
+(13, 'dbergman', 'Drew Bergman', '11fce37a79abd95b75b2e69f25640071cf6345bf59756537da90f9459', 9, 'dbergman3@gmail.com', 1245526523, 1246391947, 486630000, 'M', '923 Chestnut Ridge Drive', '201-561-3853'),
 (12, 'Teller1', '', 'f1659778a7aa44946cdf88408d278d288b3bfd597d6ab09b1816272a0', 5, 'demos@nicks-net.us', 1245521798, 1245521798, 1245481200, 'M', '', ''),
 (9, 'Customer1', 'demo1', '94886410e9aee5632cc6cb96e00add0ff5b1a1b33ac071ae261d21cfe', 5, 'demo1@nicks-net.us', 1245521587, 1245787770, 1096095600, 'F', '123 Gate Dr', '(410) 555-5555'),
 (14, 'demo5', 'Customer', 'de38097bc13991cea5891bc55bb1de7050839baa0dd8bd4e0ccb6ec6b', 1, 'demo@nicks-net.us', 1245553433, 1245787734, 836982000, 'F', '', '');
