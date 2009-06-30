@@ -28,6 +28,9 @@ if($session->isCustomer()) { //Customer
 }
 
 if($session->isTeller() || $session->isAdmin()) { //Teller or Admin
+   echo "     <li ".($_SERVER['PHP_SELF'] == '/checkinout.php' ? 'id="current"' : '').">"
+       ."<a href=\"".SITE_BASE_URL."/checkin.php\">Check In</a></li>";
+   
    echo "     <li ".($_SERVER['PHP_SELF'] == '/newuser.php' ? 'id="current"' : '').">"
        ."<a href=\"".SITE_BASE_URL."/newuser.php\">Register New Member</a></li>";
 }
