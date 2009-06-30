@@ -1,12 +1,12 @@
-<?
+<?php
 /**
  * userinfo.php
  *
  * This is the User Center page. Only administrators & tellers are allowed to view this page while logged in.
- * This page allows for the creation of new user accounts.  Only admins can create new admins & tellers.  All other users
- * can only create regular customers.
+ * This page allows for the creation of new user accounts.  Only admins can create new admins & tellers.  All
+ * other users can only create regular customers.
  */
-include("include/session.php");
+require_once("include/session.php");
 
 if(!$session->logged_in) {
    header("Location: ".SITE_BASE_URL."/index.php");
@@ -21,32 +21,38 @@ if(!$session->logged_in) {
   <meta name="description" content="LibDBDatabase: Library Database" />
   <meta name="keywords" content="library,database" />
   <meta name="author" content="LibDBDatabase / Original design: Andreas Viklund - http://andreasviklund.com/" />
-  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/andreas06.css" type="text/css" media="screen,projection" />
-  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/slide.css"  type="text/css" media="screen,projection" />
-  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/validate.css"  type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL; ?>/css/andreas06.css" type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL; ?>/css/slide.css"  type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL; ?>/css/validate.css"  type="text/css" media="screen,projection" />
 
   <!-- javascripts -->
   <!-- PNG FIX for IE6 -->
   <!-- http://24ways.org/2007/supersleight-transparent-png-in-ie6 -->
   <!--[if lte IE 6]>
-   <script type="text/javascript" src="<?php echo SITE_BASE_URL?>/js/pngfix/supersleight-min.js"></script>
+   <script type="text/javascript" src="<?php echo SITE_BASE_URL; ?>/js/pngfix/supersleight-min.js"></script>
   <![endif]-->
 
   <!-- jQuery -->
-  <script src="<?php echo SITE_BASE_URL?>/js/jquery-1.3.2.min.js" type="text/javascript"></script>
-  <script src="<?php echo SITE_BASE_URL?>/js/jquery.validate.min.js" type="text/javascript"></script>
-  <script src="<?php echo SITE_BASE_URL?>/js/jquery.metadata.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL; ?>/js/jquery.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL; ?>/js/jquery.validate.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL; ?>/js/jquery.metadata.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL; ?>/js/jquery.maskedinput.min.js" type="text/javascript"></script>
 
   <script type="text/javascript">
      $.metadata.setType("attr", "validate");
 
      $(document).ready(function() {
+     	  $("#edzip").mask("99999?-9999");
+        $("#edphone").mask("(999) 999-9999");
         // validate edit form on keyup and submit
         $("#edituser").validate({
            rules: {
-              edcurpass: {
+              curpass: {
                  required: true,
                  minlength: 5
+              },
+              ednewpassconf: {
+                 equalTo: "#ednewpass"
               },
               edemail: {
                  required: true,
@@ -63,9 +69,12 @@ if(!$session->logged_in) {
               }
            },
            messages: {
-              edcurpass: {
-                 required: "Please provide a password",
+              curpass: {
+                 required: "Please provide your password",
                  minlength: "Your password must be at least 5 characters long"
+              },
+              ednewpassconf: {
+              	  equalTo: "Doesn't match new password entered above"
               },
               edemail: "Please enter a valid email address",
               edbirthmonth: "Please select your birth month",
@@ -78,7 +87,7 @@ if(!$session->logged_in) {
 
 
   <!-- Sliding effect -->
-  <script src="<?php echo SITE_BASE_URL?>/js/slide.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL; ?>/js/slide.js" type="text/javascript"></script>
 
  </head>
 
@@ -109,8 +118,8 @@ if(!$session->logged_in) {
      <div id="topbox">
       <strong>
        <span class="hide">Currently viewing: </span>
-       <a href="<?php echo SITE_BASE_URL?>/index.php">LibDBDatabase</a> &raquo;
-       <a href="<?php echo $_SERVER['PHP_SELF']?>">User Center</a>
+       <a href="<?php echo SITE_BASE_URL; ?>/index.php">LibDBDatabase</a> &raquo;
+       <a href="<?php echo $_SERVER['PHP_SELF']; ?>">User Center</a>
       </strong>
      </div>
 
@@ -121,54 +130,54 @@ if(!$session->logged_in) {
      <a id="main"></a>
      <div id="contentalt">
       <h1>User Center</h1>
-      <img src="<?php echo SITE_BASE_URL?>/img/gravatar-edituser.png" height="80" width="80" alt="Edit User Gravatar" />
+      <img src="<?php echo SITE_BASE_URL; ?>/img/gravatar-edituser.png" height="80" width="80" alt="Edit User Gravatar" />
 
       <font size="5" color="#ff0000">
        <b>::::::::::::::::::::::::::::::::::::::::::::</b>
       </font>
       <br /><br />
 <?php
-if($session->form->num_errors > 0) {
-   echo "      <font size=\"2\" color=\"#ff0000\">".$session->form->num_errors." error(s) found</font>\n";
-}
 
-/**
- * The user has submitted form without errors and user's account has been updated.
- */
-if(isset($_SESSION['edituser'])) {
-   unset($_SESSION['edituser']);
+   if($session->form->num_errors > 0) {
+      echo "<font size=\"2\" color=\"#ff0000\">".$session->form->num_errors." error(s) found</font>\n";
+   }
 
-   echo "      <h1>User Account Edit Success!</h1>";
-   echo "      <p><b>$session->username</b>, your account has been successfully updated.</p>";
+   /* The user has submitted form without errors and user's account has been updated. */
+   if(isset($_SESSION['edituser'])) {
+      unset($_SESSION['edituser']);
+
+      echo "<h1>User Account Edit Success!</h1>";
+      echo "<p><b>".$session->user->username."</b>'s account has been successfully updated.</p>";
+   }
+?>
+      <h1>Update <?php echo $session->user->username;?>'s Account</h1>
+      <form action="process.php" method="POST" id="edituser">
+       <input type="hidden" name="uid" value="<?php echo $session->user->getUID();?>" />
+       <input type="hidden" name="username" value="<?php echo $session->user->username;?>" />
+
+<?php
+if($session->isAdmin() || $session->isTeller()) {
+?>
+       <input type="hidden" name="edhiredate" value="<?php
+   if($session->form->value("edhiredate") == "") {
+      echo $session->user->dateHired;
+   } else {
+      echo $session->form->value("edhiredate");
+   }
+?>" />
+<?php
 }
 ?>
-      <h1>Update Your Account</h1>
-      <form action="process.php" method="POST" id="edituser">
+
        <table align="left" border="0" cellspacing="0" cellpadding="3">
         <tr>
          <td>
-          <label for="eduser" class="grey required">Username:</label>
+          <label for="edcurpass" class="required grey">Current Password:</label>
          </td>
          <td>
-          <input class="field" type="text" name="eduser" maxlength="30" value="<?php
-   if($session->form->value("eduser") == "") {
-      echo $session->userinfo['username'];
-   } else {
-      echo $session->form->value("eduser");
-   }
-?>" readonly />
+          <input type="password" name="curpass" maxlength="30" value="" />
          </td>
-         <td><?php echo $session->form->error("eduser")?></td>
-        </tr>
-
-        <tr>
-         <td>
-          <label for="edcurpass" class="grey required">Current Password:</label>
-         </td>
-         <td>
-          <input type="password" name="edcurpass" maxlength="30" value="<?php echo $session->form->value("edcurpass")?>" />
-         </td>
-         <td><?php echo $session->form->error("edcurpass")?></td>
+         <td><?php echo $session->form->error("curpass")?></td>
         </tr>
 
         <tr>
@@ -176,9 +185,19 @@ if(isset($_SESSION['edituser'])) {
           <label for="ednewpass" class="grey">New Password:</label>
          </td>
          <td>
-          <input type="password" name="ednewpass" maxlength="30" value="<?php echo $session->form->value("ednewpass")?>" />
+          <input type="password" id="ednewpass" name="ednewpass" maxlength="30" value="<?php echo $session->form->value("ednewpass")?>" />
          </td>
          <td><?php echo $session->form->error("ednewpass")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for="ednewpassconf" class="grey">Confirm New Password:</label>
+         </td>
+         <td>
+          <input type="password" id="ednewpassconf" name="ednewpassconf" maxlength="30" value="" />
+         </td>
+         <td><?php echo $session->form->error("ednewpassconf")?></td>
         </tr>
 
         <tr>
@@ -186,10 +205,9 @@ if(isset($_SESSION['edituser'])) {
           <label for="edemail" class="grey required">Email:</label>
          </td>
          <td>
-          <input class="field" type="text" name="edemail" maxlength="96" value="
-<?php
+          <input class="field" type="text" name="edemail" maxlength="96" value="<?php
    if($session->form->value("edemail") == "") {
-      echo $session->userinfo['email'];
+      echo $session->user->email;
    } else {
       echo $session->form->value("edemail");
    }
@@ -200,18 +218,34 @@ if(isset($_SESSION['edituser'])) {
 
         <tr>
          <td>
-          <label for="edname" class="grey">Fullname:</label>
+          <label for="edfname" class="grey">First Name:</label>
          </td>
          <td>
-          <input class="field" type="text" name="edname" maxlength="50" value="<?php
-   if($session->form->value("edname") == "") {
-      echo $session->userinfo['fullname'];
+          <input class="field" type="text" name="edfname" maxlength="50" value="<?php
+   if($session->form->value("edfname") == "") {
+      echo $session->user->firstName;
    } else {
-      echo $session->form->value("edname");
+      echo $session->form->value("edfname");
    }
 ?>" />
          </td>
-         <td><?php echo $session->form->error("edname")?></td>
+         <td><?php echo $session->form->error("edfname")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for="edlname" class="grey">Last Name:</label>
+         </td>
+         <td>
+          <input class="field" type="text" name="edlname" maxlength="50" value="<?php
+   if($session->form->value("edlname") == "") {
+      echo $session->user->lastName;
+   } else {
+      echo $session->form->value("edlname");
+   }
+?>" />
+         </td>
+         <td><?php echo $session->form->error("edlname")?></td>
         </tr>
 
         <tr>
@@ -219,17 +253,17 @@ if(isset($_SESSION['edituser'])) {
           <label class="grey required">Birthdate:</label>
 <?php
    if($session->form->value("edbirthmonth") == "") {
-      $subbirthmonth = date("n", $session->userinfo['birthdate']);
+      $subbirthmonth = date("n", $session->user->birthDate);
    } else {
       $subbirthmonth = $session->form->value("edbirthmonth");
    }
    if($session->form->value("edbirthday") == "") {
-      $subbirthday = date("j", $session->userinfo['birthdate']);
+      $subbirthday = date("j", $session->user->birthDate);
    } else {
       $subbirthday = $session->form->value("edbirthday");
    }
    if($session->form->value("edbirthyear") == "") {
-      $subbirthyear = date("o", $session->userinfo['birthdate']);
+      $subbirthyear = date("o", $session->user->birthDate);
    } else {
       $subbirthyear = $session->form->value("edbirthyear");
    }
@@ -281,50 +315,215 @@ if(isset($_SESSION['edituser'])) {
 
         <tr>
          <td>
-          <label for="edsex" class="grey">Sex:</label>
+          <label for="edgender" class="grey">Gender:</label>
          </td>
          <td>
-          <label for="male"><input type="radio" name="edsex" id="male" value="M"
+          <label for="male"><input type="radio" name="edgender" id="male" value="M"
 <?php
-   if($session->form->value("edsex") == "") {
-      if($session->userinfo['sex'] == "M") {
+   if($session->form->value("edgender") == "") {
+      if($session->user->gender == "M") {
          echo "checked ";
       }
    } else {
-      if($session->form->value("edsex") == "M") {
+      if($session->form->value("edgender") == "M") {
          echo "checked ";
       }
    }
 ?>/>Male</label>
-          <label for="female"><input type="radio" name="edsex" id="female" value="F" <?php
-   if($session->form->value("edsex") == "") {
-      if($session->userinfo['sex'] == "F") {
+          <label for="female"><input type="radio" name="edgender" id="female" value="F" <?php
+   if($session->form->value("edgender") == "") {
+      if($session->user->gender == "F") {
          echo "checked ";
       }
    } else {
-      if($session->form->value("edsex") == "F") {
+      if($session->form->value("edgender") == "F") {
          echo "checked ";
       }
    }
 ?>/>Female</label>
          </td>
-         <td><?php echo $session->form->error("edsex")?></td>
+         <td><?php echo $session->form->error("edgender")?></td>
+        </tr>
+
+        <tr><td colspan="2">Address:</td></tr>
+        <tr>
+         <td>
+          <label for="edaddrline1" class="grey">Line 1:</label>
+         </td>
+         <td>
+          <input class="field" type="text" name="edaddrline1" maxlength="80" value="<?php
+   if($session->form->value("edaddrline1") == "") {
+      echo $session->user->address['line1'];
+   } else {
+      echo $session->form->value("edaddrline1");
+   }
+?>" />
+         </td>
+         <td><?php echo $session->form->error("edaddrline1")?></td>
         </tr>
 
         <tr>
          <td>
-          <label for="edaddr" class="grey">Address:</label>
+          <label for="edaddrline2" class="grey">Line 2:</label>
          </td>
          <td>
-          <input class="field" type="text" name="edaddr" maxlength="160" value="<?php
-   if($session->form->value("edaddr") == "") {
-      echo $session->userinfo['address'];
+          <input class="field" type="text" name="edaddrline2" maxlength="80" value="<?php
+   if($session->form->value("edaddrline2") == "") {
+      echo $session->user->address['line2'];
    } else {
-      echo $session->form->value("edaddr");
+      echo $session->form->value("edaddrline2");
    }
 ?>" />
          </td>
-         <td><?php echo $session->form->error("edaddr")?></td>
+         <td><?php echo $session->form->error("edaddrline2")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for="edcity" class="grey">City:</label>
+         </td>
+         <td>
+          <input class="field" type="text" name="edcity" maxlength="40" value="<?php
+   if($session->form->value("edcity") == "") {
+      echo $session->user->address['city'];
+   } else {
+      echo $session->form->value("edcity");
+   }
+?>" />
+         </td>
+         <td><?php echo $session->form->error("edcity")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for="edstate" class="grey">State:</label>
+         </td>
+         <td>
+          <select name="edstate">
+           <option value="">Select a State:</option>
+           <option value="AL"<?php if($session->form->value("edstate") == "AL") echo " selected";
+                                   else if($session->user->address['state'] == "AL") echo " selected";?>>Alabama</option>
+           <option value="AK"<?php if($session->form->value("edstate") == "AK") echo " selected";
+                                   else if($session->user->address['state'] == "AK") echo " selected";?>>Alaska</option>
+           <option value="AZ"<?php if($session->form->value("edstate") == "AZ") echo " selected";
+                                   else if($session->user->address['state'] == "AZ") echo " selected";?>>Arizona</option>
+           <option value="AR"<?php if($session->form->value("edstate") == "AR") echo " selected";
+                                   else if($session->user->address['state'] == "AR") echo " selected";?>>Arkansas</option>
+           <option value="CA"<?php if($session->form->value("edstate") == "CA") echo " selected";
+                                   else if($session->user->address['state'] == "CA") echo " selected";?>>California</option>
+           <option value="CO"<?php if($session->form->value("edstate") == "CO") echo " selected";
+                                   else if($session->user->address['state'] == "CO") echo " selected";?>>Colorado</option>
+           <option value="CT"<?php if($session->form->value("edstate") == "CT") echo " selected";
+                                   else if($session->user->address['state'] == "CT") echo " selected";?>>Connecticut</option>
+           <option value="DC"<?php if($session->form->value("edstate") == "DC") echo " selected";
+                                   else if($session->user->address['state'] == "DC") echo " selected";?>>District of Columbia</option>
+           <option value="DE"<?php if($session->form->value("edstate") == "DE") echo " selected";
+                                   else if($session->user->address['state'] == "DE") echo " selected";?>>Delaware</option>
+           <option value="FL"<?php if($session->form->value("edstate") == "FL") echo " selected";
+                                   else if($session->user->address['state'] == "FL") echo " selected";?>>Florida</option>
+           <option value="GA"<?php if($session->form->value("edstate") == "GA") echo " selected";
+                                   else if($session->user->address['state'] == "GA") echo " selected";?>>Georgia</option>
+           <option value="HI"<?php if($session->form->value("edstate") == "HI") echo " selected";
+                                   else if($session->user->address['state'] == "HI") echo " selected";?>>Hawaii</option>
+           <option value="ID"<?php if($session->form->value("edstate") == "ID") echo " selected";
+                                   else if($session->user->address['state'] == "ID") echo " selected";?>>Idaho</option>
+           <option value="IL"<?php if($session->form->value("edstate") == "IL") echo " selected";
+                                   else if($session->user->address['state'] == "IL") echo " selected";?>>Illinois</option>
+           <option value="IN"<?php if($session->form->value("edstate") == "IN") echo " selected";
+                                   else if($session->user->address['state'] == "IN") echo " selected";?>>Indiana</option>
+           <option value="IA"<?php if($session->form->value("edstate") == "IA") echo " selected";
+                                   else if($session->user->address['state'] == "IA") echo " selected";?>>Iowa</option>
+           <option value="KS"<?php if($session->form->value("edstate") == "KS") echo " selected";
+                                   else if($session->user->address['state'] == "KS") echo " selected";?>>Kansas</option>
+           <option value="KY"<?php if($session->form->value("edstate") == "KY") echo " selected";
+                                   else if($session->user->address['state'] == "KY") echo " selected";?>>Kentucky</option>
+           <option value="LA"<?php if($session->form->value("edstate") == "LA") echo " selected";
+                                   else if($session->user->address['state'] == "LA") echo " selected";?>>Louisiana</option>
+           <option value="ME"<?php if($session->form->value("edstate") == "ME") echo " selected";
+                                   else if($session->user->address['state'] == "ME") echo " selected";?>>Maine</option>
+           <option value="MD"<?php if($session->form->value("edstate") == "MD") echo " selected";
+                                   else if($session->user->address['state'] == "MD") echo " selected";?>>Maryland</option>
+           <option value="MA"<?php if($session->form->value("edstate") == "MA") echo " selected";
+                                   else if($session->user->address['state'] == "MA") echo " selected";?>>Massachusetts</option>
+           <option value="MI"<?php if($session->form->value("edstate") == "MI") echo " selected";
+                                   else if($session->user->address['state'] == "MI") echo " selected";?>>Michigan</option>
+           <option value="MN"<?php if($session->form->value("edstate") == "MN") echo " selected";
+                                   else if($session->user->address['state'] == "MN") echo " selected";?>>Minnesota</option>
+           <option value="MS"<?php if($session->form->value("edstate") == "MS") echo " selected";
+                                   else if($session->user->address['state'] == "MS") echo " selected";?>>Mississippi</option>
+           <option value="MO"<?php if($session->form->value("edstate") == "MO") echo " selected";
+                                   else if($session->user->address['state'] == "MO") echo " selected";?>>Missouri</option>
+           <option value="MT"<?php if($session->form->value("edstate") == "MT") echo " selected";
+                                   else if($session->user->address['state'] == "MT") echo " selected";?>>Montana</option>
+           <option value="NE"<?php if($session->form->value("edstate") == "NE") echo " selected";
+                                   else if($session->user->address['state'] == "NE") echo " selected";?>>Nebraska</option>
+           <option value="NV"<?php if($session->form->value("edstate") == "NV") echo " selected";
+                                   else if($session->user->address['state'] == "NV") echo " selected";?>>Nevada</option>
+           <option value="NH"<?php if($session->form->value("edstate") == "NH") echo " selected";
+                                   else if($session->user->address['state'] == "NH") echo " selected";?>>New Hampshire</option>
+           <option value="NJ"<?php if($session->form->value("edstate") == "NJ") echo " selected";
+                                   else if($session->user->address['state'] == "NJ") echo " selected";?>>New Jersey</option>
+           <option value="NM"<?php if($session->form->value("edstate") == "NM") echo " selected";
+                                   else if($session->user->address['state'] == "NM") echo " selected";?>>New Mexico</option>
+           <option value="NY"<?php if($session->form->value("edstate") == "NY") echo " selected";
+                                   else if($session->user->address['state'] == "NY") echo " selected";?>>New York</option>
+           <option value="NC"<?php if($session->form->value("edstate") == "NC") echo " selected";
+                                   else if($session->user->address['state'] == "NC") echo " selected";?>>North Carolina</option>
+           <option value="ND"<?php if($session->form->value("edstate") == "ND") echo " selected";
+                                   else if($session->user->address['state'] == "ND") echo " selected";?>>North Dakota</option>
+           <option value="OH"<?php if($session->form->value("edstate") == "OH") echo " selected";
+                                   else if($session->user->address['state'] == "OH") echo " selected";?>>Ohio</option>
+           <option value="OK"<?php if($session->form->value("edstate") == "OK") echo " selected";
+                                   else if($session->user->address['state'] == "OK") echo " selected";?>>Oklahoma</option>
+           <option value="OR"<?php if($session->form->value("edstate") == "OR") echo " selected";
+                                   else if($session->user->address['state'] == "OR") echo " selected";?>>Oregon</option>
+           <option value="PA"<?php if($session->form->value("edstate") == "PA") echo " selected";
+                                   else if($session->user->address['state'] == "PA") echo " selected";?>>Pennsylvania</option>
+           <option value="PR"<?php if($session->form->value("edstate") == "PR") echo " selected";
+                                   else if($session->user->address['state'] == "PR") echo " selected";?>>Puerto Rico</option>
+           <option value="RI"<?php if($session->form->value("edstate") == "RI") echo " selected";
+                                   else if($session->user->address['state'] == "RI") echo " selected";?>>Rhode Island</option>
+           <option value="SC"<?php if($session->form->value("edstate") == "SC") echo " selected";
+                                   else if($session->user->address['state'] == "SC") echo " selected";?>>South Carolina</option>
+           <option value="SD"<?php if($session->form->value("edstate") == "SD") echo " selected";
+                                   else if($session->user->address['state'] == "SD") echo " selected";?>>South Dakota</option>
+           <option value="TN"<?php if($session->form->value("edstate") == "TN") echo " selected";
+                                   else if($session->user->address['state'] == "TN") echo " selected";?>>Tennessee</option>
+           <option value="TX"<?php if($session->form->value("edstate") == "TX") echo " selected";
+                                   else if($session->user->address['state'] == "TX") echo " selected";?>>Texas</option>
+           <option value="UT"<?php if($session->form->value("edstate") == "UT") echo " selected";
+                                   else if($session->user->address['state'] == "UT") echo " selected";?>>Utah</option>
+           <option value="VT"<?php if($session->form->value("edstate") == "VT") echo " selected";
+                                   else if($session->user->address['state'] == "VT") echo " selected";?>>Vermont</option>
+           <option value="VA"<?php if($session->form->value("edstate") == "VA") echo " selected";
+                                   else if($session->user->address['state'] == "VA") echo " selected";?>>Virginia</option>
+           <option value="WA"<?php if($session->form->value("edstate") == "WA") echo " selected";
+                                   else if($session->user->address['state'] == "WA") echo " selected";?>>Washington</option>
+           <option value="WV"<?php if($session->form->value("edstate") == "WV") echo " selected";
+                                   else if($session->user->address['state'] == "WV") echo " selected";?>>West Virginia</option>
+           <option value="WI"<?php if($session->form->value("edstate") == "WI") echo " selected";
+                                   else if($session->user->address['state'] == "WI") echo " selected";?>>Wisconsin</option>
+           <option value="WY"<?php if($session->form->value("edstate") == "WY") echo " selected";
+                                   else if($session->user->address['state'] == "WY") echo " selected";?>>Wyoming</option>
+          </select>
+         </td>
+         <td><?php echo $session->form->error("edstate")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for="edzip" class="grey">Zip:</label>
+         </td>
+         <td>
+          <input class="field" type="text" id="edzip" name="edzip" maxlength="10" value="<?php
+   if($session->form->value("edzip") == "") {
+      echo $session->user->address['zip'];
+   } else {
+      echo $session->form->value("edzip");
+   }
+?>" />
+         </td>
+         <td><?php echo $session->form->error("edzip")?></td>
         </tr>
 
         <tr>
@@ -332,9 +531,9 @@ if(isset($_SESSION['edituser'])) {
           <label for="edphone" class="grey">Phone:</label>
          </td>
          <td>
-          <input class="field" type="text" name="edphone" maxlength="26" value="<?php
+          <input class="field" type="text" id="edphone" name="edphone" maxlength="26" value="<?php
    if($session->form->value("edphone") == "") {
-      echo $session->userinfo['phone'];
+      echo $session->user->phone;
    } else {
       echo $session->form->value("edphone");
    }
@@ -345,16 +544,16 @@ if(isset($_SESSION['edituser'])) {
 
         <tr>
          <td>
-          <label class="grey">User Level:</label>
+          <label class="grey">Usertype:</label>
          </td>
          <td>
-          <select name="edulevel" disabled>
-           <option value="<?php echo CUST_LEVEL?>"<?php echo ($session->userlevel == CUST_LEVEL) ? ' selected' : '' ?>>Customer</option>
-           <option value="<?php echo TELLER_LEVEL?>"<?php echo ($session->userlevel == TELLER_LEVEL) ? ' selected' : '' ?>>Teller</option>
-           <option value="<?php echo ADMIN_LEVEL?>"<?php echo ($session->userlevel == ADMIN_LEVEL) ? ' selected' : '' ?>>Administrator</option>
+          <select name="edutype"<?php echo ($session->isAdmin() ? '' : ' disabled')?>>
+           <option value="<?php echo CUST; ?>"<?php echo ($session->isCustomer()) ? ' selected' : '' ?>>Customer</option>
+           <option value="<?php echo TELLER; ?>"<?php echo ($session->isTeller()) ? ' selected' : '' ?>>Teller</option>
+           <option value="<?php echo ADMIN; ?>"<?php echo ($session->isAdmin()) ? ' selected' : '' ?>>Administrator</option>
           </select>
          </td>
-         <td><?php echo $session->form->error("edulevel")?></td>
+         <td><?php echo $session->form->error("edutype")?></td>
         </tr>
 
         <tr>

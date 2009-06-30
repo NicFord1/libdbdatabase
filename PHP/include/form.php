@@ -12,7 +12,7 @@ class Form {
    var $num_errors;        //The number of errors in submitted form
 
    /* Class constructor */
-   function Form() {
+   function __construct() {
       /**
        * Get form value and error arrays, used when there is an error with a
        * user-submitted form.

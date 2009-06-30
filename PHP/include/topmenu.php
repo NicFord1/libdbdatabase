@@ -10,16 +10,14 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'topmenu.php') !== false) {
 ?>
    <div id="nav">
     <ul>
-     <li <?=($_SERVER['PHP_SELF'] == '/index.php' || $_SERVER['PHP_SELF'] == '/' ? 'id="current"' : '')?>>
-      <a href="<?=SITE_BASE_URL?>/index.php">Front page</a>
+     <li <?php echo ($_SERVER['PHP_SELF'] == '/index.php' || $_SERVER['PHP_SELF'] == '/' ? 'id="current"' : '')?>>
+      <a href="<?php echo SITE_BASE_URL?>/index.php">Front page</a>
      </li>
 <?php
 /**
  * Display relavent links based on user privileges.
  */
-if($session->isCustomer()) { //Customer
-   echo "     <li ".($_SERVER['PHP_SELF'] == '/search.php' ? 'id="current"' : '').">"
-       ."<a href=\"".SITE_BASE_URL."/search.php\">Search</a></li>";
+if($session->isCustomer()) { //Customer, Teller OR Administrator
    echo "     <li ".($_SERVER['PHP_SELF'] == '/userhistory.php' ? 'id="current"' : '').">"
        ."<a href=\"".SITE_BASE_URL."/userhistory.php\">View My History</a></li>";
 
@@ -28,9 +26,6 @@ if($session->isCustomer()) { //Customer
 }
 
 if($session->isTeller() || $session->isAdmin()) { //Teller or Admin
-   echo "     <li ".($_SERVER['PHP_SELF'] == '/checkinout.php' ? 'id="current"' : '').">"
-       ."<a href=\"".SITE_BASE_URL."/checkin.php\">Check In</a></li>";
-   
    echo "     <li ".($_SERVER['PHP_SELF'] == '/newuser.php' ? 'id="current"' : '').">"
        ."<a href=\"".SITE_BASE_URL."/newuser.php\">Register New Member</a></li>";
 }

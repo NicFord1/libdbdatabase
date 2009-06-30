@@ -16,6 +16,7 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'config.php') !== false) {
 }
 
 
+define("SITE_NAME", "LibDBDatabase");
 define("SITE_BASE_URL", "http://LibDBDatabase.Nicks-Net.us");
 
 
@@ -23,18 +24,14 @@ define("SITE_BASE_URL", "http://LibDBDatabase.Nicks-Net.us");
  ** AUTHENTICATION CONSTANTS **
 \******************************/
 /**
- * Username and Level Variables - the admin page will only be accessible
- * to those users at the admin user level.  Feel free to change the guest
- * name and level Variables as you see fit, you may also add additional
- * level specifications.
- *
- * Levels must be digits between 0-9.
+ * Usertype Constant - the admin page will only be accessible to those users
+ * of the type Administrator. Feel free to change as you see fit, you may also
+ * add additional usertypes.
  */
-define("GUEST_NAME", "Guest");
-define("ADMIN_LEVEL",  9);
-define("TELLER_LEVEL", 5);
-define("CUST_LEVEL",   1);
-define("GUEST_LEVEL",  0);
+define("GUEST",  "Guest");
+define("CUST",   "Customer");
+define("TELLER", "Teller");
+define("ADMIN",  "Administrator");
 
 
 define("SALT_LENGTH", 17);
@@ -80,9 +77,9 @@ define("SALTLENGTH", 17);
  * that the script sends to users, and whether to send a welcome email to
  * newly registered users.
  */
-define("EMAIL_FROM_NAME", "LibDBDatabase");
+define("EMAIL_FROM_NAME", SITE_NAME);
 define("EMAIL_FROM_ADDR", "LibDBDatabase-noreply@Nicks-Net.us");
-define("EMAIL_WELCOME", false);
+define("EMAIL_WELCOME", true);
 
 
 /**
@@ -90,5 +87,4 @@ define("EMAIL_WELCOME", false);
  * letters are converted automatically.
  */
 define("ALL_LOWERCASE", false);
-
 ?>

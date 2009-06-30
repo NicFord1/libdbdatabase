@@ -104,86 +104,52 @@ if($trimmed == "") {
   echo "<p>We dont seem to have a search parameter!</p>";
   exit;
 } else {
-   // Load media plugins which will perform search for us.
-   opendir("plugins");
-   while($file = readdir())
-   {
-     if(is_file("plugins/$file"))
-     {
-       require_once("plugins/$file");
-     }
+   $q = "SELECT * FROM ldb_books WHERE author LIKE \"%$trimmed%\" OR "
+       ."description LIKE \"%$trimmed%\" OR title LIKE \"%$trimmed%\""
+       ." ORDER BY author";
+
+   $results = mysql_query($q);
+   if($results) {
+ 	   $numresults = mysql_num_rows($results);
    }
 
-   // Tell plugins to search for items
-   // $searchresults is a list of lists of items. An item is a map from
-   // column name to data.
-   $searchresults = performFunctionOnAllPlugins("search", $trimmed, $database);
+   if ($numresults == 0) {
+      echo "<p>Sorry, your search: &quot;".$trimmed."&quot; returned zero results</p>";
+   } else {
+	   if(empty($s)) {
+	      $s = 0;
+	   }
 
+	   // get results
+	   $q .= " limit $s,$limit";
+	   $result = $database->query($q);
 
-   $numresults = 0;
-   // Aggregate all column names that we need
-   foreach($searchresults as $aresultlist)
-   {
-     if(!is_array($aresultlist))
-     {
-       continue;
-     }
-     foreach($aresultlist as $aresult)
-     {
-       // Copy results to a flat list
-       $results[$numresults++] = $aresult;
+	   // begin to show results set
+	   $count = 1 + $s ;
+		echo "<br /><table border='1'><tr>";
 
-       // Now aggregate the columns
-       $columnsForThisItem = array_keys($aresult);
+		$itemFields = array("ISBN", "Title", "Author", "Publisher", "ReleaseDate", "Rating", "Description");
+		for($i=0; $i<count($itemFields); $i++)
+		{
+		    //$field = mysql_fetch_field($result);
+		    echo "<td>$itemFields[$i]</td>";
+		}
 
-       foreach($columnsForThisItem as $newcolumn)
-       {
-         if(!array_key_exists($newcolumn, $column_names))
-         {
-           $column_names[$newcolumn] = 1;
-           echo "Added $newcolumn<br>";
-         }
-       }
-     }
-   }
-   $itemFields = array_keys($column_names);
+	   while ($row = mysql_fetch_array($result)) {
+			echo "<tr>";
+			echo "<td>".$row["isbn"]."</td>";
+			echo "<td>".$row["title"]."</td>";
+			echo "<td>".$row["author"]."</td>";
+			echo "<td>".$row["publisher"]."</td>";
+			echo "<td>".$row["releasedate"]."</td>";
+			echo "<td>".$row["rating"]."</td>";
+			echo "<td>".$row["description"]."</td>";
+			echo "</tr>";
+	      $count++ ;
+	   }
+	   echo "</table><br />";
 
-
-   // begin to show results set
-   $count = 1 + $s ;
-   echo "<br /><table border='1'><tr>";
-
-
-   // Print first row of table, showing the column names
-   for($i=0; $i<count($itemFields); $i++)
-   {
-     echo "<td>$itemFields[$i]</td>";
-   }
-
-   // Print item rows
-   foreach($results as $aresult)
-   {
-    echo "<tr>";
-
-    foreach($itemFields as $field)
-    {
-      if(array_key_exists($field, $aresult))
-      {
-        $text = $aresult[$field];
-      } else {
-        $text = "n/a";
-      }
-      echo "<td>".$text."</td>";
-    }
-
-    echo "</tr>";
-   }
- $count++ ;
-
-
-   echo "</table><br />";
-
-   $currPage = (($s/$limit) + 1);
+	   $currPage = (($s/$limit) + 1);
 
 	   // create links for more results
 	   if ($s>=1) { // bypass PREV link if s is 0
@@ -209,7 +175,7 @@ if($trimmed == "") {
 	   }
 	   $b = $s + 1 ;
 	   echo "<p>Showing results $b to $a of $numresults</p>";
-
+   }
 }
 ?>
       <p class="hide"><a href="#top">Back to top</a></p>

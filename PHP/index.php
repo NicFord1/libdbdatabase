@@ -27,7 +27,8 @@ require_once("include/session.php");
   <![endif]-->
 
   <!-- jQuery -->
-  <script src="<?php echo SITE_BASE_URL?>/js/jquery-1.3.2.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery.form.min.js" type="text/javascript"></script>
   <script src="<?php echo SITE_BASE_URL?>/js/jquery.validate.min.js" type="text/javascript"></script>
   <script src="<?php echo SITE_BASE_URL?>/js/jquery.metadata.js" type="text/javascript"></script>
 
@@ -38,7 +39,7 @@ require_once("include/session.php");
         // validate login form on keyup and submit
         $("#login").validate({
            rules: {
-              user: {
+              uname: {
                  required: true,
                  minlength: 5
               },
@@ -48,7 +49,7 @@ require_once("include/session.php");
               }
            },
            messages: {
-              user: {
+              uname: {
                  required: "Please provide a username",
                  minlength: "Your username must be at least 5 characters long"
               },
@@ -59,7 +60,7 @@ require_once("include/session.php");
            }
         });
      });
-</script>
+  </script>
 
 
   <!-- Sliding effect -->
@@ -73,8 +74,8 @@ require_once("include/session.php");
 
 <?php
 /**
- * User has already logged in, so display relavent links, including
- * a link to the admin center if the user is an administrator.
+ * User has already logged in, so display relavent links, including a link to
+ * the admin center if the user is an administrator.
  */
 if(!$session->logged_in) {
 ?>
@@ -86,19 +87,20 @@ if(!$session->logged_in) {
       <h1>Welcome to LibDBDatabase</h1>
       <h2>Library Database System</h2>
       <p class="grey">
-       We are here to provide a wealth of information and entertainment to our members!  With over 1 million
-       titles in our collection, if we don't have what you're looking for, we'll get a copy.
+       We are here to provide a wealth of information and entertainment to our
+       members!  With over 1 million titles in our collection, if we don't have
+       what you're looking for, we'll get a copy.
       </p>
-
+      <div id="result"></div>
 <?php
    if($session->form->num_errors > 0) {
-      echo "      <font size=\"2\" color=\"#ff0000\">".$session->form->num_errors." error(s) found</font>\n";
+      echo "<font size=\"2\" color=\"#ff0000\">".$session->form->num_errors." error(s) found</font>\n";
 
       //login errors
       if($session->form->value("sublogin") == "1") {
-         echo "      <p>Login Credentials:</p>\n";
-         echo "      <label for=\"user\">".$session->form->error("user")."</label>\n";
-         echo "      <label for=\"pass\">".$session->form->error("pass")."</label>\n";
+         echo "<p>Login Credentials:</p>\n";
+         echo "<label for=\"uname\">".$session->form->error("uname")."</label>\n";
+         echo "<label for=\"pass\">".$session->form->error("pass")."</label>\n";
       }
    }
 ?>
@@ -106,11 +108,11 @@ if(!$session->logged_in) {
 
      <div class="left">
       <!-- Login Form -->
-      <form class="clearfix" action="process.php" method="post" id="login">
+      <form class="clearfix" action="<?php echo SITE_BASE_URL; ?>/process.php" method="post" id="login">
        <h1>Member Login</h1>
 
-       <label class="grey required" for="user">Username:</label>
-       <input class="field" type="text" name="user" id="user" value="<?php echo $session->form->value("user")?>" size="23" />
+       <label class="grey required" for="uname">Username:</label>
+       <input class="field" type="text" name="uname" id="uname" value="<?php echo $session->form->value("uname")?>" size="23" />
 
        <label class="grey required" for="pass">Password:</label>
        <input class="field" type="password" name="pass" id="pass" value="" size="23" />
@@ -123,15 +125,16 @@ if(!$session->logged_in) {
        <div class="clear"></div>
        <input type="hidden" name="sublogin" value="1">
        <input type="submit" name="submit" value="Login" class="bt_login" />
-       <a class="lost-pass" href="<?php echo SITE_BASE_URL?>/forgotpass.php">Lost your password?</a>
+       <a class="lost-pass" href="<?php echo SITE_BASE_URL; ?>/forgotpass.php">Lost your password?</a>
       </form>
      </div>
 
      <div class="left right">
       <h1>Not a member yet?  Sign-up!</h1>
       <p>
-       We welcome new members to our library.  All we ask is that you provide some details so that we can
-       get you started with a new account.  Sign-up <a href="<?php echo SITE_BASE_URL?>/newuser.php">here</a>!
+       We welcome new members to our library.  All we ask is that you provide
+       some details so that we can get you started with a new account.  Sign-up
+       <a href="<?php echo SITE_BASE_URL; ?>/newuser.php">here</a>!
       </p>
      </div>
     </div>
@@ -140,7 +143,7 @@ if(!$session->logged_in) {
    <div class="tab">
     <ul class="login">
      <li class="left">&nbsp;</li>
-     <li>Hello <?php echo $session->username?>!</li>
+     <li>Hello <?php echo $session->user->username; ?>!</li>
      <li class="sep">|</li>
      <li id="toggle">
       <a id="open" class="open" href="#">Log In | Register</a>
@@ -159,9 +162,9 @@ if(!$session->logged_in) {
    <div class="tab">
     <ul class="login">
      <li class="left">&nbsp;</li>
-     <li>Welcome <?php echo $session->username?>!</li>
+     <li>Welcome <?php echo $session->user->username; ?>!</li>
      <li class="sep">|</li>
-     <li><a href="<?php echo SITE_BASE_URL?>/process.php?logout">Logout</a></li>
+     <li><a href="<?php echo SITE_BASE_URL; ?>/process.php?logout">Logout</a></li>
      <li class="right">&nbsp;</li>
     </ul>
    </div>
@@ -215,8 +218,9 @@ if($session->form->num_errors > 0) {
      <div id="rightside">
       <h1>Template info:</h1>
       <p>
-       andreas06 is built with valid XHTML 1.1 and CSS2. It conforms to section 508 and a WCAG 1.0 AAA rating.
-       It has full support for browser-based font-resizing, 100% readable also even in text-based browsers.
+       andreas06 is built with valid XHTML 1.1 and CSS2. It conforms to section
+       508 and a WCAG 1.0 AAA rating. It has full support for browser-based
+       font-resizing, 100% readable also even in text-based browsers.
       </p>
       <p>/<strong>Andreas</strong></p>
 
@@ -238,9 +242,11 @@ if($session->form->num_errors > 0) {
       <img src="<?php echo SITE_BASE_URL?>/img/gravatar-books.png" height="80" width="80" alt="Gravatar example" />
 
       <p class="intro">
-       ...an open source library database app by a group of UMBC students. This was created for a project
-       in CMSC 432 during the Summer of 2009 semester.
+       ...an open source library database app by a group of UMBC students. This
+       was created for a project in CMSC 432 during the Summer of 2009 semester.
       </p>
+
+      <h2>Now some filler...</h2>
 
       <p>
        Like in my other templates, the extra features are all built into the stylesheet. The simple structure
