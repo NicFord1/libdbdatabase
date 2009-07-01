@@ -86,7 +86,7 @@ class Session {
 
       /* Username and uid have been set and not guest */
       if(isset($_SESSION['username']) && isset($_SESSION['uid']) &&
-         $_SESSION['username'] != GUEST_NAME) {
+         $_SESSION['username'] != GUEST) {
          /* Confirm that username and uid are valid */
          if($this->database->confirmUserUID($_SESSION['username'], $_SESSION['uid']) != 0) {
             /* Variables are incorrect, user not logged in */
