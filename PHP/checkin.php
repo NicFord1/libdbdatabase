@@ -88,11 +88,11 @@ require_once("include/session.php");
 		<tr>
 		<td>Media ID number: </td>
 		 <td><input type="text" name="q" value="<?php
-		 	if(isset($_GET['isbn']) && !empty($_GET['isbn'])){ 
+		 	if(isset($_GET['isbn']) && !empty($_GET['isbn'])){
 				echo $_GET['isbn'];
-			} else if(isset($_GET['issn']) && !empty($_GET['issn'])){ 
+			} else if(isset($_GET['issn']) && !empty($_GET['issn'])){
 				echo $_GET['issn'];
-			} else if(isset($_GET['upc']) && !empty($_GET['upc'])){ 
+			} else if(isset($_GET['upc']) && !empty($_GET['upc'])){
 				echo $_GET['upc'];
 			} if(!isset($_POST["q"]) || empty($_POST["q"])) {
 				echo "";
@@ -103,14 +103,14 @@ require_once("include/session.php");
 		  <select name="idtype">
 			<?php
 				$selected;
-				if((isset($_GET['isbn']) && !empty($_GET['isbn'])) || 
-					$_POST["idtype"] == "ISBN"){ 
+				if((isset($_GET['isbn']) && !empty($_GET['isbn'])) ||
+					$_POST["idtype"] == "ISBN"){
 					$selected = 1;
-				} else if((isset($_GET['issn']) && !empty($_GET['issn'])) || 
-					$_POST["idtype"] == "ISSN"){ 
+				} else if((isset($_GET['issn']) && !empty($_GET['issn'])) ||
+					$_POST["idtype"] == "ISSN"){
 					$selected = 2;
-				} else if((isset($_GET['upc']) && !empty($_GET['upc'])) || 
-					$_POST["idtype"] == "UPC"){ 
+				} else if((isset($_GET['upc']) && !empty($_GET['upc'])) ||
+					$_POST["idtype"] == "UPC"){
 					$selected = 3;
 				} else if(!isset($_POST["idtype"]) || empty($_POST["idtype"])){
 					$selected = 0;
@@ -161,13 +161,13 @@ if($trimmed == "") {
 	//Build the itemid query
 	$qitemid = "SELECT itemid ";
 	if($idtype == 'ISBN'){
-		$qitemid .= "FROM ((SELECT itemid, isbn FROM `ldb_books`)
-				UNION(SELECT itemid, isbn FROM `ldb_periodicals`)) as T ";
+		$qitemid .= "FROM ((SELECT itemid, isbn FROM `".DB_TBL_PRFX."books`)
+				UNION(SELECT itemid, isbn FROM `".DB_TBL_PRFX."periodicals`)) as T ";
 	} else if($idtype == 'UPC'){
-		$qitemid .= "FROM ((SELECT itemid, upc FROM `ldb_cds`)
-				UNION(SELECT itemid, upc FROM `ldb_dvds`)) as T ";
+		$qitemid .= "FROM ((SELECT itemid, upc FROM `".DB_TBL_PRFX."cds`)
+				UNION(SELECT itemid, upc FROM `".DB_TBL_PRFX."dvds`)) as T ";
 	}else if($idtype == 'ISSN' || $idtype == 'SICI'){
-		$qitemid .= "FROM `ldb_periodicals` ";
+		$qitemid .= "FROM `".DB_TBL_PRFX."periodicals` ";
 	}
 	$qitemid .= "WHERE $idtype = '$trimmed'";
 
@@ -190,7 +190,7 @@ if($trimmed == "") {
 		$rowitemid = mysql_fetch_array($database->query($qitemid));
 		$itemid = $rowitemid["itemid"];
 
-		$qborrowed = "SELECT * FROM ldb_borroweditems WHERE itemid = '$itemid' AND uid = '$uid' AND returned = 0";
+		$qborrowed = "SELECT * FROM ".DB_TBL_PRFX."borroweditems WHERE itemid = '$itemid' AND uid = '$uid' AND returned = 0";
 		$resultsborrowed = mysql_query($qborrowed);
 		if($resultsborrowed) {
 			$numresultsborrowed = mysql_num_rows($resultsborrowed);
@@ -198,22 +198,22 @@ if($trimmed == "") {
 		if ($numresultsborrowed == 0) {
 			echo "<p>ERROR: \"$username\" does not have \"$idtype: $trimmed\" checked out.</p>";
 		} else {
-			$q1 = "UPDATE ldb_items SET quantity = quantity + 1 WHERE itemid = '$itemid'";
-			$q2 = 
-			"UPDATE ldb_borroweditems 
-			SET returned = 1 
+			$q1 = "UPDATE ".DB_TBL_PRFX."items SET quantity = quantity + 1 WHERE itemid = '$itemid'";
+			$q2 =
+			"UPDATE ".DB_TBL_PRFX."borroweditems
+			SET returned = 1
 			WHERE uid = '$uid' AND itemid = '$itemid' AND returned = 0 AND histnum = (
-				SELECT MIN(histnum) 
+				SELECT MIN(histnum)
 				FROM ((
-					SELECT * 
-					FROM ldb_borroweditems 
-					WHERE returned = 0) as J) 
+					SELECT *
+					FROM ".DB_TBL_PRFX."borroweditems
+					WHERE returned = 0) as J)
 				WHERE duedate = (
-					SELECT MIN(duedate) 
+					SELECT MIN(duedate)
 					FROM ((
-						SELECT * 
-						FROM ldb_borroweditems
-						WHERE returned = 0) as T) 
+						SELECT *
+						FROM ".DB_TBL_PRFX."borroweditems
+						WHERE returned = 0) as T)
 					WHERE uid = '$uid'))";
 			mysql_query($q1);
 			mysql_query($q2);
