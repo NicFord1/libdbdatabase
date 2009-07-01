@@ -220,7 +220,7 @@ if($session->form->num_errors > 0) {
    } else {
       echo " value=\"".$session->form->value("regpass")."\"";
    }
-?> /><?=$randpass?>
+?> />
          </td>
          <td>&nbsp;<?php echo $session->form->error("regpass");?></td>
         </tr>
