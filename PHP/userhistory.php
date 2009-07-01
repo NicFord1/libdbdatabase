@@ -77,7 +77,7 @@ function displayHistory() {
       echo "<td>".$item['itemid']."</td>\n";
       echo "<td>".$itemtypeinfo['title']."</td>\n";
       date_default_timezone_set('America/New_York');
-      echo "<td>".date(r,$item['duedate'])."</td>\n";
+      echo "<td>".date('r', $item['duedate'])."</td>\n";
       if($item['returned']) {
       	echo "<td>Yes</td>\n";
       } else {
