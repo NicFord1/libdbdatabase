@@ -162,11 +162,11 @@ if($trimmed == "") {
 	$qitemid = "SELECT itemid ";
 	if($idtype == 'ISBN'){
 		$qitemid .= "FROM ((SELECT itemid, isbn FROM `ldb_books`)
-				UNION(SELECT itemid, upc FROM `ldb_cds`)
-				UNION(SELECT itemid, upc FROM `ldb_dvds`)
 				UNION(SELECT itemid, isbn FROM `ldb_periodicals`)) as T ";
-	}
-	else if($idtype == 'ISSN' || $idtype == 'SICI'){
+	} else if($idtype == 'UPC'){
+		$qitemid .= "FROM ((SELECT itemid, upc FROM `ldb_cds`)
+				UNION(SELECT itemid, upc FROM `ldb_dvds`)) as T ";
+	}else if($idtype == 'ISSN' || $idtype == 'SICI'){
 		$qitemid .= "FROM `ldb_periodicals` ";
 	}
 	$qitemid .= "WHERE $idtype = '$trimmed'";
@@ -190,7 +190,7 @@ if($trimmed == "") {
 		$rowitemid = mysql_fetch_array($database->query($qitemid));
 		$itemid = $rowitemid["itemid"];
 
-		$qborrowed = "SELECT * FROM ldb_borroweditems WHERE itemid = '$itemid' AND uid = '$uid'";
+		$qborrowed = "SELECT * FROM ldb_borroweditems WHERE itemid = '$itemid' AND uid = '$uid' AND returned = 0";
 		$resultsborrowed = mysql_query($qborrowed);
 		if($resultsborrowed) {
 			$numresultsborrowed = mysql_num_rows($resultsborrowed);
@@ -198,11 +198,25 @@ if($trimmed == "") {
 		if ($numresultsborrowed == 0) {
 			echo "<p>ERROR: \"$username\" does not have \"$idtype: $trimmed\" checked out.</p>";
 		} else {
-			mysql_query("UPDATE ldb_items SET quantity = quantity + 1 WHERE itemid = '$itemid'");
-			mysql_query("UPDATE ldb_borroweditems SET returned = 1 WHERE uid = '$uid' AND "
-			."itemid = '$itemid' AND returned = 0 AND histnum = (SELECT MIN(histnum) FROM (("
-			."SELECT * FROM ldb_borroweditems) as J) WHERE duedate = (SELECT MIN(duedate) "
-			."FROM ((SELECT * FROM ldb_borroweditems) as T) WHERE uid = '$uid'))");
+			$q1 = "UPDATE ldb_items SET quantity = quantity + 1 WHERE itemid = '$itemid'";
+			$q2 = 
+			"UPDATE ldb_borroweditems 
+			SET returned = 1 
+			WHERE uid = '$uid' AND itemid = '$itemid' AND returned = 0 AND histnum = (
+				SELECT MIN(histnum) 
+				FROM ((
+					SELECT * 
+					FROM ldb_borroweditems 
+					WHERE returned = 0) as J) 
+				WHERE duedate = (
+					SELECT MIN(duedate) 
+					FROM ((
+						SELECT * 
+						FROM ldb_borroweditems
+						WHERE returned = 0) as T) 
+					WHERE uid = '$uid'))";
+			mysql_query($q1);
+			mysql_query($q2);
 			echo "<p>\"$username\" has checked in \"$idtype: $trimmed\" successfully.</p>";
 		}
    }
