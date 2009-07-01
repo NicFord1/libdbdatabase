@@ -63,7 +63,7 @@ require_once("include/session.php");
      <div id="topbox">
       <strong>
        <span class="hide">Currently viewing: </span>
-       <a href="<?=SITE_BASE_URL?>/index.php">LibDBDatabase</a> &raquo; <a href="<?=$_SERVER['PHP_SELF']?>">Check In Media</a>
+       <a href="<?=SITE_BASE_URL?>/index.php">LibDBDatabase</a> &raquo; <a href="<?=$_SERVER['PHP_SELF']?>">Check Out Media</a>
       </strong>
      </div>
 
@@ -73,14 +73,14 @@ require_once("include/session.php");
 
      <a id="main"></a>
      <div id="contentalt">
-      <h1>Check In Center</h1>
+      <h1>Check Out Center</h1>
       <img src="<?=SITE_BASE_URL?>/img/gravatar-checkin.png" height="80" width="80" alt="Checkin Gravatar" />
 
       <font size="5" color="#ff0000">
        <b>::::::::::::::::::::::::::::::::::::::::::::</b>
       </font>
       <br /><br />
-      <h1>Check In</h1>
+      <h1>Check Out</h1>
       <br />
 
 	    <form action="<?php echo $_SERVER['PHP_SELF']?>" method="POST">
@@ -123,7 +123,7 @@ require_once("include/session.php");
 		  }?>"/></td>
         </tr>
 		<tr><td>
-	     <input type="submit" value="Check In" />
+	     <input type="submit" value="Check Out" />
 		</td></tr>
 	   </form>
 
@@ -170,7 +170,7 @@ if($trimmed == "") {
 	}
 
    $uid = $session->database->getUID($username);
-   if (!$uid) {
+	if (!$uid) {
 		echo "<p>ERROR: Username \"$username\" not found.</p>";
 	}
 
