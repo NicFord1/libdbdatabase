@@ -9,7 +9,7 @@ require_once("include/session.php");
  * table.
  */
 function displayItems() {
-   global $database;
+   global $session, $database;
 
    echo "<h1>Items in Our Library</h1>\n";
 
@@ -36,8 +36,15 @@ function displayItems() {
    }
 
    /* Display table contents */
-   echo "<table align=\"center\" border=\"1\" cellspacing=\"0\" cellpadding=\"3\">\n";
-   echo "<tr><td><b>itemID</b></td><td><b>Item Type</b></td><td><b>Qty on Hand</b></td></tr>\n";
+   echo "<table id=\"items\" align=\"center\" border=\"1\" cellspacing=\"0\" cellpadding=\"3\">\n";
+   echo "<tr>\n";
+   echo "<th>itemID</th>\n";
+   echo "<th>Item Type</th>\n";
+   echo "<th>Qty on Hand</th>";
+   if($session->isTeller() || $session->isAdmin()) {
+   	echo "<th>Check Media</th>\n";
+   }
+   echo "</tr>\n";
 
    while($item = mysql_fetch_array($result, MYSQL_ASSOC)) {
       if($item['itemtype'] == "BOOK") {
@@ -60,8 +67,36 @@ function displayItems() {
          $iteminfo = NULL;
       }
 
-      echo "<tr><td>".$item['itemid']."</td><td>".$iteminfo['title']."</td>"
-          ."<td>".$item['quantity']."</td></tr>\n";
+      echo "<tr>";
+      echo "<td>".$item['itemid']."</td>\n";
+      echo "<td>".$iteminfo['title']."</td>\n";
+      echo "<td>".$item['quantity']."</td>\n";
+      if($session->isTeller() || $session->isAdmin()) {
+         if($item['itemtype'] == "BOOK") {
+            echo "<td>"
+                ."<a href=\"".SITE_BASE_URL."/checkin.php?isbn=".$iteminfo['isbn']."\">In</a>"
+                ." / <a href=\"".SITE_BASE_URL."/checkout.php?isbn=".$iteminfo['isbn']."\">Out</a>"
+                ."</td>\n";
+         } else if ($item['itemtype'] == "PERIODICAL") {
+            echo "<td>"
+                ."<a href=\"".SITE_BASE_URL."/checkin.php?issn=".$iteminfo['issn']."\">In</a>"
+                ." / <a href=\"".SITE_BASE_URL."/checkout.php?issn=".$iteminfo['issn']."\">Out</a>"
+                ."</td>\n";
+         } else if ($item['itemtype'] == "DVD") {
+            echo "<td>"
+                ."<a href=\"".SITE_BASE_URL."/checkin.php?upc=".$iteminfo['upc']."\">In</a>"
+                ." / <a href=\"".SITE_BASE_URL."/checkout.php?upc=".$iteminfo['upc']."\">Out</a>"
+                ."</td>\n";
+         } else if ($item['itemtype'] == "CD") {
+            echo "<td>"
+                ."<a href=\"".SITE_BASE_URL."/checkin.php?upc=".$iteminfo['upc']."\">In</a>"
+                ." / <a href=\"".SITE_BASE_URL."/checkout.php?upc=".$iteminfo['upc']."\">Out</a>"
+                ."</td>\n";
+         } else {
+            echo "<td>&nbsp;</td>\n";
+         }
+      }
+      echo "</tr>\n";
    }
    echo "</table><br /><br />\n";
 }
@@ -93,11 +128,13 @@ function displayItems() {
   <script src="<?php echo SITE_BASE_URL?>/js/jquery.form.min.js" type="text/javascript"></script>
   <script src="<?php echo SITE_BASE_URL?>/js/jquery.validate.min.js" type="text/javascript"></script>
   <script src="<?php echo SITE_BASE_URL?>/js/jquery.metadata.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery.tablehover.min.js" type="text/javascript"></script>
 
   <script type="text/javascript">
      $.metadata.setType("attr", "validate");
 
      $(document).ready(function() {
+        $('#items').tableHover();
         // validate login form on keyup and submit
         $("#login").validate({
            rules: {
