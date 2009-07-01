@@ -13,11 +13,11 @@ function displayItems() {
 
    echo "<h1>Items in Our Library</h1>\n";
 
-   $q = "SELECT * FROM ldb_items ORDER BY itemtype ASC,itemid";
+   $q = "SELECT * FROM ".DB_TBL_PRFX."items ORDER BY itemtype ASC,itemid";
 
    if(isset($_GET['type']) && !empty($_GET['type'])) {
    	$itemType = $_GET['type'];
-      $q = "SELECT * FROM ldb_items WHERE itemtype='$itemType' ORDER BY itemtype ASC,itemid";
+      $q = "SELECT * FROM ".DB_TBL_PRFX."items WHERE itemtype='$itemType' ORDER BY itemtype ASC,itemid";
    }
 
    $result = $database->query($q);
@@ -39,7 +39,7 @@ function displayItems() {
    echo "<table id=\"items\" align=\"center\" border=\"1\" cellspacing=\"0\" cellpadding=\"3\">\n";
    echo "<tr>\n";
    echo "<th>itemID</th>\n";
-   echo "<th>Item Type</th>\n";
+   echo "<th>Title</th>\n";
    echo "<th>Qty on Hand</th>";
    if($session->isTeller() || $session->isAdmin()) {
    	echo "<th>Check Media</th>\n";
