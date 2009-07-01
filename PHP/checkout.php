@@ -199,6 +199,7 @@ if($trimmed == "") {
 			echo "<p>ERROR: \"$idtype: $trimmed\" is not in stock.</p>";
 		} else {
 			//604800 seconds = 1 week
+         date_default_timezone_set('America/New_York');
 			$duedate = time() + 604800;
 			mysql_query("UPDATE ".DB_TBL_PRFX."items SET quantity = quantity - 1 WHERE itemid = '$itemid'");
 			mysql_query("INSERT INTO ".DB_TBL_PRFX."borroweditems (itemid, uid, duedate) "
