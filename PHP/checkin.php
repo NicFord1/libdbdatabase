@@ -88,28 +88,40 @@ require_once("include/session.php");
 		<tr>
 		<td>Media ID number: </td>
 		 <td><input type="text" name="q" value="<?php
-		   if(!isset($_POST["q"]) || empty($_POST["q"])) {
-			echo "";
-		   } else {
-			echo $_POST["q"];
-		   }?>"/></td>
+		 	if(isset($_GET['isbn']) && !empty($_GET['isbn'])){ 
+				echo $_GET['isbn'];
+			} else if(isset($_GET['issn']) && !empty($_GET['issn'])){ 
+				echo $_GET['issn'];
+			} else if(isset($_GET['upc']) && !empty($_GET['upc'])){ 
+				echo $_GET['upc'];
+			} if(!isset($_POST["q"]) || empty($_POST["q"])) {
+				echo "";
+			} else {
+				echo $_POST["q"];
+			}?>"/></td>
 		 <td>
 		  <select name="idtype">
 			<?php
 				$selected;
-				if(!isset($_POST["idtype"]) || empty($_POST["idtype"])){
-					$selected = 0;
-				} else if($_POST["idtype"] == "ISBN"){
+				if((isset($_GET['isbn']) && !empty($_GET['isbn'])) || 
+					$_POST["idtype"] == "ISBN"){ 
 					$selected = 1;
-				} else if($_POST["idtype"] == "ISSN"){
+				} else if((isset($_GET['issn']) && !empty($_GET['issn'])) || 
+					$_POST["idtype"] == "ISSN"){ 
 					$selected = 2;
-				} else if($_POST["idtype"] == "SICI"){
+				} else if((isset($_GET['upc']) && !empty($_GET['upc'])) || 
+					$_POST["idtype"] == "UPC"){ 
 					$selected = 3;
+				} else if(!isset($_POST["idtype"]) || empty($_POST["idtype"])){
+					$selected = 0;
+				} else if($_POST["idtype"] == "SICI"){
+					$selected = 4;
 				}
 			?>
 		  <option value="ISBN" <?php if($selected == 1){ echo "selected"; } ?>>ISBN</option>
 		  <option value="ISSN" <?php if($selected == 2){ echo "selected"; } ?>>ISSN</option>
-		  <option value="SICI" <?php if($selected == 3){ echo "selected"; } ?>>SICI</option>
+		  <option value="UPC" <?php if($selected == 3){ echo "selected"; } ?>>UPC</option>
+		  <option value="SICI" <?php if($selected == 4){ echo "selected"; } ?>>SICI</option>
 		  </select>
 		  </td>
         </tr>
@@ -154,7 +166,7 @@ if($trimmed == "") {
 				UNION(SELECT itemid, upc FROM `ldb_dvds`)
 				UNION(SELECT itemid, isbn FROM `ldb_periodicals`)) as T ";
 	}
-	if($idtype == 'ISSN' || $idtype == 'SICI'){
+	else if($idtype == 'ISSN' || $idtype == 'SICI'){
 		$qitemid .= "FROM `ldb_periodicals` ";
 	}
 	$qitemid .= "WHERE $idtype = '$trimmed'";
@@ -187,9 +199,10 @@ if($trimmed == "") {
 			echo "<p>ERROR: \"$username\" does not have \"$idtype: $trimmed\" checked out.</p>";
 		} else {
 			mysql_query("UPDATE ldb_items SET quantity = quantity + 1 WHERE itemid = '$itemid'");
-			mysql_query("DELETE FROM ldb_borroweditems WHERE uid = '$uid' AND histnum = (SELECT "
-			."MIN(histnum) FROM ((SELECT * FROM ldb_borroweditems) as J) WHERE duedate <= (SELECT "
-			."MIN(duedate) FROM ((SELECT * FROM ldb_borroweditems) as T) WHERE uid = '$uid'))");
+			mysql_query("UPDATE ldb_borroweditems SET returned = 1 WHERE uid = '$uid' AND "
+			."itemid = '$itemid' AND returned = 0 AND histnum = (SELECT MIN(histnum) FROM (("
+			."SELECT * FROM ldb_borroweditems) as J) WHERE duedate = (SELECT MIN(duedate) "
+			."FROM ((SELECT * FROM ldb_borroweditems) as T) WHERE uid = '$uid'))");
 			echo "<p>\"$username\" has checked in \"$idtype: $trimmed\" successfully.</p>";
 		}
    }
