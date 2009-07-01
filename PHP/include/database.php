@@ -322,7 +322,7 @@ class MySQLDB {
    function getUserInfo($uid, $table) {
       if(!get_magic_quotes_gpc()) {
          $uid = addslashes($uid);
-         $table = addslashes($uid);
+         $table = addslashes($table);
       }
 
       $q = "SELECT * FROM $table WHERE uid = '$uid'";
@@ -503,10 +503,6 @@ class MySQLDB {
     * which may be false, true or a resource identifier.
     */
    function query($query) {
-      if(!get_magic_quotes_gpc()) {
-         $query = addslashes($query);
-      }
-
       return mysql_query($query, $this->connection);
    }
 };
