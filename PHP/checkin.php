@@ -1,10 +1,15 @@
 <?
 /**
- * search.php
+ * checkin.php
  *
- * This is the Search Center page.
+ * This is the Checkin page.
  */
 require_once("include/session.php");
+
+if(!($session->isTeller() || $session->isAdmin()))
+{
+	header("Location: ".SITE_BASE_URL."/index.php");
+}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
