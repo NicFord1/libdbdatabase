@@ -351,7 +351,7 @@ text-align:center;
 font-weight:bolder;
 }
 td.click, th.click{
-	background-color: #bbb;
+	background-color: #b19d8c;
 }
 td.hover, tr.hover{
 	background-color: #fee0c9;
@@ -360,7 +360,7 @@ th.hover, tfoot td.hover{
 	background-color: ivory;
 }
 td.hovercell, th.hovercell{
-	background-color: #abc;
+	background-color: #b19d8c;
 }
 td.hoverrow, th.hoverrow
 {
