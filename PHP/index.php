@@ -14,6 +14,12 @@ function displayItems() {
    echo "<h1>Items in Our Library</h1>\n";
 
    $q = "SELECT * FROM ldb_items ORDER BY itemtype ASC,itemid";
+
+   if(isset($_GET['type']) && !empty($_GET['type'])) {
+   	$itemType = $_GET['type'];
+      $q = "SELECT * FROM ldb_items WHERE itemtype='$itemType' ORDER BY itemtype ASC,itemid";
+   }
+
    $result = $database->query($q);
 
    /* Error occurred, return given name by default */
@@ -30,7 +36,7 @@ function displayItems() {
    }
 
    /* Display table contents */
-   echo "<table align=\"left\" border=\"1\" cellspacing=\"0\" cellpadding=\"3\">\n";
+   echo "<table align=\"center\" border=\"1\" cellspacing=\"0\" cellpadding=\"3\">\n";
    echo "<tr><td><b>itemID</b></td><td><b>Item Type</b></td><td><b>Qty on Hand</b></td></tr>\n";
 
    while($item = mysql_fetch_array($result, MYSQL_ASSOC)) {
@@ -57,7 +63,7 @@ function displayItems() {
       echo "<tr><td>".$item['itemid']."</td><td>".$iteminfo['title']."</td>"
           ."<td>".$item['quantity']."</td></tr>\n";
    }
-   echo "</table><br />\n";
+   echo "</table><br /><br />\n";
 }
 ?>
 

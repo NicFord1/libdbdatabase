@@ -187,9 +187,9 @@ if($trimmed == "") {
 			echo "<p>ERROR: \"$username\" does not have \"$idtype: $trimmed\" checked out.</p>";
 		} else {
 			mysql_query("UPDATE ldb_items SET quantity = quantity + 1 WHERE itemid = '$itemid'");
-			mysql_query("DELETE FROM ldb_borroweditems WHERE uid = '13' AND histnum = (SELECT "
+			mysql_query("DELETE FROM ldb_borroweditems WHERE uid = '$uid' AND histnum = (SELECT "
 			."MIN(histnum) FROM ((SELECT * FROM ldb_borroweditems) as J) WHERE duedate <= (SELECT "
-			."MIN(duedate) FROM ((SELECT * FROM ldb_borroweditems) as T) WHERE uid = '13'))");
+			."MIN(duedate) FROM ((SELECT * FROM ldb_borroweditems) as T) WHERE uid = '$uid'))");
 			echo "<p>\"$username\" has checked in \"$idtype: $trimmed\" successfully.</p>";
 		}
    }
