@@ -32,8 +32,14 @@ function displayUsers() {
    }
 
    /* Display table contents */
-   echo "<table align=\"left\" border=\"1\" cellspacing=\"0\" cellpadding=\"3\">\n";
-   echo "<tr><td><b>Username</b></td><td><b>User Type</b></td><td><b>Registration Time</b></td><td><b>Last Active</b></td><td><b>Actions</b></td></tr>\n";
+   echo "<table id=\"users\" align=\"left\" border=\"1\" cellspacing=\"0\" cellpadding=\"3\">\n";
+   echo "<tr>\n";
+   echo "<th>Username</th>\n";
+   echo "<th>User Type</th>\n";
+   echo "<th>Registration Time</th>\n";
+   echo "<th>Last Active</th>\n";
+   echo "<th>Actions</th>\n";
+   echo "</tr>\n";
 
    while($usersinfo = mysql_fetch_array($result, MYSQL_ASSOC)) {
    	$user = NULL;
@@ -105,8 +111,12 @@ function displayBannedUsers() {
    }
 
    /* Display table contents */
-   echo "<table align=\"left\" border=\"1\" cellspacing=\"0\" cellpadding=\"3\">\n";
-   echo "<tr><td><b>Username</b></td><td><b>Time Banned</b></td><td><b>Actions</b></td></tr>\n";
+   echo "<table id=\"banned\" align=\"left\" border=\"1\" cellspacing=\"0\" cellpadding=\"3\">\n";
+   echo "<tr>\n";
+   echo "<th>Username</th>\n";
+   echo "<th>Time Banned</th>\n";
+   echo "<th>Actions</th>\n";
+   echo "</tr>\n";
 
    while($usersinfo = mysql_fetch_array($result, MYSQL_ASSOC)) {
       $uname = $usersinfo['username'];
@@ -153,6 +163,15 @@ if(!$session->isAdmin()) { /* User not an administrator, redirect to front page 
   <script src="<?php echo SITE_BASE_URL?>/js/jquery.validate.min.js" type="text/javascript"></script>
   <script src="<?php echo SITE_BASE_URL?>/js/jquery.metadata.min.js" type="text/javascript"></script>
   <script src="<?php echo SITE_BASE_URL?>/js/jquery.maskedinput.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/jquery.tablehover.min.js" type="text/javascript"></script>
+
+  <script type="text/javascript">
+     $(document).ready(function() {
+        $('#users').tableHover();
+        $('#banned').tableHover();
+     });
+  </script>
+
 
   <!-- Sliding effect -->
   <script src="<?php echo SITE_BASE_URL?>/js/slide.js" type="text/javascript"></script>

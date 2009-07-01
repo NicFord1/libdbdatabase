@@ -345,3 +345,24 @@ text-align:center;
 .hide{
 display:none;
 }
+
+th{
+text-align:center;
+font-weight:bolder;
+}
+td.click, th.click{
+	background-color: #bbb;
+}
+td.hover, tr.hover{
+	background-color: #fee0c9;
+}
+th.hover, tfoot td.hover{
+	background-color: ivory;
+}
+td.hovercell, th.hovercell{
+	background-color: #abc;
+}
+td.hoverrow, th.hoverrow
+{
+	background-color: #fee0c9;
+}
