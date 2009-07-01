@@ -1,75 +1,40 @@
 <?php
-
+// Allow us to use addPlugin to add ourselves to the global plugin list
 require_once("include/pluginUtils.php");
-
+// Allow us to issue queries on the database, i.e. to search for items and
+// obtain their data
 require_once("include/database.php");
-//require_once("include/db-config.php");
-//require_once("include/session.php");
 
+// Whenever we are included by somebody, add an instance of ourselves to the
+// global plugin list.
 addPlugin(new BookPlugin());
 
-class BookPlugin
-{
-  public function search($query, $database)
-  {
-   $q = "SELECT * FROM ldb_books WHERE author LIKE \"%$query%\" OR "
-       ."description LIKE \"%$query%\" OR title LIKE \"%$query%\""
-       ." ORDER BY author";
+class BookPlugin {
+   public function search($query, $database) {
+      // Issue query to database for rows matching query
+      $q = "SELECT * FROM ldb_books WHERE author LIKE \"%$query%\" OR "
+          ."description LIKE \"%$query%\" OR title LIKE \"%$query%\""
+          ." ORDER BY author";
 
-   $results = mysql_query($q);
-   if($results) {
- 	   $numresults = mysql_num_rows($results);
-   }
+      $result = $database->query($q);
 
-   if ($numresults == 0) {
-//      echo "<p>Sorry, your search: &quot;".$trimmed."&quot; returned zero results</p>";
-   } else {
-	   if(empty($s)) {
-	      $s = 0;
-	   }
-
-	   // get results
-//           $q .= " limit $s,$limit";
-	   $result = $database->query($q);
-
-	   // begin to show results set
-	   $count = 1 + $s ;
-//                echo "<br /><table border='1'><tr>";
-
-		$itemFields = array("ISBN", "Title", "Author", "Publisher", "ReleaseDate", "Rating", "Description");
-//                for($i=0; $i<count($itemFields); $i++)
-//                {
-//                    //$field = mysql_fetch_field($result);
-//                    echo "<td>$itemFields[$i]</td>";
-//                }
-
-	   while ($row = mysql_fetch_array($result)) {
-             $resultslist[$index]["ISBN"] = $row["isbn"];
-             $resultslist[$index]["Title"] = $row["title"];
-             $resultslist[$index]["Author"] = $row["author"];
-             $resultslist[$index]["Publisher"] = $row["publisher"];
-             $resultslist[$index]["Release Date"] = $row["releasedate"];
-             $resultslist[$index]["Rating"] = $row["rating"];
-             $resultslist[$index]["Description"] = $row["description"];
-
-
-//                        echo "<tr>";
-//                        echo "<td>".$row["isbn"]."</td>";
- //                       echo "<td>".$row["title"]."</td>";
-//                        echo "<td>".$row["author"]."</td>";
-//                        echo "<td>".$row["publisher"]."</td>";
-//                        echo "<td>".$row["releasedate"]."</td>";
-//                        echo "<td>".$row["rating"]."</td>";
-//                        echo "<td>".$row["description"]."</td>";
-//                        echo "</tr>";
-	      $count++ ;
-              $index++;
-	   }
-//           echo "</table><br />";
-
-            return $resultslist;
-   } // if
-  } // search
+      // Place each match into next index of $resultlist. $resultlist should
+      // only contain the columns we want the user to see. That's why we do
+      // this selective copy of only some fields. The caller is going to put
+      // the data from $resultslist into a table displayed to the user.
+      $index = 0;
+      $resultslist[] = array();
+      while ($row = mysql_fetch_array($result)) {
+         $resultslist[$index]["ISBN"] = $row["isbn"];
+         $resultslist[$index]["Title"] = $row["title"];
+         $resultslist[$index]["Author"] = $row["author"];
+         $resultslist[$index]["Publisher"] = $row["publisher"];
+         $resultslist[$index]["Release Date"] = $row["releasedate"];
+         $resultslist[$index]["Rating"] = $row["rating"];
+         $resultslist[$index]["Description"] = $row["description"];
+         $index++;
+      }
+      return $resultslist;
+   } // search
 } // class
-
 ?>

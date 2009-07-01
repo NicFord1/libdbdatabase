@@ -95,8 +95,6 @@ if(!isset($_GET["q"]) || empty($_GET["q"])) {
 <?php
 $searchQuery = @$_GET['q'] ;
 $trimmed = trim($searchQuery); //trim whitespace from the stored variable
-$limit = 10; // rows to return
-
 
 if($trimmed == "") {
    echo "<p>Please enter a search...</p>";
@@ -104,78 +102,73 @@ if($trimmed == "") {
   echo "<p>We dont seem to have a search parameter!</p>";
   exit;
 } else {
-   $q = "SELECT * FROM ldb_books WHERE author LIKE \"%$trimmed%\" OR "
-       ."description LIKE \"%$trimmed%\" OR title LIKE \"%$trimmed%\""
-       ." ORDER BY author";
-
-   $results = mysql_query($q);
-   if($results) {
- 	   $numresults = mysql_num_rows($results);
+   // Load media plugins which will perform search for us.
+   opendir("plugins");
+   while($file = readdir()) {
+     if(is_file("plugins/$file")) {
+       require_once("plugins/$file");
+     }
    }
 
-   if ($numresults == 0) {
-      echo "<p>Sorry, your search: &quot;".$trimmed."&quot; returned zero results</p>";
-   } else {
-	   if(empty($s)) {
-	      $s = 0;
-	   }
+   // Tell plugins to search for items
+   // $searchresults is a list of lists of items. An item is a map from
+   // column name to data.
+   $searchresults = performFunctionOnAllPlugins("search", $trimmed, $database);
 
-	   // get results
-	   $q .= " limit $s,$limit";
-	   $result = $database->query($q);
+   $numresults = count($searchresults);
 
-	   // begin to show results set
-	   $count = 1 + $s ;
-		echo "<br /><table border='1'><tr>";
+   // Aggregate all column names that we need
+   $column_names[] = array();
 
-		$itemFields = array("ISBN", "Title", "Author", "Publisher", "ReleaseDate", "Rating", "Description");
-		for($i=0; $i<count($itemFields); $i++)
-		{
-		    //$field = mysql_fetch_field($result);
-		    echo "<td>$itemFields[$i]</td>";
-		}
+   foreach($searchresults as $aresultlist) {
+     if(!is_array($aresultlist) OR !isset($searchresults)) {
+       continue;
+     }
+     foreach($aresultlist as $aresult) {
+       // Copy results to a flat list
+       $results[$numresults++] = $aresult;
 
-	   while ($row = mysql_fetch_array($result)) {
-			echo "<tr>";
-			echo "<td>".$row["isbn"]."</td>";
-			echo "<td>".$row["title"]."</td>";
-			echo "<td>".$row["author"]."</td>";
-			echo "<td>".$row["publisher"]."</td>";
-			echo "<td>".$row["releasedate"]."</td>";
-			echo "<td>".$row["rating"]."</td>";
-			echo "<td>".$row["description"]."</td>";
-			echo "</tr>";
-	      $count++ ;
-	   }
-	   echo "</table><br />";
+       // Now aggregate the columns
+       $columnsForThisItem = array_keys($aresult);
 
-	   $currPage = (($s/$limit) + 1);
-
-	   // create links for more results
-	   if ($s>=1) { // bypass PREV link if s is 0
-	      $prevs=($s-$limit);
-	      print "&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?s=$prevs&q=$searchQuery\">&lt;&lt;Prev 10</a>&nbsp&nbsp;";
-	   }
-
-	   $pages = intval($numresults / $limit); // calculate number of pages needing links
-	   // $pages now contains int of pages needed unless there is a remainder from division
-
-	   if ($numresults%$limit) { // has remainder so add one page
-	      $pages++;
-	   }
-
-	   if (!((($s + $limit) / $limit) == $pages) && $pages != 1) {// check to see if last page
-	      $news = $s + $limit; // not last page so give NEXT link
-	      echo "&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?s=$news&q=$searchQuery\">Next 10 &gt;&gt;</a>";
-	   }
-
-	   $a = $s + ($limit) ;
-	   if ($a > $numresults) {
-	      $a = $numresults ;
-	   }
-	   $b = $s + 1 ;
-	   echo "<p>Showing results $b to $a of $numresults</p>";
+       foreach($columnsForThisItem as $newcolumn) {
+         if(!array_key_exists($newcolumn, $column_names)) {
+           $column_names[$newcolumn] = 1;
+         }
+       }
+     }
    }
+   $itemFields = array_keys($column_names);
+
+   echo "<br /><table border='1'><tr>";
+
+   // Print first row of table, showing the column names
+   for($i=0; $i<count($itemFields); $i++) {
+     echo "<td>$itemFields[$i]</td>";
+   }
+
+   // Print item rows
+   foreach($results as $aresult) {
+    echo "<tr>";
+
+    if(count($aresult) == 0)
+    	continue;
+
+    foreach($itemFields as $field) {
+      if(array_key_exists($field, $aresult)) {
+        $text = $aresult[$field];
+      } else {
+        $text = "n/a";
+      }
+      echo "<td>".$text."</td>";
+    }
+
+    echo "</tr>";
+   }
+ $count++ ;
+
+
+   echo "</table><br />";
 }
 ?>
       <p class="hide"><a href="#top">Back to top</a></p>
