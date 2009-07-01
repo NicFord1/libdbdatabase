@@ -51,6 +51,7 @@ if($session->isAdmin()) { //Admin
    //should anything go here in an administrator menu?
    echo "<h1>Administrator menu:</h1>\n";
    echo "<a class=\"nav\" href=\"".SITE_BASE_URL."/admin/admin.php\">Admin Center</a><br class=\"hide\" />\n";
+   echo "<a class=\"nav\" href=\"".SITE_BASE_URL."/admin/newitem.php\">Add New Item</a><br class=\"hide\" />\n";
    echo "<a class=\"nav\" href=\"".SITE_BASE_URL."/newuser.php\">Register New Member</a><br class=\"hide\" />\n";
    echo "<a class=\"hide\" href=\"#top\">Back to top</a>\n";
    echo "</p>\n";
