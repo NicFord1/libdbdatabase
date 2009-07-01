@@ -3,6 +3,62 @@
  * index.php
  */
 require_once("include/session.php");
+
+/**
+ * displayItems - Displays the items database table in a nicely formatted html
+ * table.
+ */
+function displayItems() {
+   global $database;
+
+   echo "<h1>Items in Our Library</h1>\n";
+
+   $q = "SELECT * FROM ldb_items ORDER BY itemtype ASC,itemid";
+   $result = $database->query($q);
+
+   /* Error occurred, return given name by default */
+   $num_rows = mysql_numrows($result);
+
+   if(!$result || ($num_rows < 0)) {
+      echo "Error displaying info";
+      return;
+   }
+
+   if($num_rows == 0) {
+      echo "Database table empty";
+      return;
+   }
+
+   /* Display table contents */
+   echo "<table align=\"left\" border=\"1\" cellspacing=\"0\" cellpadding=\"3\">\n";
+   echo "<tr><td><b>itemID</b></td><td><b>Item Type</b></td><td><b>Qty on Hand</b></td></tr>\n";
+
+   while($item = mysql_fetch_array($result, MYSQL_ASSOC)) {
+      if($item['itemtype'] == "BOOK") {
+         $qry = "SELECT * FROM ".DB_TBL_PRFX."books WHERE itemid='".$item['itemid']."'";
+         $qresult = $database->query($qry);
+         $iteminfo = mysql_fetch_array($qresult, MYSQL_ASSOC);
+      } else if ($item['itemtype'] == "PERIODICAL") {
+         $qry = "SELECT * FROM ".DB_TBL_PRFX."periodicals WHERE itemid='".$item['itemid']."'";
+         $qresult = $database->query($qry);
+         $iteminfo = mysql_fetch_array($qresult, MYSQL_ASSOC);
+      } else if ($item['itemtype'] == "DVD") {
+         $qry = "SELECT * FROM ".DB_TBL_PRFX."dvds WHERE itemid='".$item['itemid']."'";
+         $qresult = $database->query($qry);
+         $iteminfo = mysql_fetch_array($qresult, MYSQL_ASSOC);
+      } else if ($item['itemtype'] == "CD") {
+         $qry = "SELECT * FROM ".DB_TBL_PRFX."cds WHERE itemid='".$item['itemid']."'";
+         $qresult = $database->query($qry);
+         $iteminfo = mysql_fetch_array($qresult, MYSQL_ASSOC);
+      } else {
+         $iteminfo = NULL;
+      }
+
+      echo "<tr><td>".$item['itemid']."</td><td>".$iteminfo['title']."</td>"
+          ."<td>".$item['quantity']."</td></tr>\n";
+   }
+   echo "</table><br />\n";
+}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
@@ -215,29 +271,8 @@ if($session->form->num_errors > 0) {
       <?php include_once("include/sidemenu.php"); ?>
      </div>
 
-     <div id="rightside">
-      <h1>Template info:</h1>
-      <p>
-       andreas06 is built with valid XHTML 1.1 and CSS2. It conforms to section
-       508 and a WCAG 1.0 AAA rating. It has full support for browser-based
-       font-resizing, 100% readable also even in text-based browsers.
-      </p>
-      <p>/<strong>Andreas</strong></p>
-
-      <h1>Links:</h1>
-      <p>
-       <a href="http://andreasviklund.com">My website</a><br />
-       <a href="http://andreasviklund.com/templates">Free templates</a><br />
-       <a href="http://baygroove.com">Baygroove.com</a><br />
-       <a href="http://openwebdesign.org">Open Web Design</a><br />
-       <a href="http://oswd.org">OSWD.org</a><br />
-       <a href="http://www.solucija.com">sNews CMS</a><br />
-      </p>
-      <p class="smallcaps">andreas06 v1.2 <br /> (Nov 28, 2005)</p>
-     </div>
-
      <a id="main"></a>
-     <div id="content">
+     <div id="contentalt">
       <h1>Welcome to "LibDBDatabase"...</h1>
       <img src="<?php echo SITE_BASE_URL?>/img/gravatar-books.png" height="80" width="80" alt="Gravatar example" />
 
@@ -246,28 +281,12 @@ if($session->form->num_errors > 0) {
        was created for a project in CMSC 432 during the Summer of 2009 semester.
       </p>
 
-      <h2>Now some filler...</h2>
+      <font size="5" color="#ff0000">
+       <b>::::::::::::::::::::::::::::::::::::::::::::</b>
+      </font>
+      <br /><br />
 
-      <p>
-       Like in my other templates, the extra features are all built into the stylesheet. The simple structure
-       of the code (all content is separated from the presentation) makes it easy to customize the look and
-       feel of the design, and you get several layouts to choose from in the download zip. Click the menu tabs
-       to view the examples.
-      </p>
-
-      <p>
-       The design is inspired by the colors of the fall, since the template was created as an entry in the
-       <a href="http://openwebdesign.org">Open Web Design</a> "fall/autumn" competition in October 2005
-       (where it as awarded 1st place). The colors are picked from a photo of the local park, taken on Oct 1st.
-      </p>
-
-      <h2>Open source design</h2>
-      <p>
-       This template is released as open source, which means that you are free to use it in any way you may want
-       to. If you like this design, you can download my other designs directly from
-       <a href="http://andreasviklund.com">my website</a> (where you can also find a WordPress version of this
-       theme) or from Open Web Design. Comments, questions and suggestions are always very welcome!
-      </p>
+      <?php displayItems(); ?>
       <p class="hide"><a href="#top">Back to top</a></p>
      </div>
     </div>
