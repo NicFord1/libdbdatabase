@@ -346,6 +346,10 @@ text-align:center;
 display:none;
 }
 
+form.actions{
+display:inline;
+}
+
 th{
 text-align:center;
 font-weight:bolder;
@@ -362,7 +366,6 @@ th.hover, tfoot td.hover{
 td.hovercell, th.hovercell{
 	background-color: #b19d8c;
 }
-td.hoverrow, th.hoverrow
-{
+td.hoverrow, th.hoverrow{
 	background-color: #fee0c9;
 }

@@ -32,13 +32,13 @@ function displayUsers() {
    }
 
    /* Display table contents */
-   echo "<table id=\"users\" align=\"left\" border=\"1\" cellspacing=\"0\" cellpadding=\"3\">\n";
+   echo "<table id=\"users\" align=\"center\" border=\"1\" cellspacing=\"0\" cellpadding=\"3\" width=\"100%\">\n";
    echo "<tr>\n";
    echo "<th>Username</th>\n";
-   echo "<th>User Type</th>\n";
-   echo "<th>Registration Time</th>\n";
-   echo "<th>Last Active</th>\n";
-   echo "<th>Actions</th>\n";
+   echo "<th width=\"85px\">User Type</th>\n";
+   echo "<th width=\"200px\">Registration Time</th>\n";
+   echo "<th width=\"200px\">Last Active</th>\n";
+   echo "<th width=\"50px\">Actions</th>\n";
    echo "</tr>\n";
 
    while($usersinfo = mysql_fetch_array($result, MYSQL_ASSOC)) {
@@ -67,18 +67,20 @@ function displayUsers() {
          $lvtime = "Never";
       }
 
-		echo "<tr><td>".$user->username."</td><td>".get_class($user)."</td>"
-		    ."<td>".$rtime."</td><td>".$lvtime."</td>"
+		echo "<tr><td align=\"center\">".$user->username."</td><td align=\"center\">".get_class($user)."</td>"
+		    ."<td align=\"center\">".$rtime."</td><td align=\"center\">".$lvtime."</td>"
 		    ."<td><a href=\"userinfo.php?uid=".$user->getUID()."\">"
           ."<img class=\"clearimg\" src=\"".SITE_BASE_URL."/img/user_edit.png\" alt=\"Edit\" /></a> "
+          ."<a href=\"userhistory.php?uid=".$user->getUID()."\">"
+          ."<img class=\"clearimg\" src=\"".SITE_BASE_URL."/img/user_history.png\" alt=\"History\" /></a> "
 
-		    ."<form action=\"adminprocess.php\" method=\"POST\">"
+		    ."<form class=\"actions\" action=\"adminprocess.php\" method=\"POST\">"
 			 ."<input type=\"hidden\" name=\"deluser\" value=\"".$user->getUID()."\" />"
 			 ."<input type=\"hidden\" name=\"subdeluser\" value=\"1\" />"
 			 ."<input type=\"image\" src=\"".SITE_BASE_URL."/img/user_delete.png\" alt=\"Delete\">"
 			 ."</form>"
 
-			 ."<form action=\"adminprocess.php\" method=\"POST\">"
+			 ."<form class=\"actions\" action=\"adminprocess.php\" method=\"POST\">"
 			 ."<input type=\"hidden\" name=\"banuser\" value=\"".$user->username."\" />"
 			 ."<input type=\"hidden\" name=\"subbanuser\" value=\"1\" />"
 			 ."<input type=\"image\" src=\"".SITE_BASE_URL."/img/user_ban.png\" alt=\"Ban\" />"
@@ -111,7 +113,7 @@ function displayBannedUsers() {
    }
 
    /* Display table contents */
-   echo "<table id=\"banned\" align=\"left\" border=\"1\" cellspacing=\"0\" cellpadding=\"3\">\n";
+   echo "<table id=\"banned\" align=\"center\" border=\"1\" cellspacing=\"0\" cellpadding=\"3\">\n";
    echo "<tr>\n";
    echo "<th>Username</th>\n";
    echo "<th>Time Banned</th>\n";
@@ -228,7 +230,7 @@ if($session->form->num_errors > 0) {
 }
 ?>
 
-      <table align="left" border="0" cellspacing="5" cellpadding="5">
+      <table align="center" border="0" cellspacing="5" cellpadding="5" width="100%">
        <tr>
         <td>
 <?php
