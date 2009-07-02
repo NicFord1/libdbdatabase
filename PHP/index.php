@@ -72,13 +72,13 @@ function displayItems() {
       echo "<td align=\"center\">".$item['itemid']."</td>\n";
       echo "<td align=\"center\"><div align=\"center\"><img src=\"".SITE_BASE_URL."/img/itemtypes/".$item['itemtype'].".png\" alt=\"".$item['itemtype']."\" class=\"clearimg\" /></div></td>\n";
       echo "<td><a href=\"#TB_inline?height=155&amp;width=500&amp;inlineId=itemid".$item['itemid']."\" class=\"thickbox\" title=\"".$iteminfo['title']."\">".$iteminfo['title']."</a>\n";
-      echo "<div id=\"itemid".$item['itemid']."\" class=\"hide\"><pre>";
+      echo "<div id=\"itemid".$item['itemid']."\" class=\"hide\"><p>";
       if(!empty($iteminfo['description'])) {
-         echo $iteminfo['description'];
+         echo nl2br($iteminfo['description']);
       } else {
       	echo "No Description";
       }
-      echo "</pre></div>\n";
+      echo "</p></div>\n";
       echo "</td>\n";
       echo "<td align=\"center\">".$item['quantity']."</td>\n";
       if($session->isTeller() || $session->isAdmin()) {
