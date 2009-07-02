@@ -25,6 +25,7 @@ class DVDPlugin {
       $index = 0;
       $resultslist[] = array();
       while ($row = mysql_fetch_array($result)) {
+      	 $resultslist[$index]["ITEMID"] = $row["itemid"];
          $resultslist[$index]["UPC"] = $row["upc"];
          $resultslist[$index]["Title"] = $row["title"];
          $resultslist[$index]["Director"] = $row["author"];
@@ -37,5 +38,31 @@ class DVDPlugin {
       }
       return $resultslist;
    } // search
+      public function get($id, $database) {
+      // Issue query to database for rows matching query
+      $q = "SELECT * FROM ldb_dvds WHERE itemid = $id";
+
+      $result = $database->query($q);
+
+      // Place each match into next index of $resultlist. $resultlist should
+      // only contain the columns we want the user to see. That's why we do
+      // this selective copy of only some fields. The caller is going to put
+      // the data from $resultslist into a table displayed to the user.
+      $index = 0;
+      $resultslist[] = array();
+      while ($row = mysql_fetch_array($result)) {
+      	 $resultslist[$index]["ITEMID"] = $row["itemid"];
+         $resultslist[$index]["ISBN"] = $row["isbn"];
+         $resultslist[$index]["Title"] = $row["title"];
+         $resultslist[$index]["Author"] = $row["author"];
+         $resultslist[$index]["Publisher"] = $row["publisher"];
+         $resultslist[$index]["Release Date"] = $row["releasedate"];
+         $resultslist[$index]["Rating"] = $row["rating"];
+         $resultslist[$index]["Description"] = $row["description"];
+         $index++;
+      }
+      return $resultslist;
+   } // get   
+   
 } // class
 ?>
