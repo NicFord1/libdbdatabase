@@ -42,7 +42,7 @@ class Recommend{
 			return -1;
 		}
 
-		//reccoomend an item
+		//recommend an item
 		$qrec =
 		"SELECT itemid
 		FROM
