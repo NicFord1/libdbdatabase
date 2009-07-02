@@ -70,8 +70,10 @@ function displayItems() {
 
       echo "<tr>";
       echo "<td align=\"center\">".$item['itemid']."</td>\n";
-      echo "<td align=\"center\"><img src=\"".SITE_BASE_URL."/img/itemtypes/".$item['itemtype'].".png\" alt=\"".$item['itemtype']."\" align=\"center\" class=\"clearimg\" /></td>\n";
-      echo "<td>".$iteminfo['title']."</td>\n";
+      echo "<td align=\"center\"><div align=\"center\"><img src=\"".SITE_BASE_URL."/img/itemtypes/".$item['itemtype'].".png\" alt=\"".$item['itemtype']."\" class=\"clearimg\" /></div></td>\n";
+      echo "<td><a href=\"#TB_inline?height=155&amp;width=500&amp;inlineId=itemid".$item['itemid']."\" class=\"thickbox\" title=\"".$iteminfo['title']."\">".$iteminfo['title']."</a>\n";
+      echo "<div id=\"itemid".$item['itemid']."\" class=\"hide\"><p>".$iteminfo['description']."</p></div>\n";
+      echo "</td>\n";
       echo "<td align=\"center\">".$item['quantity']."</td>\n";
       if($session->isTeller() || $session->isAdmin()) {
          if($item['itemtype'] == "BOOK") {
@@ -117,6 +119,7 @@ function displayItems() {
   <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/andreas06.css" type="text/css" media="screen,projection" />
   <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/slide.css"  type="text/css" media="screen,projection" />
   <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/validate.css"  type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?php echo SITE_BASE_URL?>/css/thickbox.css"  type="text/css" media="screen,projection" />
 
   <!-- javascripts -->
   <!-- PNG FIX for IE6 -->
@@ -131,6 +134,7 @@ function displayItems() {
   <script src="<?php echo SITE_BASE_URL?>/js/jquery.validate.min.js" type="text/javascript"></script>
   <script src="<?php echo SITE_BASE_URL?>/js/jquery.metadata.js" type="text/javascript"></script>
   <script src="<?php echo SITE_BASE_URL?>/js/jquery.tablehover.min.js" type="text/javascript"></script>
+  <script src="<?php echo SITE_BASE_URL?>/js/thickbox.min.js" type="text/javascript"></script>
 
   <script type="text/javascript">
      $.metadata.setType("attr", "validate");
