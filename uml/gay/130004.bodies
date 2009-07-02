@@ -1,0 +1,57 @@
+class Administrator
+!!!139220.php!!!	__construct(inout userInfo : array, inout empInfo : array = NULL)
+
+      parent::__construct($userInfo, $empInfo);
+
+      if($this->database->confirmUserUID($userInfo['username'], $userInfo['uid']) == 0) {
+         $dbEmpInfo = $this->database->getUserInfo($userInfo['uid'], DB_TBL_ADMINS);
+      }
+
+      if($dbEmpInfo) {
+         parent::__construct($userInfo, $dbEmpInfo);
+      }
+!!!139348.php!!!	update(inout info : )
+
+   	$result = parent::update($info);
+      if($result == 0) { //employee successfully updated, now update Administrator specifics
+         if($this->database->confirmUID($this->getUID(), DB_TBL_ADMINS)) { //user is a Administrator
+            if(isset($info['hiredate'])) {
+               $this->dateHired = trim($info['hiredate']);
+               $this->database->updateUserField($this->getUID(), DB_TBL_ADMINS, "hiredate", $this->dateHired);
+            }
+         } else { //not a known Administrator in our system
+         	$result = 3;
+         }
+      } else if($result == 1) { //user doesn't exist, make sure not in Administrator table
+      	$this->database->removeUser($this->getUID(), DB_TBL_ADMINS);
+      }
+      return $result;
+!!!139476.php!!!	register()
+
+      $result = parent::register();
+      if($result) {
+         //perform Administrator Specific actions
+         $result = $this->database->hireAdministrator($this->getUID(), $this->dateHired);
+      }
+      return $result;
+!!!139604.php!!!	updateUserType(inout usertype : int)
+
+   	if($usertype == ADMIN) {
+   		return ADMIN; //already an administrator
+   	} else if($this->database->getNumAdmins() > 1) {
+	   	if($usertype == TELLER) {
+	   		if($this->database->hireTeller($this->getUID())) {
+	   			$this->database->removeUser($this->getUID(), DB_TBL_ADMINS);
+	   			return TELLER;
+	   		} else {
+	   			return false; //didn't successfully hire as teller
+	   		}
+	   	} else if($usertype == CUST){
+	   		$this->database->removeUser($this->getUID(), DB_TBL_ADMINS);
+	   	   return CUST;
+	   	} else {
+	         return false; //invalid usertype
+	   	}
+   	} else {
+   		return false; //only adminstrator in system
+   	}

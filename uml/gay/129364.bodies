@@ -1,0 +1,115 @@
+class User
+!!!136532.php!!!	__construct(inout info : array)
+
+      $this->database = new MYSQLDB;
+
+      if($this->database->confirmUserUID($info['username'], $info['uid']) == 0) {
+         $this->_uid = trim($info['uid']);
+         $dbInfo = $this->database->getUserInfo($this->getUID(), DB_TBL_CUSTOMERS);
+         parent::__construct($dbInfo);
+         $this->_lastVisit = $dbInfo['lastvisit'];
+         $this->_regTime = $dbInfo['regtime'];
+         $this->username = stripslashes($dbInfo['username']);
+         $this->password = $dbInfo['password'];
+         $this->email = $dbInfo['email'];
+      } else {
+         parent::__construct($info);
+         $this->_uid = NULL;
+         $this->_lastVisit = NULL;
+         $this->_regTime = NULL;
+         $this->username = stripslashes($info['username']);
+         $this->password = trim($info['password']);
+         $this->email = trim($info['email']);
+      }
+!!!136660.php!!!	getUID()
+
+      return $this->_uid;
+!!!136788.php!!!	getLastVisit()
+
+      return $this->_lastVisit;
+!!!136916.php!!!	getRegistrationTime()
+
+      return $this->_regTime;
+!!!137044.php!!!	update(inout info : )
+
+      if($this->database->confirmUID($this->getUID(), DB_TBL_CUSTOMERS)) { //user exists in the database already so update user
+         if($this->database->confirmUserUID($this->username, $this->getUID(), DB_TBL_CUSTOMERS) == 0) { //username matches uid
+            if(isset($info['newuname'])) {
+               $this->username = trim($info['newuname']);
+            	$this->database->updateUserField($this->getUID(), DB_TBL_CUSTOMERS, "username", $this->username);
+            }
+            if(isset($info['newpass'])) {
+               $this->password = trim($info['newpass']);
+            	$this->database->updateUserField($this->getUID(), DB_TBL_CUSTOMERS, "password", $this->password);
+            }
+            if(isset($info['edemail'])) {
+               $this->email = trim($info['edemail']);
+            	$this->database->updateUserField($this->getUID(), DB_TBL_CUSTOMERS, "email", $this->email);
+            }
+            if(isset($info['edfname'])) {
+               $this->firstName = trim($info['edfname']);
+            	$this->database->updateUserField($this->getUID(), DB_TBL_CUSTOMERS, "firstname", $this->firstName);
+            }
+            if(isset($info['edlname'])) {
+               $this->lastName = trim($info['edlname']);
+            	$this->database->updateUserField($this->getUID(), DB_TBL_CUSTOMERS, "lastname", $this->lastName);
+            }
+            if(isset($info['edbirthdate'])) {
+               $this->birthDate = trim($info['edbirthdate']);
+            	$this->database->updateUserField($this->getUID(), DB_TBL_CUSTOMERS, "birthdate", $this->birthDate);
+            }
+            if(isset($info['edgender'])) {
+               $this->gender = trim($info['edgender']);
+            	$this->database->updateUserField($this->getUID(), DB_TBL_CUSTOMERS, "gender", $this->gender);
+            }
+            if(isset($info['edaddrline1'])) {
+               $this->address['line1'] = trim($info['edaddrline1']);
+            	$this->database->updateUserField($this->getUID(), DB_TBL_CUSTOMERS, "addrline1", $this->address['line1']);
+            }
+            if(isset($info['edaddrline2'])) {
+               $this->address['line2'] = trim($info['edaddrline2']);
+            	$this->database->updateUserField($this->getUID(), DB_TBL_CUSTOMERS, "addrline2", $this->address['line2']);
+            }
+            if(isset($info['edcity'])) {
+               $this->address['city'] = trim($info['edcity']);
+            	$this->database->updateUserField($this->getUID(), DB_TBL_CUSTOMERS, "city", $this->address['city']);
+            }
+            if(isset($info['edstate'])) {
+               $this->address['state'] = trim($info['edstate']);
+            	$this->database->updateUserField($this->getUID(), DB_TBL_CUSTOMERS, "state", $this->address['state']);
+            }
+            if(isset($info['edzip'])) {
+               $this->address['zip'] = trim($info['edzip']);
+            	$this->database->updateUserField($this->getUID(), DB_TBL_CUSTOMERS, "zip", $this->address['zip']);
+            }
+            if(isset($info['edphone'])) {
+               $this->phone = trim($info['edphone']);
+            	$this->database->updateUserField($this->getUID(), DB_TBL_CUSTOMERS, "phone", $this->phone);
+            }
+         } else { //username and uid do not match
+            return 2;
+         }
+      } else { //user does not exist in system
+         return 1;
+      }
+      return 0; //user information successfully updated
+!!!137172.php!!!	register()
+
+      date_default_timezone_set('America/New_York');
+      $this->_regTime = time();
+
+      $q = "INSERT INTO ".DB_TBL_CUSTOMERS." (username, password, email, regtime, "
+          ."firstname, lastname, birthdate, gender, addrline1, addrline2, "
+          ."city, state, zip, phone) VALUES ('".$this->username."', '".$this->password."', "
+          ."'".$this->email."', '".$this->_regTime."', '".$this->firstName."', "
+          ."'".$this->lastName."', '".$this->birthDate."', '".$this->gender."', "
+          ."'".$this->address['line1']."', '".$this->address['line2']."', '".$this->address['city']."', "
+          ."'".$this->address['state']."', '".$this->address['zip']."', '".$this->phone."')";
+
+      $result = $this->database->query($q);
+
+      if($result) {
+         $this->_uid = $this->database->getUID($this->username);
+      }
+
+      return $result;

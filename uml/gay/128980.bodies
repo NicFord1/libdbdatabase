@@ -1,0 +1,47 @@
+class Recommend
+!!!134612.php!!!	recommend(inout itemid : )
+
+		if(!isset($itemid)){
+			return -2;
+		}
+		
+		//see if this itemid is for an existing item
+		$qexists = "SELECT * FROM ".DB_TBL_PRFX."items WHERE itemid = '$itemid'";
+		$resultsexists = mysql_query($qexists);
+		if($resultsexists) {
+			$numresultsexists = mysql_num_rows($resultsexists);
+		}
+		if ($numresultsexists == 0){
+			return -1
+		}
+		
+		//reccoomend an item
+		$qrec = 
+		"SELECT itemid	
+		FROM
+			((SELECT itemid, COUNT(itemid) as count
+			FROM	
+				((SELECT DISTINCT itemid, uid
+				FROM ".DB_TBL_PRFX."borroweditems
+				WHERE itemid != '$itemid' AND uid IN (
+					SELECT uid
+					FROM ".DB_TBL_PRFX."borroweditems
+					WHERE itemid = '$itemid')) as T)
+			GROUP BY itemid) as U)
+		WHERE count = 
+			(SELECT MAX(count)
+			FROM
+				((SELECT itemid, COUNT(itemid) as count
+				FROM	
+					((SELECT DISTINCT itemid, uid
+					FROM ".DB_TBL_PRFX."borroweditems
+					WHERE itemid != '$itemid' AND uid IN (
+						SELECT uid
+						FROM ".DB_TBL_PRFX."borroweditems
+						WHERE itemid = '$itemid')) as T)
+				GROUP BY itemid) as U))";
+			
+		$rowrec = mysql_fetch_array(mysql_query($qrec));
+		$rec = $rowrec["itemid"];
+		
+		return $rec;

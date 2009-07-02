@@ -1,0 +1,17 @@
+class Guest
+!!!137684.php!!!	__construct(inout ipAddress : , inout time : )
+
+      $this->database = new MYSQLDB;
+
+      $this->username = GUEST;
+      $this->_ipAddress = $ipAddress;
+      $this->_lastVisit = $time;
+!!!137812.php!!!	update()
+
+      return $this->database->addActiveGuest($this->_ipAddress, $this->_lastVisit);
+!!!137940.php!!!	register()
+
+   	return $this->update();
+!!!138068.php!!!	updateUserType(inout usertype : int)
+//Guest's are guests...
+   	return GUEST; //Must first be a customer....that's life!

@@ -1,0 +1,13 @@
+class Employee
+!!!137428.php!!!	__construct(inout userInfo : array, inout empInfo : array)
+
+      parent::__construct($userInfo);
+
+      if($empInfo != NULL) {
+         $this->dateHired = $empInfo['hiredate'];
+      } else {
+      	$this->dateHired = NULL;
+      }
+!!!137556.php!!!	update(inout info : )
+
+      return parent::update($info);

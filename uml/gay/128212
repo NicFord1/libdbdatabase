@@ -1,0 +1,2638 @@
+format 66
+"PHP" // PHP
+  revision 1
+  modified_by 84 "DARYL TEWELL"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default show_stereotype_properties default
+  
+  deploymentview 128212 "PHP"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+    artifact 128212 "checkin"
+      stereotype "source"
+      php_src "<?
+/**
+ * checkin.php
+ *
+ * This is the Checkin page.
+ */
+require_once(\"include/session.php\");
+
+if(!($session->isTeller() || $session->isAdmin()))
+{
+	header(\"Location: \".SITE_BASE_URL.\"/index.php\");
+}
+?>
+
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">
+ <head>
+  <title>LibDBDatabase</title>
+  <meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\" />
+  <meta name=\"description\" content=\"LibDBDatabase: Library Database\" />
+  <meta name=\"keywords\" content=\"library,database\" />
+  <meta name=\"author\" content=\"LibDBDatabase / Original design: Andreas Viklund - http://andreasviklund.com/\" />
+  <link rel=\"stylesheet\" href=\"<?=SITE_BASE_URL?>/css/andreas06.css\" type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?=SITE_BASE_URL?>/css/slide.css\"  type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?=SITE_BASE_URL?>/css/validate.css\"  type=\"text/css\" media=\"screen,projection\" />
+
+  <!-- javascripts -->
+  <!-- PNG FIX for IE6 -->
+  <!-- http://24ways.org/2007/supersleight-transparent-png-in-ie6 -->
+  <!--[if lte IE 6]>
+   <script type=\"text/javascript\" src=\"<?=SITE_BASE_URL?>/js/pngfix/supersleight-min.js\"></script>
+  <![endif]-->
+
+  <!-- jQuery -->
+  <script src=\"<?=SITE_BASE_URL?>/js/jquery.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?=SITE_BASE_URL?>/js/jquery.validate.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?=SITE_BASE_URL?>/js/jquery.metadata.min.js\" type=\"text/javascript\"></script>
+
+  <!-- Sliding effect -->
+  <script src=\"<?=SITE_BASE_URL?>/js/slide.js\" type=\"text/javascript\"></script>
+
+ </head>
+
+ <body>
+  <?php include_once(\"include/userpanel.php\"); ?>
+
+  <div id=\"container\">
+
+   <a id=\"top\"></a>
+   <p class=\"hide\">
+    Skip to:
+    <a href=\"#menu\">site menu</a>
+    | <a href=\"#sectionmenu\">section menu</a>
+    | <a href=\"#main\">main content</a>
+   </p>
+
+   <div id=\"sitename\">
+    <h1>LibDBDatabase</h1>
+    <span>Library Database System</span>
+    <a id=\"menu\"></a>
+   </div>
+
+   <?php include_once(\"include/topmenu.php\"); ?>
+
+   <div id=\"wrap1\">
+    <div id=\"wrap2\">
+
+     <div id=\"topbox\">
+      <strong>
+       <span class=\"hide\">Currently viewing: </span>
+       <a href=\"<?=SITE_BASE_URL?>/index.php\">LibDBDatabase</a> &raquo; <a href=\"<?=$_SERVER['PHP_SELF']?>\">Check In Media</a>
+      </strong>
+     </div>
+
+     <div id=\"leftside\">
+      <?php include_once(\"include/sidemenu.php\"); ?>
+     </div>
+
+     <a id=\"main\"></a>
+     <div id=\"contentalt\">
+      <h1>Check In Center</h1>
+      <img src=\"<?=SITE_BASE_URL?>/img/gravatar-checkin.png\" height=\"80\" width=\"80\" alt=\"Checkin Gravatar\" />
+
+      <font size=\"5\" color=\"#ff0000\">
+       <b>::::::::::::::::::::::::::::::::::::::::::::</b>
+      </font>
+      <br /><br />
+      <h1>Check In</h1>
+      <br />
+
+	    <form action=\"<?php echo $_SERVER['PHP_SELF']?>\" method=\"POST\">
+	    <table border=0>
+		<tr>
+		<td>Media ID number: </td>
+		 <td><input type=\"text\" name=\"q\" value=\"<?php
+		 	if(isset($_GET['isbn']) && !empty($_GET['isbn'])){
+				echo $_GET['isbn'];
+			} else if(isset($_GET['issn']) && !empty($_GET['issn'])){
+				echo $_GET['issn'];
+			} else if(isset($_GET['upc']) && !empty($_GET['upc'])){
+				echo $_GET['upc'];
+			} if(!isset($_POST[\"q\"]) || empty($_POST[\"q\"])) {
+				echo \"\";
+			} else {
+				echo $_POST[\"q\"];
+			}?>\"/></td>
+		 <td>
+		  <select name=\"idtype\">
+			<?php
+				$selected;
+				if((isset($_GET['isbn']) && !empty($_GET['isbn'])) ||
+					$_POST[\"idtype\"] == \"ISBN\"){
+					$selected = 1;
+				} else if((isset($_GET['issn']) && !empty($_GET['issn'])) ||
+					$_POST[\"idtype\"] == \"ISSN\"){
+					$selected = 2;
+				} else if((isset($_GET['upc']) && !empty($_GET['upc'])) ||
+					$_POST[\"idtype\"] == \"UPC\"){
+					$selected = 3;
+				} else if(!isset($_POST[\"idtype\"]) || empty($_POST[\"idtype\"])){
+					$selected = 0;
+				} else if($_POST[\"idtype\"] == \"SICI\"){
+					$selected = 4;
+				}
+			?>
+		  <option value=\"ISBN\" <?php if($selected == 1){ echo \"selected\"; } ?>>ISBN</option>
+		  <option value=\"ISSN\" <?php if($selected == 2){ echo \"selected\"; } ?>>ISSN</option>
+		  <option value=\"UPC\" <?php if($selected == 3){ echo \"selected\"; } ?>>UPC</option>
+		  <option value=\"SICI\" <?php if($selected == 4){ echo \"selected\"; } ?>>SICI</option>
+		  </select>
+		  </td>
+        </tr>
+        <tr>
+		 <td>Username: </td>
+		 <td><input type=\"text\" name=\"quid\" value=\"<?php
+		  if(!isset($_POST[\"quid\"]) || empty($_POST[\"quid\"])) {
+		   echo \"\";
+		  } else {
+		   echo $_POST[\"quid\"];
+		  }?>\"/></td>
+        </tr>
+		<tr><td>
+	     <input type=\"submit\" value=\"Check In\" />
+		</td></tr>
+	   </form>
+
+	  </table>
+
+<?php
+$searchQuery = @$_POST['q'] ;
+$searchQueryUID = @$_POST['quid'] ;
+$idtype = @$_POST['idtype'] ;
+$trimmed = trim($searchQuery); //trim whitespace from the stored variable
+$username = trim($searchQueryUID);
+
+
+if($trimmed == \"\") {
+   echo \"<p>Please enter the ISBN, ISSN, or SICI of the item and the username of the borrower.</p>\";
+} else if(!isset($searchQuery)) { //check for a search parameter
+  echo \"<p>We dont seem to have an item ID number.</p>\";
+  exit;
+} else if(!isset($searchQueryUID)) { //check for a search parameter
+  echo \"<p>We dont seem to have a username.</p>\";
+  exit;
+} else {
+	//Build the itemid query
+	$qitemid = \"SELECT itemid \";
+	if($idtype == 'ISBN'){
+		$qitemid .= \"FROM ((SELECT itemid, isbn FROM `\".DB_TBL_PRFX.\"books`)
+				UNION(SELECT itemid, isbn FROM `\".DB_TBL_PRFX.\"periodicals`)) as T \";
+	} else if($idtype == 'UPC'){
+		$qitemid .= \"FROM ((SELECT itemid, upc FROM `\".DB_TBL_PRFX.\"cds`)
+				UNION(SELECT itemid, upc FROM `\".DB_TBL_PRFX.\"dvds`)) as T \";
+	}else if($idtype == 'ISSN' || $idtype == 'SICI'){
+		$qitemid .= \"FROM `\".DB_TBL_PRFX.\"periodicals` \";
+	}
+	$qitemid .= \"WHERE $idtype = '$trimmed'\";
+
+	//run the itemid query
+	$resultsitemid = mysql_query($qitemid);
+	if($resultsitemid) {
+		$numresultsitemid = mysql_num_rows($resultsitemid);
+	}
+
+	if ($numresultsitemid == 0){
+		echo \"<p>ERROR: \\\"$idtype: $trimmed\\\" not found.</p>\";
+	}
+
+   $uid = $session->database->getUID($username);
+   if (!$uid) {
+		echo \"<p>ERROR: Username \\\"$username\\\" not found.</p>\";
+	}
+
+	if($numresultsitemid != 0 && $uid) {
+		$rowitemid = mysql_fetch_array($database->query($qitemid));
+		$itemid = $rowitemid[\"itemid\"];
+
+		$qborrowed = \"SELECT * FROM \".DB_TBL_PRFX.\"borroweditems WHERE itemid = '$itemid' AND uid = '$uid' AND returned = 0\";
+		$resultsborrowed = mysql_query($qborrowed);
+		if($resultsborrowed) {
+			$numresultsborrowed = mysql_num_rows($resultsborrowed);
+		}
+		if ($numresultsborrowed == 0) {
+			echo \"<p>ERROR: \\\"$username\\\" does not have \\\"$idtype: $trimmed\\\" checked out.</p>\";
+		} else {
+			$q1 = \"UPDATE \".DB_TBL_PRFX.\"items SET quantity = quantity + 1 WHERE itemid = '$itemid'\";
+			$q2 =
+			\"UPDATE \".DB_TBL_PRFX.\"borroweditems
+			SET returned = 1
+			WHERE uid = '$uid' AND itemid = '$itemid' AND returned = 0 AND histnum = (
+				SELECT MIN(histnum)
+				FROM ((
+					SELECT *
+					FROM \".DB_TBL_PRFX.\"borroweditems
+					WHERE returned = 0) as J)
+				WHERE duedate = (
+					SELECT MIN(duedate)
+					FROM ((
+						SELECT *
+						FROM \".DB_TBL_PRFX.\"borroweditems
+						WHERE returned = 0) as T)
+					WHERE uid = '$uid'))\";
+			mysql_query($q1);
+			mysql_query($q2);
+			echo \"<p>\\\"$username\\\" has checked in \\\"$idtype: $trimmed\\\" successfully.</p>\";
+		}
+   }
+}
+?>
+      <p class=\"hide\"><a href=\"#top\">Back to top</a></p>
+     </div>
+    </div>
+
+    <?php include_once(\"include/footer.php\"); ?>
+
+   </div>
+  </div>
+ </body>
+</html>"
+      associated_classes
+      end
+    end
+
+    artifact 128340 "checkout"
+      stereotype "source"
+      php_src "<?
+/**
+ * checkout.php
+ *
+ * This is the Checkout page.
+ */
+require_once(\"include/session.php\");
+
+if(!($session->isTeller() || $session->isAdmin()))
+{
+   header(\"Location: \".SITE_BASE_URL.\"/index.php\");
+}
+?>
+
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">
+ <head>
+  <title>LibDBDatabase</title>
+  <meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\" />
+  <meta name=\"description\" content=\"LibDBDatabase: Library Database\" />
+  <meta name=\"keywords\" content=\"library,database\" />
+  <meta name=\"author\" content=\"LibDBDatabase / Original design: Andreas Viklund - http://andreasviklund.com/\" />
+  <link rel=\"stylesheet\" href=\"<?=SITE_BASE_URL?>/css/andreas06.css\" type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?=SITE_BASE_URL?>/css/slide.css\"  type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?=SITE_BASE_URL?>/css/validate.css\"  type=\"text/css\" media=\"screen,projection\" />
+
+  <!-- javascripts -->
+  <!-- PNG FIX for IE6 -->
+  <!-- http://24ways.org/2007/supersleight-transparent-png-in-ie6 -->
+  <!--[if lte IE 6]>
+   <script type=\"text/javascript\" src=\"<?=SITE_BASE_URL?>/js/pngfix/supersleight-min.js\"></script>
+  <![endif]-->
+
+  <!-- jQuery -->
+  <script src=\"<?=SITE_BASE_URL?>/js/jquery.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?=SITE_BASE_URL?>/js/jquery.validate.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?=SITE_BASE_URL?>/js/jquery.metadata.min.js\" type=\"text/javascript\"></script>
+
+  <!-- Sliding effect -->
+  <script src=\"<?=SITE_BASE_URL?>/js/slide.js\" type=\"text/javascript\"></script>
+
+ </head>
+
+ <body>
+  <?php include_once(\"include/userpanel.php\"); ?>
+
+  <div id=\"container\">
+
+   <a id=\"top\"></a>
+   <p class=\"hide\">
+    Skip to:
+    <a href=\"#menu\">site menu</a>
+    | <a href=\"#sectionmenu\">section menu</a>
+    | <a href=\"#main\">main content</a>
+   </p>
+
+   <div id=\"sitename\">
+    <h1>LibDBDatabase</h1>
+    <span>Library Database System</span>
+    <a id=\"menu\"></a>
+   </div>
+
+   <?php include_once(\"include/topmenu.php\"); ?>
+
+   <div id=\"wrap1\">
+    <div id=\"wrap2\">
+
+     <div id=\"topbox\">
+      <strong>
+       <span class=\"hide\">Currently viewing: </span>
+       <a href=\"<?=SITE_BASE_URL?>/index.php\">LibDBDatabase</a> &raquo; <a href=\"<?=$_SERVER['PHP_SELF']?>\">Check Out Media</a>
+      </strong>
+     </div>
+
+     <div id=\"leftside\">
+      <?php include_once(\"include/sidemenu.php\"); ?>
+     </div>
+
+     <a id=\"main\"></a>
+     <div id=\"contentalt\">
+      <h1>Check Out Center</h1>
+      <img src=\"<?=SITE_BASE_URL?>/img/gravatar-checkin.png\" height=\"80\" width=\"80\" alt=\"Checkin Gravatar\" />
+
+      <font size=\"5\" color=\"#ff0000\">
+       <b>::::::::::::::::::::::::::::::::::::::::::::</b>
+      </font>
+      <br /><br />
+      <h1>Check Out</h1>
+      <br />
+
+	    <form action=\"<?php echo $_SERVER['PHP_SELF']?>\" method=\"POST\">
+	    <table border=0>
+		<tr>
+		<td>Media ID number: </td>
+		 <td><input type=\"text\" name=\"q\" value=\"<?php
+			if(isset($_GET['isbn']) && !empty($_GET['isbn'])){
+				echo $_GET['isbn'];
+			} else if(isset($_GET['issn']) && !empty($_GET['issn'])){
+				echo $_GET['issn'];
+			} else if(isset($_GET['upc']) && !empty($_GET['upc'])){
+				echo $_GET['upc'];
+			} else if(!isset($_POST[\"q\"]) || empty($_POST[\"q\"])) {
+				echo \"\";
+			} else {
+				echo $_POST[\"q\"];
+			}?>\"/></td>
+		 <td>
+		  <select name=\"idtype\">
+			<?php
+				$selected;
+				if((isset($_GET['isbn']) && !empty($_GET['isbn'])) ||
+					$_POST[\"idtype\"] == \"ISBN\"){
+					$selected = 1;
+				} else if((isset($_GET['issn']) && !empty($_GET['issn'])) ||
+					$_POST[\"idtype\"] == \"ISSN\"){
+					$selected = 2;
+				} else if((isset($_GET['upc']) && !empty($_GET['upc'])) ||
+					$_POST[\"idtype\"] == \"UPC\"){
+					$selected = 3;
+				} else if(!isset($_POST[\"idtype\"]) || empty($_POST[\"idtype\"])){
+					$selected = 0;
+				} else if($_POST[\"idtype\"] == \"SICI\"){
+					$selected = 4;
+				}
+			?>
+		  <option value=\"ISBN\" <?php if($selected == 1){ echo \"selected\"; } ?>>ISBN</option>
+		  <option value=\"ISSN\" <?php if($selected == 2){ echo \"selected\"; } ?>>ISSN</option>
+		  <option value=\"UPC\" <?php if($selected == 3){ echo \"selected\"; } ?>>UPC</option>
+		  <option value=\"SICI\" <?php if($selected == 4){ echo \"selected\"; } ?>>SICI</option>
+		  </select>
+		  </td>
+        </tr>
+        <tr>
+		 <td>Username: </td>
+		 <td><input type=\"text\" name=\"quid\" value=\"<?php
+		  if(!isset($_POST[\"quid\"]) || empty($_POST[\"quid\"])) {
+		   echo \"\";
+		  } else {
+		   echo $_POST[\"quid\"];
+		  }?>\"/></td>
+        </tr>
+		<tr><td>
+	     <input type=\"submit\" value=\"Check Out\" />
+		</td></tr>
+	   </form>
+
+	  </table>
+
+<?php
+$searchQuery = @$_POST['q'] ;
+$searchQueryUID = @$_POST['quid'] ;
+$idtype = @$_POST['idtype'] ;
+$trimmed = trim($searchQuery); //trim whitespace from the stored variable
+$username = trim($searchQueryUID);
+
+
+if($trimmed == \"\") {
+   echo \"<p>Please enter the ISBN, ISSN, or SICI of the item and the username of the borrower.</p>\";
+} else if(!isset($searchQuery)) { //check for a search parameter
+  echo \"<p>We dont seem to have an item ID number.</p>\";
+  exit;
+} else if(!isset($searchQueryUID)) { //check for a search parameter
+  echo \"<p>We dont seem to have a username.</p>\";
+  exit;
+} else {
+	//Build the itemid query
+	$qitemid = \"SELECT itemid \";
+	if($idtype == 'ISBN') {
+		$qitemid .= \"FROM ((SELECT itemid, isbn FROM `\".DB_TBL_PRFX.\"books`)
+				UNION(SELECT itemid, isbn FROM `\".DB_TBL_PRFX.\"periodicals`)) as T \";
+	} else if($idtype == 'UPC') {
+		$qitemid .= \"FROM ((SELECT itemid, upc FROM `\".DB_TBL_PRFX.\"cds`)
+				UNION(SELECT itemid, upc FROM `\".DB_TBL_PRFX.\"dvds`)) as T \";
+	} else if($idtype == 'ISSN' || $idtype == 'SICI') {
+		$qitemid .= \"FROM `\".DB_TBL_PRFX.\"periodicals` \";
+	}
+	$qitemid .= \"WHERE $idtype = '$trimmed'\";
+
+	//run the itemid query
+	$resultsitemid = mysql_query($qitemid);
+	if($resultsitemid) {
+		$numresultsitemid = mysql_num_rows($resultsitemid);
+	}
+
+	if ($numresultsitemid == 0) {
+		echo \"<p>ERROR: \\\"$idtype: $trimmed\\\" not found.</p>\";
+	}
+
+   $uid = $session->database->getUID($username);
+	if (!$uid) {
+		echo \"<p>ERROR: Username \\\"$username\\\" not found.</p>\";
+	}
+
+	if($numresultsitemid != 0 && $uid) {
+		//get the itemid
+		$rowitemid = mysql_fetch_array($database->query($qitemid));
+		$itemid = $rowitemid[\"itemid\"];
+
+		//check if the item is in stock
+		$qinstock = \"SELECT quantity FROM \".DB_TBL_PRFX.\"items WHERE itemid = $itemid\";
+		$rowinstock = mysql_fetch_array($database->query($qinstock));
+		$instock = $rowinstock[\"quantity\"];
+		if($instock <= 0) {
+			echo \"<p>ERROR: \\\"$idtype: $trimmed\\\" is not in stock.</p>\";
+		} else {
+			//604800 seconds = 1 week
+         date_default_timezone_set('America/New_York');
+			$duedate = time() + 604800;
+			mysql_query(\"UPDATE \".DB_TBL_PRFX.\"items SET quantity = quantity - 1 WHERE itemid = '$itemid'\");
+			mysql_query(\"INSERT INTO \".DB_TBL_PRFX.\"borroweditems (itemid, uid, duedate) \"
+						.\"VALUES('$itemid','$uid', $duedate)\");
+			echo \"<p>\\\"$username\\\" has checked out \\\"$idtype: $trimmed\\\" successfully.</p>\"
+			.\"<p>This item is due on \" . date('l, F jS Y', $duedate) . \".</p>\";
+		}
+   }
+}
+?>
+      <p class=\"hide\"><a href=\"#top\">Back to top</a></p>
+     </div>
+    </div>
+
+    <?php include_once(\"include/footer.php\"); ?>
+
+   </div>
+  </div>
+ </body>
+</html>"
+      associated_classes
+      end
+    end
+
+    artifact 128468 "forgotpass"
+      stereotype "source"
+      php_src "<?php
+/**
+ * forgotpass.php
+ *
+ * This page is for those users who have forgotten their password and want to have
+ * a new password generated for them and sent to the email address attached to their
+ * account in the database. The new password is not displayed on the website for
+ * security purposes.
+ *
+ * Note: If your server is not properly setup to send mail, then this page is
+ * essentially useless and it would be better to not even link to this page from
+ * your website.
+ */
+include(\"include/session.php\");
+?>
+
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">
+ <head>
+  <title>LibDBDatabase</title>
+  <meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\" />
+  <meta name=\"description\" content=\"LibDBDatabase: Library Database\" />
+  <meta name=\"keywords\" content=\"library,database\" />
+  <meta name=\"author\" content=\"LibDBDatabase / Original design: Andreas Viklund - http://andreasviklund.com/\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL?>/css/andreas06.css\" type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL?>/css/slide.css\"  type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL?>/css/validate.css\"  type=\"text/css\" media=\"screen,projection\" />
+
+  <!-- javascripts -->
+  <!-- PNG FIX for IE6 -->
+  <!-- http://24ways.org/2007/supersleight-transparent-png-in-ie6 -->
+  <!--[if lte IE 6]>
+   <script type=\"text/javascript\" src=\"<?php echo SITE_BASE_URL?>/js/pngfix/supersleight-min.js\"></script>
+  <![endif]-->
+
+  <!-- jQuery -->
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery-1.3.2.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.validate.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.metadata.js\" type=\"text/javascript\"></script>
+
+  <!-- Sliding effect -->
+  <script src=\"<?php echo SITE_BASE_URL?>/js/slide.js\" type=\"text/javascript\"></script>
+
+ </head>
+
+ <body>
+  <?php include_once(\"include/userpanel.php\"); ?>
+
+  <div id=\"container\">
+
+   <a id=\"top\"></a>
+   <p class=\"hide\">
+    Skip to:
+    <a href=\"#menu\">site menu</a>
+    | <a href=\"#sectionmenu\">section menu</a>
+    | <a href=\"#main\">main content</a>
+   </p>
+
+   <div id=\"sitename\">
+    <h1>LibDBDatabase</h1>
+    <span>Library Database System</span>
+    <a id=\"menu\"></a>
+   </div>
+
+   <?php include_once(\"include/topmenu.php\"); ?>
+
+   <div id=\"wrap1\">
+    <div id=\"wrap2\">
+
+     <div id=\"topbox\">
+      <strong>
+       <span class=\"hide\">Currently viewing: </span>
+       <a href=\"<?php echo SITE_BASE_URL?>/index.php\">LibDBDatabase</a> &raquo;
+       <a href=\"<?php echo $_SERVER['PHP_SELF']?>\">Forgotten Password Center</a>
+      </strong>
+     </div>
+
+     <div id=\"leftside\">
+      <?php include_once(\"include/sidemenu.php\"); ?>
+     </div>
+
+     <a id=\"main\"></a>
+     <div id=\"contentalt\">
+      <h1>Forgotten Password Center</h1>
+      <img src=\"<?php echo SITE_BASE_URL?>/img/gravatar-help.png\" height=\"80\" width=\"80\" alt=\"Help Gravatar\" />
+
+      <font size=\"5\" color=\"#ff0000\">
+       <b>::::::::::::::::::::::::::::::::::::::::::::</b>
+      </font>
+      <br /><br />
+<?php
+/**
+ * Forgot Password form has been submitted and no errors were found with the
+ * form (the username is in the database)
+ */
+if(isset($_SESSION['forgotpass'])) {
+   if($_SESSION['forgotpass']) { /* New password generated for user and sent via email */
+      echo \"<h1>New Password Generated</h1>\";
+      echo \"<p>Your new password has been generated and sent to the email <br />\"
+          .\"associated with your account.</p>\";
+   } else { /* Email couldn't be sent, thus password not edited in the database. */
+      echo \"<h1>New Password Failure</h1>\";
+      echo \"<p>There was an error sending you the email with the new password,<br />\"
+          .\"so your password has not been changed.</p>\";
+   }
+   unset($_SESSION['forgotpass']);
+} else { /* Forgot password form is displayed, if error found it is displayed. */
+?>
+
+      <h1>Forgot Password</h1>
+      A new password will be generated for you and sent to the email address<br />
+      associated with your account, all you have to do is enter your username.<br /><br />
+      <?php echo $session->form->error(\"uname\")?>
+      <form action=\"process.php\" method=\"POST\">
+       <b>Username:</b> <input type=\"text\" name=\"uname\" maxlength=\"30\" value=\"<?php echo $session->form->value(\"uname\")?>\">
+       <input type=\"hidden\" name=\"subforgot\" value=\"1\">
+       <input type=\"submit\" value=\"Get New Password\">
+      </form>
+<?php
+}
+?>
+
+      <p class=\"hide\"><a href=\"#top\">Back to top</a></p>
+     </div>
+    </div>
+
+    <?php include_once(\"include/footer.php\"); ?>
+
+   </div>
+  </div>
+ </body>
+</html>"
+      associated_classes
+      end
+    end
+
+    artifact 128596 "index"
+      stereotype "source"
+      php_src "<?php
+/**
+ * index.php
+ */
+require_once(\"include/session.php\");
+
+/**
+ * displayItems - Displays the items database table in a nicely formatted html
+ * table.
+ */
+function displayItems() {
+   global $session, $database;
+
+   echo \"<h1>Items in Our Library</h1>\\n\";
+
+   $q = \"SELECT * FROM \".DB_TBL_PRFX.\"items ORDER BY itemtype ASC,itemid\";
+
+   if(isset($_GET['type']) && !empty($_GET['type'])) {
+   	$itemType = $_GET['type'];
+      $q = \"SELECT * FROM \".DB_TBL_PRFX.\"items WHERE itemtype='$itemType' ORDER BY itemtype ASC,itemid\";
+   }
+
+   $result = $database->query($q);
+
+   /* Error occurred, return given name by default */
+   $num_rows = mysql_numrows($result);
+
+   if(!$result || ($num_rows < 0)) {
+      echo \"Error displaying info\";
+      return;
+   }
+
+   if($num_rows == 0) {
+      echo \"Database table empty\";
+      return;
+   }
+
+   /* Display table contents */
+   echo \"<table id=\\\"items\\\" align=\\\"center\\\" border=\\\"1\\\" cellspacing=\\\"0\\\" cellpadding=\\\"3\\\">\\n\";
+   echo \"<tr>\\n\";
+   echo \"<th>itemID</th>\\n\";
+   echo \"<th>Title</th>\\n\";
+   echo \"<th>Qty on Hand</th>\";
+   if($session->isTeller() || $session->isAdmin()) {
+   	echo \"<th>Check Media</th>\\n\";
+   }
+   echo \"</tr>\\n\";
+
+   while($item = mysql_fetch_array($result, MYSQL_ASSOC)) {
+      if($item['itemtype'] == \"BOOK\") {
+         $qry = \"SELECT * FROM \".DB_TBL_PRFX.\"books WHERE itemid='\".$item['itemid'].\"'\";
+         $qresult = $database->query($qry);
+         $iteminfo = mysql_fetch_array($qresult, MYSQL_ASSOC);
+      } else if ($item['itemtype'] == \"PERIODICAL\") {
+         $qry = \"SELECT * FROM \".DB_TBL_PRFX.\"periodicals WHERE itemid='\".$item['itemid'].\"'\";
+         $qresult = $database->query($qry);
+         $iteminfo = mysql_fetch_array($qresult, MYSQL_ASSOC);
+      } else if ($item['itemtype'] == \"DVD\") {
+         $qry = \"SELECT * FROM \".DB_TBL_PRFX.\"dvds WHERE itemid='\".$item['itemid'].\"'\";
+         $qresult = $database->query($qry);
+         $iteminfo = mysql_fetch_array($qresult, MYSQL_ASSOC);
+      } else if ($item['itemtype'] == \"CD\") {
+         $qry = \"SELECT * FROM \".DB_TBL_PRFX.\"cds WHERE itemid='\".$item['itemid'].\"'\";
+         $qresult = $database->query($qry);
+         $iteminfo = mysql_fetch_array($qresult, MYSQL_ASSOC);
+      } else {
+         $iteminfo = NULL;
+      }
+
+      echo \"<tr>\";
+      echo \"<td>\".$item['itemid'].\"</td>\\n\";
+      echo \"<td>\".$iteminfo['title'].\"</td>\\n\";
+      echo \"<td>\".$item['quantity'].\"</td>\\n\";
+      if($session->isTeller() || $session->isAdmin()) {
+         if($item['itemtype'] == \"BOOK\") {
+            echo \"<td>\"
+                .\"<a href=\\\"\".SITE_BASE_URL.\"/checkin.php?isbn=\".$iteminfo['isbn'].\"\\\">In</a>\"
+                .\" / <a href=\\\"\".SITE_BASE_URL.\"/checkout.php?isbn=\".$iteminfo['isbn'].\"\\\">Out</a>\"
+                .\"</td>\\n\";
+         } else if ($item['itemtype'] == \"PERIODICAL\") {
+            echo \"<td>\"
+                .\"<a href=\\\"\".SITE_BASE_URL.\"/checkin.php?issn=\".$iteminfo['issn'].\"\\\">In</a>\"
+                .\" / <a href=\\\"\".SITE_BASE_URL.\"/checkout.php?issn=\".$iteminfo['issn'].\"\\\">Out</a>\"
+                .\"</td>\\n\";
+         } else if ($item['itemtype'] == \"DVD\") {
+            echo \"<td>\"
+                .\"<a href=\\\"\".SITE_BASE_URL.\"/checkin.php?upc=\".$iteminfo['upc'].\"\\\">In</a>\"
+                .\" / <a href=\\\"\".SITE_BASE_URL.\"/checkout.php?upc=\".$iteminfo['upc'].\"\\\">Out</a>\"
+                .\"</td>\\n\";
+         } else if ($item['itemtype'] == \"CD\") {
+            echo \"<td>\"
+                .\"<a href=\\\"\".SITE_BASE_URL.\"/checkin.php?upc=\".$iteminfo['upc'].\"\\\">In</a>\"
+                .\" / <a href=\\\"\".SITE_BASE_URL.\"/checkout.php?upc=\".$iteminfo['upc'].\"\\\">Out</a>\"
+                .\"</td>\\n\";
+         } else {
+            echo \"<td>&nbsp;</td>\\n\";
+         }
+      }
+      echo \"</tr>\\n\";
+   }
+   echo \"</table><br /><br />\\n\";
+}
+?>
+
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">
+ <head>
+  <title>LibDBDatabase</title>
+  <meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\" />
+  <meta name=\"description\" content=\"LibDBDatabase: Library Database\" />
+  <meta name=\"keywords\" content=\"library,database\" />
+  <meta name=\"author\" content=\"LibDBDatabase / Original design: Andreas Viklund - http://andreasviklund.com/\" />
+
+  <!-- stylesheets -->
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL?>/css/andreas06.css\" type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL?>/css/slide.css\"  type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL?>/css/validate.css\"  type=\"text/css\" media=\"screen,projection\" />
+
+  <!-- javascripts -->
+  <!-- PNG FIX for IE6 -->
+  <!-- http://24ways.org/2007/supersleight-transparent-png-in-ie6 -->
+  <!--[if lte IE 6]>
+   <script type=\"text/javascript\" src=\"<?php echo SITE_BASE_URL?>/js/pngfix/supersleight-min.js\"></script>
+  <![endif]-->
+
+  <!-- jQuery -->
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.form.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.validate.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.metadata.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.tablehover.min.js\" type=\"text/javascript\"></script>
+
+  <script type=\"text/javascript\">
+     $.metadata.setType(\"attr\", \"validate\");
+
+     $(document).ready(function() {
+        $('#items').tableHover();
+        // validate login form on keyup and submit
+        $(\"#login\").validate({
+           rules: {
+              uname: {
+                 required: true,
+                 minlength: 5
+              },
+              pass: {
+                 required: true,
+                 minlength: 5
+              }
+           },
+           messages: {
+              uname: {
+                 required: \"Please provide a username\",
+                 minlength: \"Your username must be at least 5 characters long\"
+              },
+              pass: {
+                 required: \"Please provide a password\",
+                 minlength: \"Your password must be at least 5 characters long\"
+              }
+           }
+        });
+     });
+  </script>
+
+
+  <!-- Sliding effect -->
+  <script src=\"<?php echo SITE_BASE_URL?>/js/slide.js\" type=\"text/javascript\"></script>
+ </head>
+
+ <body>
+
+  <!-- Sliding Panel -->
+  <div id=\"toppanel\">
+
+<?php
+/**
+ * User has already logged in, so display relavent links, including a link to
+ * the admin center if the user is an administrator.
+ */
+if(!$session->logged_in) {
+?>
+   <div id=\"panel\">
+    <div class=\"content clearfix\">
+
+     <div class=\"left\">
+      <a name=\"toppanel\"></a>
+      <h1>Welcome to LibDBDatabase</h1>
+      <h2>Library Database System</h2>
+      <p class=\"grey\">
+       We are here to provide a wealth of information and entertainment to our
+       members!  With over 1 million titles in our collection, if we don't have
+       what you're looking for, we'll get a copy.
+      </p>
+      <div id=\"result\"></div>
+<?php
+   if($session->form->num_errors > 0) {
+      echo \"<font size=\\\"2\\\" color=\\\"#ff0000\\\">\".$session->form->num_errors.\" error(s) found</font>\\n\";
+
+      //login errors
+      if($session->form->value(\"sublogin\") == \"1\") {
+         echo \"<p>Login Credentials:</p>\\n\";
+         echo \"<label for=\\\"uname\\\">\".$session->form->error(\"uname\").\"</label>\\n\";
+         echo \"<label for=\\\"pass\\\">\".$session->form->error(\"pass\").\"</label>\\n\";
+      }
+   }
+?>
+     </div>
+
+     <div class=\"left\">
+      <!-- Login Form -->
+      <form class=\"clearfix\" action=\"<?php echo SITE_BASE_URL; ?>/process.php\" method=\"post\" id=\"login\">
+       <h1>Member Login</h1>
+
+       <label class=\"grey required\" for=\"uname\">Username:</label>
+       <input class=\"field\" type=\"text\" name=\"uname\" id=\"uname\" value=\"<?php echo $session->form->value(\"uname\")?>\" size=\"23\" />
+
+       <label class=\"grey required\" for=\"pass\">Password:</label>
+       <input class=\"field\" type=\"password\" name=\"pass\" id=\"pass\" value=\"\" size=\"23\" />
+
+       <label>
+        <input name=\"remember\" id=\"remember\" type=\"checkbox\" checked=\"checked\" value=\"forever\" />
+        &nbsp;Remember me
+       </label>
+
+       <div class=\"clear\"></div>
+       <input type=\"hidden\" name=\"sublogin\" value=\"1\">
+       <input type=\"submit\" name=\"submit\" value=\"Login\" class=\"bt_login\" />
+       <a class=\"lost-pass\" href=\"<?php echo SITE_BASE_URL; ?>/forgotpass.php\">Lost your password?</a>
+      </form>
+     </div>
+
+     <div class=\"left right\">
+      <h1>Not a member yet?  Sign-up!</h1>
+      <p>
+       We welcome new members to our library.  All we ask is that you provide
+       some details so that we can get you started with a new account.  Sign-up
+       <a href=\"<?php echo SITE_BASE_URL; ?>/newuser.php\">here</a>!
+      </p>
+     </div>
+    </div>
+   </div>
+
+   <div class=\"tab\">
+    <ul class=\"login\">
+     <li class=\"left\">&nbsp;</li>
+     <li>Hello <?php echo $session->user->username; ?>!</li>
+     <li class=\"sep\">|</li>
+     <li id=\"toggle\">
+      <a id=\"open\" class=\"open\" href=\"#\">Log In | Register</a>
+      <a id=\"close\" style=\"display: none;\" class=\"close\" href=\"#\">Close Panel</a>
+     </li>
+     <li class=\"right\">&nbsp;</li>
+    </ul>
+   </div>
+<?php
+} else {
+/**
+ * User has already logged in, so display relavent links, including
+ * a link to the admin center if the user is an administrator.
+ */
+?>
+   <div class=\"tab\">
+    <ul class=\"login\">
+     <li class=\"left\">&nbsp;</li>
+     <li>Welcome <?php echo $session->user->username; ?>!</li>
+     <li class=\"sep\">|</li>
+     <li><a href=\"<?php echo SITE_BASE_URL; ?>/process.php?logout\">Logout</a></li>
+     <li class=\"right\">&nbsp;</li>
+    </ul>
+   </div>
+<?php
+}
+?>
+  </div>
+  <!-- /Sliding Panel -->
+
+  <div id=\"container\">
+
+   <a id=\"top\"></a>
+   <p class=\"hide\">
+    Skip to:
+    <a href=\"#menu\">site menu</a>
+    | <a href=\"#sectionmenu\">section menu</a>
+    | <a href=\"#main\">main content</a>
+   </p>
+
+   <div id=\"sitename\">
+    <h1>LibDBDatabase</h1>
+    <span>Library Database System</span>
+    <a id=\"menu\"></a>
+   </div>
+
+   <?php include_once(\"include/topmenu.php\"); ?>
+
+   <div id=\"wrap1\">
+    <div id=\"wrap2\">
+
+     <div id=\"topbox\">
+      <strong>
+       <span class=\"hide\">Currently viewing: </span>
+       <a href=\"<?php echo SITE_BASE_URL?>/index.php\">LibDBDatabase</a> &raquo;
+       <a href=\"<?php echo $_SERVER['PHP_SELF']?>\">Front page</a>
+      </strong>
+     </div>
+
+     <div id=\"leftside\">
+<?php
+if($session->form->num_errors > 0) {
+   echo \"      <strong>\";
+   echo \"       <font size=\\\"2\\\" color=\\\"#ff0000\\\">Login failed.</font>\\n\";
+   echo \"      </strong>\";
+   echo \"      <br />\";
+}
+?>
+      <?php include_once(\"include/sidemenu.php\"); ?>
+     </div>
+
+     <a id=\"main\"></a>
+     <div id=\"contentalt\">
+      <h1>Welcome to \"LibDBDatabase\"...</h1>
+      <img src=\"<?php echo SITE_BASE_URL?>/img/gravatar-books.png\" height=\"80\" width=\"80\" alt=\"Gravatar example\" />
+
+      <p class=\"intro\">
+       ...an open source library database app by a group of UMBC students. This
+       was created for a project in CMSC 432 during the Summer of 2009 semester.
+      </p>
+
+      <font size=\"5\" color=\"#ff0000\">
+       <b>::::::::::::::::::::::::::::::::::::::::::::</b>
+      </font>
+      <br /><br />
+
+      <?php displayItems(); ?>
+      <p class=\"hide\"><a href=\"#top\">Back to top</a></p>
+     </div>
+    </div>
+
+    <?php include_once(\"include/footer.php\"); ?>
+
+   </div>
+  </div>
+ </body>
+</html>
+"
+      associated_classes
+      end
+    end
+
+    artifact 128724 "newuser"
+      stereotype "source"
+      php_src "<?php
+/**
+ * newuser.php
+ *
+ * This is the Registration Center page. Only administrators & tellers are allowed to view this page while logged in.
+ * This page allows for the creation of new user accounts.  Only admins can create new admins & tellers.  All other users
+ * can only create regular customers.
+ */
+include(\"include/session.php\");
+
+
+/**
+ * User logged in and not an administrator or teller, redirect to main page automatically.
+ */
+if($session->logged_in && !($session->isAdmin() || $session->isTeller())) {
+   header(\"Location: \".SITE_BASE_URL.\"/index.php\");
+}
+?>
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">
+ <head>
+  <title>LibDBDatabase</title>
+  <meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\" />
+  <meta name=\"description\" content=\"LibDBDatabase: Library Database\" />
+  <meta name=\"keywords\" content=\"library,database\" />
+  <meta name=\"author\" content=\"LibDBDatabase / Original design: Andreas Viklund - http://andreasviklund.com/\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL?>/css/andreas06.css\" type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL?>/css/slide.css\"  type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL?>/css/validate.css\"  type=\"text/css\" media=\"screen,projection\" />
+
+  <!-- javascripts -->
+  <!-- PNG FIX for IE6 -->
+  <!-- http://24ways.org/2007/supersleight-transparent-png-in-ie6 -->
+  <!--[if lte IE 6]>
+   <script type=\"text/javascript\" src=\"<?php echo SITE_BASE_URL?>/js/pngfix/supersleight-min.js\"></script>
+  <![endif]-->
+
+  <!-- jQuery -->
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.form.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.validate.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.metadata.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.maskedinput.min.js\" type=\"text/javascript\"></script>
+
+  <script type=\"text/javascript\">
+     $.metadata.setType(\"attr\", \"validate\");
+
+     $(document).ready(function() {
+        $(\"#regzip\").mask(\"99999?-9999\");
+        $(\"#regphone\").mask(\"(999) 999-9999\");
+        // validate registration form on keyup and submit
+        $(\"#registration\").validate({
+           rules: {
+              reguname: {
+                 required: true,
+                 minlength: 5
+              },
+              regpass: {
+                 required: true,
+                 minlength: 5
+              },
+              regpassconf: {
+                 required: true,
+                 minlength: 5,
+                 equalTo: \"#regpass\"
+              },
+              regemail: {
+                 required: true,
+                 email: true
+              },
+              regbirthmonth: {
+                 required: true
+              },
+              regbirthday: {
+                 required: true
+              },
+              regbirthyear: {
+                 required: true
+              }
+           },
+           messages: {
+              reguname: {
+                 required: \"Please provide a username\",
+                 minlength: \"Your username must be at least 5 characters long\"
+              },
+              regpass: {
+                 required: \"Please provide a password\",
+                 minlength: \"Your password must be at least 5 characters long\"
+              },
+              regpassconf: {
+                 required: \"Please confirm your password\",
+                 minlength: \"Your password must be at least 5 characters long\",
+                 equalTo: \"Enter the same password as above\"
+              },
+              regemail: \"Please enter a valid email address\",
+              regbirthmonth: \"Please select your birth month\",
+              regbirthday: \"Please select your birth day\",
+              regbirthyear: \"Please select your birth year\"
+           }
+        });
+     });
+</script>
+
+
+  <!-- Sliding effect -->
+  <script src=\"<?php echo SITE_BASE_URL?>/js/slide.js\" type=\"text/javascript\"></script>
+
+ </head>
+
+ <body>
+  <?php include_once(\"include/userpanel.php\"); ?>
+
+  <div id=\"container\">
+
+   <a id=\"top\"></a>
+   <p class=\"hide\">
+    Skip to:
+    <a href=\"#menu\">site menu</a>
+    | <a href=\"#sectionmenu\">section menu</a>
+    | <a href=\"#main\">main content</a>
+   </p>
+
+   <div id=\"sitename\">
+    <h1>LibDBDatabase</h1>
+    <span>Library Database System</span>
+    <a id=\"menu\"></a>
+   </div>
+
+   <?php include_once(\"include/topmenu.php\"); ?>
+
+   <div id=\"wrap1\">
+    <div id=\"wrap2\">
+
+     <div id=\"topbox\">
+      <strong>
+       <span class=\"hide\">Currently viewing: </span>
+       <a href=\"<?php echo SITE_BASE_URL?>/index.php\">LibDBDatabase</a> &raquo;
+       <a href=\"<?php echo $_SERVER['PHP_SELF']?>\">Registration Center</a>
+      </strong>
+     </div>
+
+     <div id=\"leftside\">
+      <?php include_once(\"include/sidemenu.php\"); ?>
+     </div>
+
+     <a id=\"main\"></a>
+     <div id=\"contentalt\">
+      <h1>Registration Center</h1>
+      <img src=\"<?php echo SITE_BASE_URL?>/img/gravatar-newuser.png\" height=\"80\" width=\"80\" alt=\"New User Gravatar\" />
+
+      <font size=\"5\" color=\"#ff0000\">
+       <b>::::::::::::::::::::::::::::::::::::::::::::</b>
+      </font>
+      <br /><br />
+<?php
+if($session->form->num_errors > 0) {
+   echo \"      <font size=\\\"2\\\" color=\\\"#ff0000\\\">\".$session->form->num_errors.\" error(s) found</font>\\n\";
+}
+?>
+
+<?php
+   /**
+    * The user has submitted the registration form and the
+    * results have been processed.
+    */
+   if(isset($_SESSION['regsuccess'])) {
+      /* Registration was successful */
+      if($_SESSION['regsuccess']) {
+         echo \"<h1>Registered!</h1>\";
+         if($session->logged_in) {
+            echo \"<p>\".$_SESSION['reguname'].\"</b> has been added to the database, \"
+                .\"they may now log in.</p>\";
+         } else {
+            echo \"<p>Thank you <b>\".$_SESSION['reguname'].\"</b>, your information \"
+                .\"has been registered, you may now log in on the \"
+                .\"<a href=\\\"\".SITE_BASE_URL.\"/index.php\\\">front page</a>.</p>\";
+         }
+      } else { /* Registration failed */
+         echo \"<h1>Registration Failed</h1>\";
+         echo \"<p>We're sorry, but an error has occurred and your registration \"
+             .\"for the username <b>\".$_SESSION['reguname'].\"</b>, could not be \"
+             .\"completed.<br />Please try again at a later time.</p>\";
+      }
+      unset($_SESSION['regsuccess']);
+      unset($_SESSION['reguname']);
+   } else {
+   /**
+    * The user has not filled out the registration form yet. Below is the page
+    * with the sign-up form, the names of the input fields are important and
+    * should not be changed.
+    */
+      if($session->logged_in) {
+         echo \"<h1>Add a New Member to Our Library</h1>\";
+      } else {
+         echo \"<h1>Not a member yet? Sign Up!</h1>\";
+      }
+?>
+
+      <form action=\"process.php\" method=\"POST\" id=\"registration\">
+       <table align=\"left\" border=\"0\" cellspacing=\"0\" cellpadding=\"3\">
+        <tr>
+         <td>
+          <label for=\"reguname\" class=\"grey required\">Username:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" name=\"reguname\" maxlength=\"30\" value=\"<?php echo $session->form->value(\"reguname\")?>\" />
+         </td>
+         <td>&nbsp;<?php echo $session->form->error(\"reguname\");?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"regpass\" class=\"grey required\">Password:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"password\" id=\"regpass\" name=\"regpass\" maxlength=\"30\"<?php
+   if($session->isAdmin()) {
+      $randpass = $session->generateRandStr(8);
+      echo \" value=\\\"\".$randpass.\"\\\" readonly\";
+   } else {
+      echo \" value=\\\"\".$session->form->value(\"regpass\").\"\\\"\";
+   }
+?> />
+         </td>
+         <td>&nbsp;<?php echo $session->form->error(\"regpass\");?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"regpassconf\" class=\"grey required\">Confirm Password:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"password\" id=\"regpassconf\" name=\"regpassconf\" maxlength=\"30\"<?php
+   if($session->isAdmin()) {
+   	echo \" value=\\\"\".$randpass.\"\\\" readonly\";
+   }
+?> />
+         </td>
+         <td>&nbsp;<?php echo $session->form->error(\"regpassconf\");?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"regemail\" class=\"grey required\">Email:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" name=\"regemail\" maxlength=\"96\" value=\"<?php echo $session->form->value(\"regemail\")?>\" />
+         </td>
+         <td>&nbsp;<?php echo $session->form->error(\"regemail\");?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"regfname\" class=\"grey\">Firstname:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" name=\"regfname\" maxlength=\"50\" value=\"<?php echo $session->form->value(\"regfname\")?>\" />
+         </td>
+         <td>&nbsp;<?php echo $session->form->error(\"regfname\");?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"reglname\" class=\"grey\">Lastname:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" name=\"reglname\" maxlength=\"50\" value=\"<?php echo $session->form->value(\"reglname\")?>\" />
+         </td>
+         <td>&nbsp;<?php echo $session->form->error(\"reglname\");?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label class=\"grey required\">Birthdate:</label>
+         </td>
+         <td>
+          <table>
+           <tr>
+            <td>
+             <select name=\"regbirthmonth\">
+              <option value=\"\">Month:</option>
+              <option value=\"1\"<?php if($session->form->value(\"regbirthmonth\") == 1) echo \" selected\"; ?>>January</option>
+              <option value=\"2\"<?php if($session->form->value(\"regbirthmonth\") == 2) echo \" selected\"; ?>>February</option>
+              <option value=\"3\"<?php if($session->form->value(\"regbirthmonth\") == 3) echo \" selected\"; ?>>March</option>
+              <option value=\"4\"<?php if($session->form->value(\"regbirthmonth\") == 4) echo \" selected\"; ?>>April</option>
+              <option value=\"5\"<?php if($session->form->value(\"regbirthmonth\") == 5) echo \" selected\"; ?>>May</option>
+              <option value=\"6\"<?php if($session->form->value(\"regbirthmonth\") == 6) echo \" selected\"; ?>>June</option>
+              <option value=\"7\"<?php if($session->form->value(\"regbirthmonth\") == 7) echo \" selected\"; ?>>July</option>
+              <option value=\"8\"<?php if($session->form->value(\"regbirthmonth\") == 8) echo \" selected\"; ?>>August</option>
+              <option value=\"9\"<?php if($session->form->value(\"regbirthmonth\") == 9) echo \" selected\"; ?>>September</option>
+              <option value=\"10\"<?php if($session->form->value(\"regbirthmonth\") == 10) echo \" selected\"; ?>>October</option>
+              <option value=\"11\"<?php if($session->form->value(\"regbirthmonth\") == 11) echo \" selected\"; ?>>November</option>
+              <option value=\"12\"<?php if($session->form->value(\"regbirthmonth\") == 12) echo \" selected\"; ?>>December</option>
+             </select>
+
+             <select name=\"regbirthday\">
+              <option value=\"\">Day:</option>
+<?php
+      for ($i = 1; $i <= 31; $i++) {
+         echo \"              <option value='$i'\";
+         if($session->form->value(\"regbirthday\") == $i) {
+            echo \" selected\";
+         }
+         echo \">$i</option>\";
+      }
+?>
+             </select>
+
+             <select name=\"regbirthyear\">
+              <option value=\"\">Year:</option>
+<?php
+      for ($i = date(\"Y\"); $i >= date(\"Y\")-120; $i--) {
+         echo \"              <option value='$i'\";
+         if($session->form->value(\"regbirthyear\") == $i) {
+            echo \" selected\";
+         }
+         echo \">$i</option>\";
+      }
+?>
+             </select>
+            </td>
+           </tr>
+          </table>
+         </td>
+         <td>&nbsp;<?php echo $session->form->error(\"regbirth\");?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"reggender\" class=\"grey\">Gender:</label>
+         </td>
+         <td>
+          <label for=\"male\"><input type=\"radio\" name=\"reggender\" id=\"male\" value=\"M\"<?php
+   if($session->form->value(\"reggender\") == 'M') {
+   	echo \" checked\";
+   }
+?> />Male</label>
+          <label for=\"female\"><input type=\"radio\" name=\"reggender\" id=\"female\" value=\"F\"<?php
+   if($session->form->value(\"reggender\") == 'F') {
+   	echo \" checked\";
+   }
+?> />Female</label>
+         </td>
+         <td>&nbsp;<?php echo $session->form->error(\"reggender\");?></td>
+        </tr>
+
+        <tr><td colspan=\"2\">Address:</td></tr>
+        <tr>
+         <td>
+          <label for=\"regaddrline1\" class=\"grey\">Line1:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" name=\"regaddrline1\" maxlength=\"80\" value=\"<?php echo $session->form->value(\"regaddrline1\");?>\" />
+         </td>
+         <td>&nbsp;<?php echo $session->form->error(\"regaddrline1\");?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"regaddrline2\" class=\"grey\">Line 2:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" name=\"regaddrline2\" maxlength=\"80\" value=\"<?php echo $session->form->value(\"regaddrline2\");?>\" />
+         </td>
+         <td>&nbsp;<?php echo $session->form->error(\"regaddrline2\");?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"regcity\" class=\"grey\">City:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" name=\"regcity\" maxlength=\"40\" value=\"<?php echo $session->form->value(\"regcity\");?>\" />
+         </td>
+         <td>&nbsp;<?php echo $session->form->error(\"regcity\");?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"regstate\" class=\"grey\">State:</label>
+         </td>
+         <td>
+          <select name=\"regstate\">
+           <option value=\"\">Select a State:</option>
+           <option value=\"AL\"<?php if($session->form->value(\"regstate\") == \"AL\") echo \" selected\";?>>Alabama</option>
+           <option value=\"AK\"<?php if($session->form->value(\"regstate\") == \"AK\") echo \" selected\";?>>Alaska</option>
+           <option value=\"AZ\"<?php if($session->form->value(\"regstate\") == \"AZ\") echo \" selected\";?>>Arizona</option>
+           <option value=\"AR\"<?php if($session->form->value(\"regstate\") == \"AR\") echo \" selected\";?>>Arkansas</option>
+           <option value=\"CA\"<?php if($session->form->value(\"regstate\") == \"CA\") echo \" selected\";?>>California</option>
+           <option value=\"CO\"<?php if($session->form->value(\"regstate\") == \"CO\") echo \" selected\";?>>Colorado</option>
+           <option value=\"CT\"<?php if($session->form->value(\"regstate\") == \"CT\") echo \" selected\";?>>Connecticut</option>
+           <option value=\"DC\"<?php if($session->form->value(\"regstate\") == \"DC\") echo \" selected\";?>>District of Columbia</option>
+           <option value=\"DE\"<?php if($session->form->value(\"regstate\") == \"DE\") echo \" selected\";?>>Delaware</option>
+           <option value=\"FL\"<?php if($session->form->value(\"regstate\") == \"FL\") echo \" selected\";?>>Florida</option>
+           <option value=\"GA\"<?php if($session->form->value(\"regstate\") == \"GA\") echo \" selected\";?>>Georgia</option>
+           <option value=\"HI\"<?php if($session->form->value(\"regstate\") == \"HI\") echo \" selected\";?>>Hawaii</option>
+           <option value=\"ID\"<?php if($session->form->value(\"regstate\") == \"ID\") echo \" selected\";?>>Idaho</option>
+           <option value=\"IL\"<?php if($session->form->value(\"regstate\") == \"IL\") echo \" selected\";?>>Illinois</option>
+           <option value=\"IN\"<?php if($session->form->value(\"regstate\") == \"IN\") echo \" selected\";?>>Indiana</option>
+           <option value=\"IA\"<?php if($session->form->value(\"regstate\") == \"IA\") echo \" selected\";?>>Iowa</option>
+           <option value=\"KS\"<?php if($session->form->value(\"regstate\") == \"KS\") echo \" selected\";?>>Kansas</option>
+           <option value=\"KY\"<?php if($session->form->value(\"regstate\") == \"KY\") echo \" selected\";?>>Kentucky</option>
+           <option value=\"LA\"<?php if($session->form->value(\"regstate\") == \"LA\") echo \" selected\";?>>Louisiana</option>
+           <option value=\"ME\"<?php if($session->form->value(\"regstate\") == \"ME\") echo \" selected\";?>>Maine</option>
+           <option value=\"MD\"<?php if($session->form->value(\"regstate\") == \"MD\") echo \" selected\";?>>Maryland</option>
+           <option value=\"MA\"<?php if($session->form->value(\"regstate\") == \"MA\") echo \" selected\";?>>Massachusetts</option>
+           <option value=\"MI\"<?php if($session->form->value(\"regstate\") == \"MI\") echo \" selected\";?>>Michigan</option>
+           <option value=\"MN\"<?php if($session->form->value(\"regstate\") == \"MN\") echo \" selected\";?>>Minnesota</option>
+           <option value=\"MS\"<?php if($session->form->value(\"regstate\") == \"MS\") echo \" selected\";?>>Mississippi</option>
+           <option value=\"MO\"<?php if($session->form->value(\"regstate\") == \"MO\") echo \" selected\";?>>Missouri</option>
+           <option value=\"MT\"<?php if($session->form->value(\"regstate\") == \"MT\") echo \" selected\";?>>Montana</option>
+           <option value=\"NE\"<?php if($session->form->value(\"regstate\") == \"NE\") echo \" selected\";?>>Nebraska</option>
+           <option value=\"NV\"<?php if($session->form->value(\"regstate\") == \"NV\") echo \" selected\";?>>Nevada</option>
+           <option value=\"NH\"<?php if($session->form->value(\"regstate\") == \"NH\") echo \" selected\";?>>New Hampshire</option>
+           <option value=\"NJ\"<?php if($session->form->value(\"regstate\") == \"NJ\") echo \" selected\";?>>New Jersey</option>
+           <option value=\"NM\"<?php if($session->form->value(\"regstate\") == \"NM\") echo \" selected\";?>>New Mexico</option>
+           <option value=\"NY\"<?php if($session->form->value(\"regstate\") == \"NY\") echo \" selected\";?>>New York</option>
+           <option value=\"NC\"<?php if($session->form->value(\"regstate\") == \"NC\") echo \" selected\";?>>North Carolina</option>
+           <option value=\"ND\"<?php if($session->form->value(\"regstate\") == \"ND\") echo \" selected\";?>>North Dakota</option>
+           <option value=\"OH\"<?php if($session->form->value(\"regstate\") == \"OH\") echo \" selected\";?>>Ohio</option>
+           <option value=\"OK\"<?php if($session->form->value(\"regstate\") == \"OK\") echo \" selected\";?>>Oklahoma</option>
+           <option value=\"OR\"<?php if($session->form->value(\"regstate\") == \"OR\") echo \" selected\";?>>Oregon</option>
+           <option value=\"PA\"<?php if($session->form->value(\"regstate\") == \"PA\") echo \" selected\";?>>Pennsylvania</option>
+           <option value=\"PR\"<?php if($session->form->value(\"regstate\") == \"PR\") echo \" selected\";?>>Puerto Rico</option>
+           <option value=\"RI\"<?php if($session->form->value(\"regstate\") == \"RI\") echo \" selected\";?>>Rhode Island</option>
+           <option value=\"SC\"<?php if($session->form->value(\"regstate\") == \"SC\") echo \" selected\";?>>South Carolina</option>
+           <option value=\"SD\"<?php if($session->form->value(\"regstate\") == \"SD\") echo \" selected\";?>>South Dakota</option>
+           <option value=\"TN\"<?php if($session->form->value(\"regstate\") == \"TN\") echo \" selected\";?>>Tennessee</option>
+           <option value=\"TX\"<?php if($session->form->value(\"regstate\") == \"TX\") echo \" selected\";?>>Texas</option>
+           <option value=\"UT\"<?php if($session->form->value(\"regstate\") == \"UT\") echo \" selected\";?>>Utah</option>
+           <option value=\"VT\"<?php if($session->form->value(\"regstate\") == \"VT\") echo \" selected\";?>>Vermont</option>
+           <option value=\"VA\"<?php if($session->form->value(\"regstate\") == \"VA\") echo \" selected\";?>>Virginia</option>
+           <option value=\"WA\"<?php if($session->form->value(\"regstate\") == \"WA\") echo \" selected\";?>>Washington</option>
+           <option value=\"WV\"<?php if($session->form->value(\"regstate\") == \"WV\") echo \" selected\";?>>West Virginia</option>
+           <option value=\"WI\"<?php if($session->form->value(\"regstate\") == \"WI\") echo \" selected\";?>>Wisconsin</option>
+           <option value=\"WY\"<?php if($session->form->value(\"regstate\") == \"WY\") echo \" selected\";?>>Wyoming</option>
+          </select>
+         </td>
+         <td>&nbsp;<?php echo $session->form->error(\"regstate\");?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"regzip\" class=\"grey\">Zip<noscript> xxxxx-oooo</noscript>:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" id=\"regzip\" name=\"regzip\" maxlength=\"10\" value=\"<?php echo $session->form->value(\"regzip\");?>\" />
+         </td>
+         <td>&nbsp;<?php echo $session->form->error(\"regzip\");?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"regphone\" class=\"grey\">Phone<noscript> (xxx) xxx-xxxx</noscript>:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" id=\"regphone\" name=\"regphone\" maxlength=\"26\" value=\"<?php echo $session->form->value(\"regphone\");?>\" />
+         </td>
+         <td>&nbsp;<?php echo $session->form->error(\"regphone\");?></td>
+        </tr>
+
+<?php
+      if($session->isAdmin()) { /* Allow Admins to create different types of users. */
+?>
+        <tr>
+         <td>
+          <label class=\"grey\">Usertype:</label>
+         </td>
+         <td>
+          <select name=\"regutype\">
+           <option value=\"<?php echo CUST; ?>\"<?php
+         if($session->form->value(\"regutype\") == CUST) {
+            echo \" selected\";
+         }
+?>>Customer</option>
+           <option value=\"<?php echo TELLER; ?>\"<?php
+         if($session->form->value(\"regutype\") == TELLER) {
+            echo \" selected\";
+         }
+?>>Teller</option>
+           <option value=\"<?php echo ADMIN; ?>\"<?php
+         if($session->form->value(\"regutype\") == ADMIN) {
+            echo \" selected\";
+         }
+?>>Administrator</option>
+          </select>
+         </td>
+        </tr>
+<?php
+      }
+?>
+
+        <tr>
+         <td colspan=\"2\" align=\"right\">
+          <input type=\"hidden\" name=\"subreg\" value=\"1\">
+          <input type=\"submit\" value=\"Register!\" class=\"bt_register\">
+         </td>
+        </tr>
+
+       </table>
+      </form>
+<?php
+   }
+?>
+
+      <p class=\"hide\"><a href=\"#top\">Back to top</a></p>
+     </div>
+    </div>
+
+    <?php include_once(\"include/footer.php\"); ?>
+
+   </div>
+  </div>
+ </body>
+</html>"
+      associated_classes
+      end
+    end
+
+    artifact 128852 "process"
+      stereotype "source"
+      php_src "<?
+/**
+ * process.php
+ *
+ * The Process class is meant to simplify the task of processing user submitted forms,
+ * redirecting the user to the correct pages if errors are found, or if form is
+ * successful, either way. Also handles the logout procedure.
+ */
+require_once(\"include/users.php\");
+require_once(\"include/session.php\");
+${definition}
+
+;
+
+/* Initialize process */
+$process = new Process;
+?>"
+      associated_classes
+	class_ref 128212 // Process
+      end
+    end
+
+    artifact 128980 "search"
+      stereotype "source"
+      php_src "<?
+/**
+ * search.php
+ *
+ * This is the Search Center page.
+ */
+require_once(\"include/session.php\");
+?>
+
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">
+ <head>
+  <title>LibDBDatabase</title>
+  <meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\" />
+  <meta name=\"description\" content=\"LibDBDatabase: Library Database\" />
+  <meta name=\"keywords\" content=\"library,database\" />
+  <meta name=\"author\" content=\"LibDBDatabase / Original design: Andreas Viklund - http://andreasviklund.com/\" />
+  <link rel=\"stylesheet\" href=\"<?=SITE_BASE_URL?>/css/andreas06.css\" type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?=SITE_BASE_URL?>/css/slide.css\"  type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?=SITE_BASE_URL?>/css/validate.css\"  type=\"text/css\" media=\"screen,projection\" />
+
+  <!-- javascripts -->
+  <!-- PNG FIX for IE6 -->
+  <!-- http://24ways.org/2007/supersleight-transparent-png-in-ie6 -->
+  <!--[if lte IE 6]>
+   <script type=\"text/javascript\" src=\"<?=SITE_BASE_URL?>/js/pngfix/supersleight-min.js\"></script>
+  <![endif]-->
+
+  <!-- jQuery -->
+  <script src=\"<?=SITE_BASE_URL?>/js/jquery.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?=SITE_BASE_URL?>/js/jquery.validate.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?=SITE_BASE_URL?>/js/jquery.metadata.min.js\" type=\"text/javascript\"></script>
+
+  <!-- Sliding effect -->
+  <script src=\"<?=SITE_BASE_URL?>/js/slide.js\" type=\"text/javascript\"></script>
+
+ </head>
+
+ <body>
+  <?php include_once(\"include/userpanel.php\"); ?>
+
+  <div id=\"container\">
+
+   <a id=\"top\"></a>
+   <p class=\"hide\">
+    Skip to:
+    <a href=\"#menu\">site menu</a>
+    | <a href=\"#sectionmenu\">section menu</a>
+    | <a href=\"#main\">main content</a>
+   </p>
+
+   <div id=\"sitename\">
+    <h1>LibDBDatabase</h1>
+    <span>Library Database System</span>
+    <a id=\"menu\"></a>
+   </div>
+
+   <?php include_once(\"include/topmenu.php\"); ?>
+
+   <div id=\"wrap1\">
+    <div id=\"wrap2\">
+
+     <div id=\"topbox\">
+      <strong>
+       <span class=\"hide\">Currently viewing: </span>
+       <a href=\"<?=SITE_BASE_URL?>/index.php\">LibDBDatabase</a> &raquo; <a href=\"<?=$_SERVER['PHP_SELF']?>\">Search Media</a>
+      </strong>
+     </div>
+
+     <div id=\"leftside\">
+      <?php include_once(\"include/sidemenu.php\"); ?>
+     </div>
+
+     <a id=\"main\"></a>
+     <div id=\"contentalt\">
+      <h1>Search Center</h1>
+      <img src=\"<?=SITE_BASE_URL?>/img/gravatar-search.png\" height=\"80\" width=\"80\" alt=\"Search Gravatar\" />
+
+      <font size=\"5\" color=\"#ff0000\">
+       <b>::::::::::::::::::::::::::::::::::::::::::::</b>
+      </font>
+      <br /><br />
+      <h1>Search</h1>
+      <br />
+
+      <form action=\"<?php echo $_SERVER['PHP_SELF']?>\" method=\"GET\">
+       <input type=\"text\" name=\"q\" value=\"<?php
+if(!isset($_GET[\"q\"]) || empty($_GET[\"q\"])) {
+   echo \"\";
+} else {
+   echo $_GET[\"q\"];
+}?>\"/>
+       <input type=\"submit\" />
+      </form>
+<?php
+$searchQuery = @$_GET['q'] ;
+$trimmed = trim($searchQuery); //trim whitespace from the stored variable
+
+if($trimmed == \"\") {
+   echo \"<p>Please enter a search...</p>\";
+} else if(!isset($searchQuery)) { //check for a search parameter
+  echo \"<p>We dont seem to have a search parameter!</p>\";
+  exit;
+} else {
+   // Load media plugins which will perform search for us.
+   opendir(\"plugins\");
+   while($file = readdir()) {
+     if(is_file(\"plugins/$file\")) {
+       require_once(\"plugins/$file\");
+     }
+   }
+
+   // Tell plugins to search for items
+   // $searchresults is a list of lists of items. An item is a map from
+   // column name to data.
+   $searchresults = performFunctionOnAllPlugins(\"search\", $trimmed, $database);
+
+
+   // Aggregate all column names that we need
+   $column_names[] = array();
+
+   foreach($searchresults as $aresultlist) {
+     if(!is_array($aresultlist) OR !isset($aresultlist)) {
+       continue;
+     }
+     foreach($aresultlist as $aresult) {
+       // Copy results to a flat list
+       $results[$numresults++] = $aresult;
+
+       // Now aggregate the columns
+       $columnsForThisItem = array_keys($aresult);
+
+       foreach($columnsForThisItem as $newcolumn) {
+         if(!array_key_exists($newcolumn, $column_names)) {
+           $column_names[$newcolumn] = 1;
+         }
+       }
+     }
+   }
+   $itemFields = array_keys($column_names, 1);
+
+   echo \"<br /><table border='1'><tr>\";
+
+   // Print first row of table, showing the column names
+   for($i=0; $i<count($itemFields); $i++) {
+     echo \"<td>$itemFields[$i]</td>\";
+   }
+
+   echo \"</tr>\";
+
+   // Print item rows
+   foreach($results as $aresult) {
+    echo \"<tr>\";
+
+    if(count($aresult) == 0)
+    	continue;
+
+    foreach($itemFields as $field) {
+      if(array_key_exists($field, $aresult)) {
+        $text = $aresult[$field];
+      } else {
+        $text = \"n/a\";
+      }
+      echo \"<td>\".$text.\"</td>\";
+    }
+
+    echo \"</tr>\";
+   }
+ $count++ ;
+
+
+   echo \"</table><br />\";
+}
+?>
+      <p class=\"hide\"><a href=\"#top\">Back to top</a></p>
+     </div>
+    </div>
+
+    <?php include_once(\"include/footer.php\"); ?>
+
+   </div>
+  </div>
+ </body>
+</html>
+"
+      associated_classes
+      end
+    end
+
+    artifact 129108 "userhistory"
+      stereotype "source"
+      php_src "<?
+/**
+ * userhistory.php
+ *
+ * This is the User Center page. Only administrators & tellers are allowed to view this page while logged in.
+ * This page allows for the creation of new user accounts.  Only admins can create new admins & tellers.  All other users
+ * can only create regular customers.
+ */
+include(\"include/session.php\");
+
+if(!$session->logged_in) {
+   header(\"Location: \".SITE_BASE_URL.\"/index.php\");
+}
+
+/**
+ * displayHistory - Displays the borrowed items database table in a nicely
+ * formatted html table filtered for user of course.
+ */
+function displayHistory() {
+   global $session, $database;
+
+   echo \"<h1>My History</h1>\\n\";
+
+   $q = \"SELECT * FROM \".DB_TBL_PRFX.\"borroweditems WHERE uid='\".$session->user->getUID().\"' ORDER BY histnum ASC\";
+   $result = $database->query($q);
+
+   /* Error occurred, return given name by default */
+   $num_rows = mysql_numrows($result);
+
+   if(!$result || ($num_rows < 0)) {
+      echo \"Error displaying info\";
+      return;
+   }
+
+   if($num_rows == 0) {
+      echo \"Database table empty\";
+      return;
+   }
+
+   /* Display table contents */
+   echo \"<table id=\\\"history\\\" align=\\\"center\\\" border=\\\"1\\\" cellspacing=\\\"0\\\" cellpadding=\\\"3\\\">\\n\";
+   echo \"<tr>\\n\";
+   echo \"<th>History Number</th>\\n\";
+   echo \"<th>Item ID</th>\\n\";
+   echo \"<th>Title</th>\\n\";
+   echo \"<th>Due Date</th>\";
+   echo \"<th>Returned</th>\\n\";
+   echo \"</tr>\\n\";
+
+   while($item = mysql_fetch_array($result, MYSQL_ASSOC)) {
+      $itemqry = \"SELECT * FROM \".DB_TBL_PRFX.\"items WHERE itemid='\".$item['itemid'].\"'\";
+      $itemqresult = $database->query($itemqry);
+      $iteminfo = mysql_fetch_array($itemqresult, MYSQL_ASSOC);
+
+      if($iteminfo['itemtype'] == \"BOOK\") {
+         $qry = \"SELECT * FROM \".DB_TBL_PRFX.\"books WHERE itemid='\".$item['itemid'].\"'\";
+         $qresult = $database->query($qry);
+         $itemtypeinfo = mysql_fetch_array($qresult, MYSQL_ASSOC);
+      } else if ($iteminfo['itemtype'] == \"PERIODICAL\") {
+         $qry = \"SELECT * FROM \".DB_TBL_PRFX.\"periodicals WHERE itemid='\".$item['itemid'].\"'\";
+         $qresult = $database->query($qry);
+         $itemtypeinfo = mysql_fetch_array($qresult, MYSQL_ASSOC);
+      } else if ($iteminfo['itemtype'] == \"DVD\") {
+         $qry = \"SELECT * FROM \".DB_TBL_PRFX.\"dvds WHERE itemid='\".$item['itemid'].\"'\";
+         $qresult = $database->query($qry);
+         $itemtypeinfo = mysql_fetch_array($qresult, MYSQL_ASSOC);
+      } else if ($iteminfo['itemtype'] == \"CD\") {
+         $qry = \"SELECT * FROM \".DB_TBL_PRFX.\"cds WHERE itemid='\".$item['itemid'].\"'\";
+         $qresult = $database->query($qry);
+         $itemtypeinfo = mysql_fetch_array($qresult, MYSQL_ASSOC);
+      } else {
+         $itemtypeinfo = NULL;
+      }
+
+      echo \"<tr>\";
+      echo \"<td>\".$item['histnum'].\"</td>\\n\";
+      echo \"<td>\".$item['itemid'].\"</td>\\n\";
+      echo \"<td>\".$itemtypeinfo['title'].\"</td>\\n\";
+      date_default_timezone_set('America/New_York');
+      echo \"<td>\".date('l, F jS Y', $item['duedate']).\"</td>\\n\";
+      if($item['returned']) {
+      	echo \"<td>Yes</td>\\n\";
+      } else {
+      	echo \"<td>No</td>\\n\";
+      }
+      echo \"</tr>\\n\";
+   }
+   echo \"</table><br /><br />\\n\";
+}
+?>
+
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">
+ <head>
+  <title>LibDBDatabase</title>
+  <meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\" />
+  <meta name=\"description\" content=\"LibDBDatabase: Library Database\" />
+  <meta name=\"keywords\" content=\"library,database\" />
+  <meta name=\"author\" content=\"LibDBDatabase / Original design: Andreas Viklund - http://andreasviklund.com/\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL?>/css/andreas06.css\" type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL?>/css/slide.css\"  type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL?>/css/validate.css\"  type=\"text/css\" media=\"screen,projection\" />
+
+  <!-- javascripts -->
+  <!-- PNG FIX for IE6 -->
+  <!-- http://24ways.org/2007/supersleight-transparent-png-in-ie6 -->
+  <!--[if lte IE 6]>
+   <script type=\"text/javascript\" src=\"<?php echo SITE_BASE_URL?>/js/pngfix/supersleight-min.js\"></script>
+  <![endif]-->
+
+  <!-- jQuery -->
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery-1.3.2.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.validate.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.metadata.js\" type=\"text/javascript\"></script>
+
+  <!-- Sliding effect -->
+  <script src=\"<?php echo SITE_BASE_URL?>/js/slide.js\" type=\"text/javascript\"></script>
+
+ </head>
+
+ <body>
+  <?php include_once(\"include/userpanel.php\"); ?>
+
+  <div id=\"container\">
+
+   <a id=\"top\"></a>
+   <p class=\"hide\">
+    Skip to:
+    <a href=\"#menu\">site menu</a>
+    | <a href=\"#sectionmenu\">section menu</a>
+    | <a href=\"#main\">main content</a>
+   </p>
+
+   <div id=\"sitename\">
+    <h1>LibDBDatabase</h1>
+    <span>Library Database System</span>
+    <a id=\"menu\"></a>
+   </div>
+
+   <?php include_once(\"include/topmenu.php\"); ?>
+
+   <div id=\"wrap1\">
+    <div id=\"wrap2\">
+
+     <div id=\"topbox\">
+      <strong>
+       <span class=\"hide\">Currently viewing: </span>
+       <a href=\"<?php echo SITE_BASE_URL?>/index.php\">LibDBDatabase</a> &raquo; <a href=\"<?php echo $_SERVER['PHP_SELF']?>\">History Center</a>
+      </strong>
+     </div>
+
+     <div id=\"leftside\">
+      <?php include_once(\"include/sidemenu.php\"); ?>
+     </div>
+
+     <a id=\"main\"></a>
+     <div id=\"contentalt\">
+      <h1>History Center</h1>
+      <img src=\"<?php echo SITE_BASE_URL?>/img/gravatar-history.png\" height=\"80\" width=\"80\" alt=\"History Gravatar\" />
+
+      <font size=\"5\" color=\"#ff0000\">
+       <b>::::::::::::::::::::::::::::::::::::::::::::</b>
+      </font>
+      <br /><br />
+
+      <?php displayHistory(); ?>
+
+      <p class=\"hide\"><a href=\"#top\">Back to top</a></p>
+     </div>
+    </div>
+
+    <?php include_once(\"include/footer.php\"); ?>
+
+   </div>
+  </div>
+ </body>
+</html>"
+      associated_classes
+      end
+    end
+
+    artifact 129236 "userinfo"
+      stereotype "source"
+      php_src "<?php
+/**
+ * userinfo.php
+ *
+ * This is the User Center page. Only administrators & tellers are allowed to view this page while logged in.
+ * This page allows for the creation of new user accounts.  Only admins can create new admins & tellers.  All
+ * other users can only create regular customers.
+ */
+require_once(\"include/session.php\");
+
+if(!$session->logged_in) {
+   header(\"Location: \".SITE_BASE_URL.\"/index.php\");
+}
+?>
+
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">
+ <head>
+  <title>LibDBDatabase</title>
+  <meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\" />
+  <meta name=\"description\" content=\"LibDBDatabase: Library Database\" />
+  <meta name=\"keywords\" content=\"library,database\" />
+  <meta name=\"author\" content=\"LibDBDatabase / Original design: Andreas Viklund - http://andreasviklund.com/\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL; ?>/css/andreas06.css\" type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL; ?>/css/slide.css\"  type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL; ?>/css/validate.css\"  type=\"text/css\" media=\"screen,projection\" />
+
+  <!-- javascripts -->
+  <!-- PNG FIX for IE6 -->
+  <!-- http://24ways.org/2007/supersleight-transparent-png-in-ie6 -->
+  <!--[if lte IE 6]>
+   <script type=\"text/javascript\" src=\"<?php echo SITE_BASE_URL; ?>/js/pngfix/supersleight-min.js\"></script>
+  <![endif]-->
+
+  <!-- jQuery -->
+  <script src=\"<?php echo SITE_BASE_URL; ?>/js/jquery.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL; ?>/js/jquery.validate.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL; ?>/js/jquery.metadata.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL; ?>/js/jquery.maskedinput.min.js\" type=\"text/javascript\"></script>
+
+  <script type=\"text/javascript\">
+     $.metadata.setType(\"attr\", \"validate\");
+
+     $(document).ready(function() {
+     	  $(\"#edzip\").mask(\"99999?-9999\");
+        $(\"#edphone\").mask(\"(999) 999-9999\");
+        // validate edit form on keyup and submit
+        $(\"#edituser\").validate({
+           rules: {
+              curpass: {
+                 required: true,
+                 minlength: 5
+              },
+              ednewpassconf: {
+                 equalTo: \"#ednewpass\"
+              },
+              edemail: {
+                 required: true,
+                 email: true
+              },
+              edbirthmonth: {
+                 required: true
+              },
+              edbirthday: {
+                 required: true
+              },
+              edbirthyear: {
+                 required: true
+              }
+           },
+           messages: {
+              curpass: {
+                 required: \"Please provide your password\",
+                 minlength: \"Your password must be at least 5 characters long\"
+              },
+              ednewpassconf: {
+              	  equalTo: \"Doesn't match new password entered above\"
+              },
+              edemail: \"Please enter a valid email address\",
+              edbirthmonth: \"Please select your birth month\",
+              edbirthday: \"Please select your birth day\",
+              edbirthyear: \"Please select your birth year\"
+           }
+        });
+     });
+</script>
+
+
+  <!-- Sliding effect -->
+  <script src=\"<?php echo SITE_BASE_URL; ?>/js/slide.js\" type=\"text/javascript\"></script>
+
+ </head>
+
+ <body>
+  <?php include_once(\"include/userpanel.php\"); ?>
+
+  <div id=\"container\">
+
+   <a id=\"top\"></a>
+   <p class=\"hide\">
+    Skip to:
+    <a href=\"#menu\">site menu</a>
+    | <a href=\"#sectionmenu\">section menu</a>
+    | <a href=\"#main\">main content</a>
+   </p>
+
+   <div id=\"sitename\">
+    <h1>LibDBDatabase</h1>
+    <span>Library Database System</span>
+    <a id=\"menu\"></a>
+   </div>
+
+   <?php include_once(\"include/topmenu.php\"); ?>
+
+   <div id=\"wrap1\">
+    <div id=\"wrap2\">
+
+     <div id=\"topbox\">
+      <strong>
+       <span class=\"hide\">Currently viewing: </span>
+       <a href=\"<?php echo SITE_BASE_URL; ?>/index.php\">LibDBDatabase</a> &raquo;
+       <a href=\"<?php echo $_SERVER['PHP_SELF']; ?>\">User Center</a>
+      </strong>
+     </div>
+
+     <div id=\"leftside\">
+      <?php include_once(\"include/sidemenu.php\"); ?>
+     </div>
+
+     <a id=\"main\"></a>
+     <div id=\"contentalt\">
+      <h1>User Center</h1>
+      <img src=\"<?php echo SITE_BASE_URL; ?>/img/gravatar-edituser.png\" height=\"80\" width=\"80\" alt=\"Edit User Gravatar\" />
+
+      <font size=\"5\" color=\"#ff0000\">
+       <b>::::::::::::::::::::::::::::::::::::::::::::</b>
+      </font>
+      <br /><br />
+<?php
+
+   if($session->form->num_errors > 0) {
+      echo \"<font size=\\\"2\\\" color=\\\"#ff0000\\\">\".$session->form->num_errors.\" error(s) found</font>\\n\";
+   }
+
+   /* The user has submitted form without errors and user's account has been updated. */
+   if(isset($_SESSION['edituser'])) {
+      unset($_SESSION['edituser']);
+
+      echo \"<h1>User Account Edit Success!</h1>\";
+      echo \"<p><b>\".$session->user->username.\"</b>'s account has been successfully updated.</p>\";
+   }
+?>
+      <h1>Update <?php echo $session->user->username;?>'s Account</h1>
+      <form action=\"process.php\" method=\"POST\" id=\"edituser\">
+       <input type=\"hidden\" name=\"uid\" value=\"<?php echo $session->user->getUID();?>\" />
+       <input type=\"hidden\" name=\"username\" value=\"<?php echo $session->user->username;?>\" />
+
+<?php
+if($session->isAdmin() || $session->isTeller()) {
+?>
+       <input type=\"hidden\" name=\"edhiredate\" value=\"<?php
+   if($session->form->value(\"edhiredate\") == \"\") {
+      echo $session->user->dateHired;
+   } else {
+      echo $session->form->value(\"edhiredate\");
+   }
+?>\" />
+<?php
+}
+?>
+
+       <table align=\"left\" border=\"0\" cellspacing=\"0\" cellpadding=\"3\">
+        <tr>
+         <td>
+          <label for=\"edcurpass\" class=\"required grey\">Current Password:</label>
+         </td>
+         <td>
+          <input type=\"password\" name=\"curpass\" maxlength=\"30\" value=\"\" />
+         </td>
+         <td><?php echo $session->form->error(\"curpass\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"ednewpass\" class=\"grey\">New Password:</label>
+         </td>
+         <td>
+          <input type=\"password\" id=\"ednewpass\" name=\"ednewpass\" maxlength=\"30\" value=\"<?php echo $session->form->value(\"ednewpass\")?>\" />
+         </td>
+         <td><?php echo $session->form->error(\"ednewpass\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"ednewpassconf\" class=\"grey\">Confirm New Password:</label>
+         </td>
+         <td>
+          <input type=\"password\" id=\"ednewpassconf\" name=\"ednewpassconf\" maxlength=\"30\" value=\"\" />
+         </td>
+         <td><?php echo $session->form->error(\"ednewpassconf\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"edemail\" class=\"grey required\">Email:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" name=\"edemail\" maxlength=\"96\" value=\"<?php
+   if($session->form->value(\"edemail\") == \"\") {
+      echo $session->user->email;
+   } else {
+      echo $session->form->value(\"edemail\");
+   }
+?>\" />
+         </td>
+         <td><?php echo $session->form->error(\"edemail\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"edfname\" class=\"grey\">First Name:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" name=\"edfname\" maxlength=\"50\" value=\"<?php
+   if($session->form->value(\"edfname\") == \"\") {
+      echo $session->user->firstName;
+   } else {
+      echo $session->form->value(\"edfname\");
+   }
+?>\" />
+         </td>
+         <td><?php echo $session->form->error(\"edfname\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"edlname\" class=\"grey\">Last Name:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" name=\"edlname\" maxlength=\"50\" value=\"<?php
+   if($session->form->value(\"edlname\") == \"\") {
+      echo $session->user->lastName;
+   } else {
+      echo $session->form->value(\"edlname\");
+   }
+?>\" />
+         </td>
+         <td><?php echo $session->form->error(\"edlname\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label class=\"grey required\">Birthdate:</label>
+<?php
+   if($session->form->value(\"edbirthmonth\") == \"\") {
+      $subbirthmonth = date(\"n\", $session->user->birthDate);
+   } else {
+      $subbirthmonth = $session->form->value(\"edbirthmonth\");
+   }
+   if($session->form->value(\"edbirthday\") == \"\") {
+      $subbirthday = date(\"j\", $session->user->birthDate);
+   } else {
+      $subbirthday = $session->form->value(\"edbirthday\");
+   }
+   if($session->form->value(\"edbirthyear\") == \"\") {
+      $subbirthyear = date(\"o\", $session->user->birthDate);
+   } else {
+      $subbirthyear = $session->form->value(\"edbirthyear\");
+   }
+?>
+         </td>
+         <td>
+          <table>
+           <tr>
+            <td>
+             <select name=\"edbirthmonth\">
+              <option value=\"\"></option>
+              <option value=\"1\"<?php echo ($subbirthmonth==1 ? ' selected' : '')?>>January</option>
+              <option value=\"2\"<?php echo ($subbirthmonth==2 ? ' selected' : '')?>>February</option>
+              <option value=\"3\"<?php echo ($subbirthmonth==3 ? ' selected' : '')?>>March</option>
+              <option value=\"4\"<?php echo ($subbirthmonth==4 ? ' selected' : '')?>>April</option>
+              <option value=\"5\"<?php echo ($subbirthmonth==5 ? ' selected' : '')?>>May</option>
+              <option value=\"6\"<?php echo ($subbirthmonth==6 ? ' selected' : '')?>>June</option>
+              <option value=\"7\"<?php echo ($subbirthmonth==7 ? ' selected' : '')?>>July</option>
+              <option value=\"8\"<?php echo ($subbirthmonth==8 ? ' selected' : '')?>>August</option>
+              <option value=\"9\"<?php echo ($subbirthmonth==9 ? ' selected' : '')?>>September</option>
+              <option value=\"10\"<?php echo ($subbirthmonth==10 ? ' selected' : '')?>>October</option>
+              <option value=\"11\"<?php echo ($subbirthmonth==11 ? ' selected' : '')?>>November</option>
+              <option value=\"12\"<?php echo ($subbirthmonth==12 ? ' selected' : '')?>>December</option>
+             </select>
+
+             <select name=\"edbirthday\">
+              <option value=\"\"></option>
+<?php
+      for ($i = 1; $i <= 31; $i++) {
+         echo \"<option value='$i'\".($subbirthday==$i ? ' selected' : '').\">$i</option>\";
+      }
+?>
+             </select>
+
+             <select name=\"edbirthyear\">
+              <option value=\"\"></option>
+<?php
+      for ($i = date(\"Y\"); $i >= date(\"Y\")-120; $i--) {
+         echo \"<option value='$i'\".($subbirthyear==$i ? ' selected' : '').\">$i</option>\";
+      }
+?>
+             </select>
+            </td>
+           </tr>
+          </table>
+         </td>
+         <td><?php echo $session->form->error(\"edbirth\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"edgender\" class=\"grey\">Gender:</label>
+         </td>
+         <td>
+          <label for=\"male\"><input type=\"radio\" name=\"edgender\" id=\"male\" value=\"M\"
+<?php
+   if($session->form->value(\"edgender\") == \"\") {
+      if($session->user->gender == \"M\") {
+         echo \"checked \";
+      }
+   } else {
+      if($session->form->value(\"edgender\") == \"M\") {
+         echo \"checked \";
+      }
+   }
+?>/>Male</label>
+          <label for=\"female\"><input type=\"radio\" name=\"edgender\" id=\"female\" value=\"F\" <?php
+   if($session->form->value(\"edgender\") == \"\") {
+      if($session->user->gender == \"F\") {
+         echo \"checked \";
+      }
+   } else {
+      if($session->form->value(\"edgender\") == \"F\") {
+         echo \"checked \";
+      }
+   }
+?>/>Female</label>
+         </td>
+         <td><?php echo $session->form->error(\"edgender\")?></td>
+        </tr>
+
+        <tr><td colspan=\"2\">Address:</td></tr>
+        <tr>
+         <td>
+          <label for=\"edaddrline1\" class=\"grey\">Line 1:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" name=\"edaddrline1\" maxlength=\"80\" value=\"<?php
+   if($session->form->value(\"edaddrline1\") == \"\") {
+      echo $session->user->address['line1'];
+   } else {
+      echo $session->form->value(\"edaddrline1\");
+   }
+?>\" />
+         </td>
+         <td><?php echo $session->form->error(\"edaddrline1\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"edaddrline2\" class=\"grey\">Line 2:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" name=\"edaddrline2\" maxlength=\"80\" value=\"<?php
+   if($session->form->value(\"edaddrline2\") == \"\") {
+      echo $session->user->address['line2'];
+   } else {
+      echo $session->form->value(\"edaddrline2\");
+   }
+?>\" />
+         </td>
+         <td><?php echo $session->form->error(\"edaddrline2\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"edcity\" class=\"grey\">City:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" name=\"edcity\" maxlength=\"40\" value=\"<?php
+   if($session->form->value(\"edcity\") == \"\") {
+      echo $session->user->address['city'];
+   } else {
+      echo $session->form->value(\"edcity\");
+   }
+?>\" />
+         </td>
+         <td><?php echo $session->form->error(\"edcity\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"edstate\" class=\"grey\">State:</label>
+         </td>
+         <td>
+          <select name=\"edstate\">
+           <option value=\"\">Select a State:</option>
+           <option value=\"AL\"<?php if($session->form->value(\"edstate\") == \"AL\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"AL\") echo \" selected\";?>>Alabama</option>
+           <option value=\"AK\"<?php if($session->form->value(\"edstate\") == \"AK\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"AK\") echo \" selected\";?>>Alaska</option>
+           <option value=\"AZ\"<?php if($session->form->value(\"edstate\") == \"AZ\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"AZ\") echo \" selected\";?>>Arizona</option>
+           <option value=\"AR\"<?php if($session->form->value(\"edstate\") == \"AR\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"AR\") echo \" selected\";?>>Arkansas</option>
+           <option value=\"CA\"<?php if($session->form->value(\"edstate\") == \"CA\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"CA\") echo \" selected\";?>>California</option>
+           <option value=\"CO\"<?php if($session->form->value(\"edstate\") == \"CO\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"CO\") echo \" selected\";?>>Colorado</option>
+           <option value=\"CT\"<?php if($session->form->value(\"edstate\") == \"CT\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"CT\") echo \" selected\";?>>Connecticut</option>
+           <option value=\"DC\"<?php if($session->form->value(\"edstate\") == \"DC\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"DC\") echo \" selected\";?>>District of Columbia</option>
+           <option value=\"DE\"<?php if($session->form->value(\"edstate\") == \"DE\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"DE\") echo \" selected\";?>>Delaware</option>
+           <option value=\"FL\"<?php if($session->form->value(\"edstate\") == \"FL\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"FL\") echo \" selected\";?>>Florida</option>
+           <option value=\"GA\"<?php if($session->form->value(\"edstate\") == \"GA\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"GA\") echo \" selected\";?>>Georgia</option>
+           <option value=\"HI\"<?php if($session->form->value(\"edstate\") == \"HI\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"HI\") echo \" selected\";?>>Hawaii</option>
+           <option value=\"ID\"<?php if($session->form->value(\"edstate\") == \"ID\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"ID\") echo \" selected\";?>>Idaho</option>
+           <option value=\"IL\"<?php if($session->form->value(\"edstate\") == \"IL\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"IL\") echo \" selected\";?>>Illinois</option>
+           <option value=\"IN\"<?php if($session->form->value(\"edstate\") == \"IN\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"IN\") echo \" selected\";?>>Indiana</option>
+           <option value=\"IA\"<?php if($session->form->value(\"edstate\") == \"IA\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"IA\") echo \" selected\";?>>Iowa</option>
+           <option value=\"KS\"<?php if($session->form->value(\"edstate\") == \"KS\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"KS\") echo \" selected\";?>>Kansas</option>
+           <option value=\"KY\"<?php if($session->form->value(\"edstate\") == \"KY\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"KY\") echo \" selected\";?>>Kentucky</option>
+           <option value=\"LA\"<?php if($session->form->value(\"edstate\") == \"LA\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"LA\") echo \" selected\";?>>Louisiana</option>
+           <option value=\"ME\"<?php if($session->form->value(\"edstate\") == \"ME\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"ME\") echo \" selected\";?>>Maine</option>
+           <option value=\"MD\"<?php if($session->form->value(\"edstate\") == \"MD\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"MD\") echo \" selected\";?>>Maryland</option>
+           <option value=\"MA\"<?php if($session->form->value(\"edstate\") == \"MA\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"MA\") echo \" selected\";?>>Massachusetts</option>
+           <option value=\"MI\"<?php if($session->form->value(\"edstate\") == \"MI\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"MI\") echo \" selected\";?>>Michigan</option>
+           <option value=\"MN\"<?php if($session->form->value(\"edstate\") == \"MN\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"MN\") echo \" selected\";?>>Minnesota</option>
+           <option value=\"MS\"<?php if($session->form->value(\"edstate\") == \"MS\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"MS\") echo \" selected\";?>>Mississippi</option>
+           <option value=\"MO\"<?php if($session->form->value(\"edstate\") == \"MO\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"MO\") echo \" selected\";?>>Missouri</option>
+           <option value=\"MT\"<?php if($session->form->value(\"edstate\") == \"MT\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"MT\") echo \" selected\";?>>Montana</option>
+           <option value=\"NE\"<?php if($session->form->value(\"edstate\") == \"NE\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"NE\") echo \" selected\";?>>Nebraska</option>
+           <option value=\"NV\"<?php if($session->form->value(\"edstate\") == \"NV\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"NV\") echo \" selected\";?>>Nevada</option>
+           <option value=\"NH\"<?php if($session->form->value(\"edstate\") == \"NH\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"NH\") echo \" selected\";?>>New Hampshire</option>
+           <option value=\"NJ\"<?php if($session->form->value(\"edstate\") == \"NJ\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"NJ\") echo \" selected\";?>>New Jersey</option>
+           <option value=\"NM\"<?php if($session->form->value(\"edstate\") == \"NM\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"NM\") echo \" selected\";?>>New Mexico</option>
+           <option value=\"NY\"<?php if($session->form->value(\"edstate\") == \"NY\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"NY\") echo \" selected\";?>>New York</option>
+           <option value=\"NC\"<?php if($session->form->value(\"edstate\") == \"NC\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"NC\") echo \" selected\";?>>North Carolina</option>
+           <option value=\"ND\"<?php if($session->form->value(\"edstate\") == \"ND\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"ND\") echo \" selected\";?>>North Dakota</option>
+           <option value=\"OH\"<?php if($session->form->value(\"edstate\") == \"OH\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"OH\") echo \" selected\";?>>Ohio</option>
+           <option value=\"OK\"<?php if($session->form->value(\"edstate\") == \"OK\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"OK\") echo \" selected\";?>>Oklahoma</option>
+           <option value=\"OR\"<?php if($session->form->value(\"edstate\") == \"OR\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"OR\") echo \" selected\";?>>Oregon</option>
+           <option value=\"PA\"<?php if($session->form->value(\"edstate\") == \"PA\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"PA\") echo \" selected\";?>>Pennsylvania</option>
+           <option value=\"PR\"<?php if($session->form->value(\"edstate\") == \"PR\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"PR\") echo \" selected\";?>>Puerto Rico</option>
+           <option value=\"RI\"<?php if($session->form->value(\"edstate\") == \"RI\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"RI\") echo \" selected\";?>>Rhode Island</option>
+           <option value=\"SC\"<?php if($session->form->value(\"edstate\") == \"SC\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"SC\") echo \" selected\";?>>South Carolina</option>
+           <option value=\"SD\"<?php if($session->form->value(\"edstate\") == \"SD\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"SD\") echo \" selected\";?>>South Dakota</option>
+           <option value=\"TN\"<?php if($session->form->value(\"edstate\") == \"TN\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"TN\") echo \" selected\";?>>Tennessee</option>
+           <option value=\"TX\"<?php if($session->form->value(\"edstate\") == \"TX\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"TX\") echo \" selected\";?>>Texas</option>
+           <option value=\"UT\"<?php if($session->form->value(\"edstate\") == \"UT\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"UT\") echo \" selected\";?>>Utah</option>
+           <option value=\"VT\"<?php if($session->form->value(\"edstate\") == \"VT\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"VT\") echo \" selected\";?>>Vermont</option>
+           <option value=\"VA\"<?php if($session->form->value(\"edstate\") == \"VA\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"VA\") echo \" selected\";?>>Virginia</option>
+           <option value=\"WA\"<?php if($session->form->value(\"edstate\") == \"WA\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"WA\") echo \" selected\";?>>Washington</option>
+           <option value=\"WV\"<?php if($session->form->value(\"edstate\") == \"WV\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"WV\") echo \" selected\";?>>West Virginia</option>
+           <option value=\"WI\"<?php if($session->form->value(\"edstate\") == \"WI\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"WI\") echo \" selected\";?>>Wisconsin</option>
+           <option value=\"WY\"<?php if($session->form->value(\"edstate\") == \"WY\") echo \" selected\";
+                                   else if($session->user->address['state'] == \"WY\") echo \" selected\";?>>Wyoming</option>
+          </select>
+         </td>
+         <td><?php echo $session->form->error(\"edstate\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"edzip\" class=\"grey\">Zip:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" id=\"edzip\" name=\"edzip\" maxlength=\"10\" value=\"<?php
+   if($session->form->value(\"edzip\") == \"\") {
+      echo $session->user->address['zip'];
+   } else {
+      echo $session->form->value(\"edzip\");
+   }
+?>\" />
+         </td>
+         <td><?php echo $session->form->error(\"edzip\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"edphone\" class=\"grey\">Phone:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" id=\"edphone\" name=\"edphone\" maxlength=\"26\" value=\"<?php
+   if($session->form->value(\"edphone\") == \"\") {
+      echo $session->user->phone;
+   } else {
+      echo $session->form->value(\"edphone\");
+   }
+?>\" />
+         </td>
+         <td><?php echo $session->form->error(\"edphone\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label class=\"grey\">Usertype:</label>
+         </td>
+         <td>
+          <select name=\"edutype\"<?php echo ($session->isAdmin() ? '' : ' disabled')?>>
+           <option value=\"<?php echo CUST; ?>\"<?php echo ($session->isCustomer()) ? ' selected' : '' ?>>Customer</option>
+           <option value=\"<?php echo TELLER; ?>\"<?php echo ($session->isTeller()) ? ' selected' : '' ?>>Teller</option>
+           <option value=\"<?php echo ADMIN; ?>\"<?php echo ($session->isAdmin()) ? ' selected' : '' ?>>Administrator</option>
+          </select>
+         </td>
+         <td><?php echo $session->form->error(\"edutype\")?></td>
+        </tr>
+
+        <tr>
+         <td colspan=\"2\" align=\"right\">
+          <input type=\"hidden\" name=\"subedit\" value=\"1\">
+          <input type=\"submit\" value=\"Save!\" class=\"bt_register\">
+         </td>
+        </tr>
+
+       </table>
+      </form>
+
+      <p class=\"hide\"><a href=\"#top\">Back to top</a></p>
+     </div>
+    </div>
+
+    <?php include_once(\"include/footer.php\"); ?>
+
+   </div>
+  </div>
+ </body>
+</html>"
+      associated_classes
+      end
+    end
+  end
+
+  classview 128212 "PHP"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    class 128212 "Process"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 128212 "__construct"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${visibility}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment " Class constructor "
+      end
+
+      operation 128340 "procLogin"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+procLogin - Processes the user submitted login form, if errors are found, the user is
+redirected to correct the information, if not, the user is effectively logged in to the system.
+"
+      end
+
+      operation 128468 "procLogout"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+procLogout - Simply attempts to log the user out of the system given that there
+is no logout form to process.
+"
+      end
+
+      operation 128596 "procRegister"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+procRegister - Processes the user submitted registration form, if errors are found, the
+user is redirected to correct the information, if not, the user is effectively registered
+with the system and an email is (optionally) sent to the newly created user.
+"
+      end
+
+      operation 128724 "procForgotPass"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+procForgotPass - Validates the given username then if everything is fine, a new
+password is generated and emailed to the address the user gave on sign up.
+"
+      end
+
+      operation 128852 "procEditAccount"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+procEditAccount - Attempts to edit the user's account information, including the
+the password, which must be verified before a change is made.
+"
+      end
+    end
+  end
+
+  package_ref 128340 // _recaptcha-php-1.10
+
+  package_ref 128468 // admin
+
+  package_ref 128596 // include
+
+  package_ref 128724 // plugins
+end

@@ -1,0 +1,2819 @@
+format 66
+"include" // PHP::include
+  revision 3
+  modified_by 84 "DARYL TEWELL"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default show_stereotype_properties default
+  
+  deploymentview 128596 "include"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+    artifact 130260 "config"
+      stereotype "source"
+      php_src "<?php
+
+/*
+ * LibDBDatabase configuration -- config.php
+ *
+ * This file is intended to group all system variables & constants to make it
+ * easier for the site administrator to tweak the LibDBDatabase script.
+ *
+ * Written by: Nicholas Ford a.k.a. NicFord1 [Nicholas+OSSCode@Nicks-Net.us]
+ * Created: 2009.06.14
+ * Last Updated: 2009.06.14
+ */
+
+if (strpos(strtolower($_SERVER['PHP_SELF']), 'config.php') !== false) {
+    die('This file can not be used on its own!');
+}
+
+
+define(\"SITE_NAME\", \"LibDBDatabase\");
+define(\"SITE_BASE_URL\", \"/libdb\");
+
+
+/******************************\\
+ ** AUTHENTICATION CONSTANTS **
+\\******************************/
+/**
+ * Usertype Constant - the admin page will only be accessible to those users
+ * of the type Administrator. Feel free to change as you see fit, you may also
+ * add additional usertypes.
+ */
+define(\"GUEST\",  \"Guest\");
+define(\"CUST\",   \"Customer\");
+define(\"TELLER\", \"Teller\");
+define(\"ADMIN\",  \"Administrator\");
+
+
+define(\"SALT_LENGTH\", 17);
+
+
+/**
+ * This boolean constant controls whether or not the script keeps track of
+ * active users and active guests who are visiting the site.
+ */
+define(\"TRACK_VISITORS\", true);
+
+
+/**
+ * Timeout Constants - these Variables refer to the maximum amount of time
+ * (in minutes) after their last page fresh that a visitor is still considered
+ * to be active.
+ */
+define(\"USER_TIMEOUT\", 10);
+define(\"GUEST_TIMEOUT\", 5);
+
+
+/**
+ * Cookie Constants - these are the parameters to the setcookie function
+ * call, change them if necessary to fit your website. If you need help,
+ * visit www.php.net for more info.
+ * <http://www.php.net/manual/en/function.setcookie.php>
+ */
+define(\"COOKIE_EXPIRE\", 60*60*24*100);  //100 days by default
+define(\"COOKIE_PATH\", \"/\");  //Avaible in whole domain
+
+
+/**
+ * Hashing Variables - these are the parameters to the hashing function.
+ */
+define(\"SALTLENGTH\", 17);
+
+
+/********************\\
+ ** MAIL CONSTANTS **
+\\********************/
+/**
+ * Email Variables - these specify what goes in the from field in the emails
+ * that the script sends to users, and whether to send a welcome email to
+ * newly registered users.
+ */
+define(\"EMAIL_FROM_NAME\", SITE_NAME);
+define(\"EMAIL_FROM_ADDR\", \"LibDBDatabase-noreply@Nicks-Net.us\");
+define(\"EMAIL_WELCOME\", true);
+
+
+/**
+ * This constant forces all users to have lowercase usernames, capital
+ * letters are converted automatically.
+ */
+define(\"ALL_LOWERCASE\", false);
+?>
+"
+      associated_classes
+      end
+    end
+
+    artifact 130388 "database"
+      stereotype "source"
+      php_src "<?php
+/**
+ * database.php
+ *
+ * The Database class is meant to simplify the task of accessing information
+ * from the website's database.
+ */
+
+if (strpos(strtolower($_SERVER['PHP_SELF']), 'database.php') !== false) {
+   header(\"Location: \".SITE_BASE_URL.\"/index.php\"); //Gracefully leave page
+}
+
+require_once(\"include/db-config.php\");
+require_once(\"include/config.php\");
+${definition}
+
+;
+
+/* Create database connection */
+$database = new MySQLDB;
+?>
+"
+      associated_classes
+	class_ref 128596 // MySQLDB
+      end
+    end
+
+    artifact 130516 "db-config"
+      stereotype "source"
+      php_src "<?php
+
+/*
+ * LibDBDatabase database configuration -- db-config.php
+ *
+ * This file is intended to group all database variables to make it easier
+ * for the site administrator to tweak the login script.
+ *
+ * Written by: Nicholas Ford a.k.a. NicFord1 [Nicholas+OSSCode@Nicks-Net.us]
+ * Created: 2009.06.14
+ * Last Updated: 2009.06.14
+ */
+
+if (strpos(strtolower($_SERVER['PHP_SELF']), 'db-config.php') !== false) {
+    die('This file can not be used on its own!');
+}
+
+/************************\\
+ ** DATABASE CONSTANTS **
+\\************************/
+/**
+ * These are required in order for there to be a successful connection
+ * to the MySQL database. Make sure the information is correct.
+ */
+define(\"DB_SERVER\", \"127.0.0.1\");
+define(\"DB_USER\", \"root\");
+define(\"DB_PASS\", \"vickcmsc\");
+define(\"DB_NAME\", \"LibDBDatabase\");
+
+/******************************\\
+ ** DATABASE TABLE CONSTANTS **
+\\******************************/
+/*
+ * These hold the names of all the database tables used in the script.
+ */
+define(\"DB_TBL_PRFX\", \"ldb_\");
+define(\"DB_TBL_ACTIVE_USERS\",  DB_TBL_PRFX.\"activeusers\");
+define(\"DB_TBL_ACTIVE_GUESTS\", DB_TBL_PRFX.\"activeguests\");
+define(\"DB_TBL_BANNED_USERS\",  DB_TBL_PRFX.\"bannedusers\");
+
+//NEW Tables -- Added 2009.06.23
+define(\"DB_TBL_CUSTOMERS\", DB_TBL_PRFX.\"customers\");
+define(\"DB_TBL_TELLERS\",   DB_TBL_PRFX.\"tellers\");
+define(\"DB_TBL_ADMINS\",    DB_TBL_PRFX.\"admins\");
+
+?>
+"
+      associated_classes
+      end
+    end
+
+    artifact 130644 "footer"
+      stereotype "source"
+      php_src "<?php
+/**
+ * footer.php
+ */
+
+if (strpos(strtolower($_SERVER['PHP_SELF']), 'footer.php') !== false) {
+   header(\"Location: \".SITE_BASE_URL.\"/index.php\"); //Gracefully leave page
+}
+?>
+    <div id=\"footer\">
+     <p>
+      &copy; 2009 <a href=\"<?php echo SITE_BASE_URL?>\">LibDBDatabase</a>.
+      Design by <a href=\"http://andreasviklund.com/\">Andreas Viklund</a>
+     </p>
+    </div>"
+      associated_classes
+      end
+    end
+
+    artifact 130772 "form"
+      stereotype "source"
+      php_src "<?php
+${definition}
+
+;
+?>"
+      associated_classes
+	class_ref 128724 // Form
+      end
+    end
+
+    artifact 130900 "mailer"
+      stereotype "source"
+      php_src "<?php
+/**
+ * Mailer.php
+ *
+ * The Mailer class is meant to simplify the task of sending emails to users.
+ * Note: this email system won't work if your server is not setup to send mail.
+ */
+
+require_once(\"config.php\");
+${definition}
+
+;
+
+/* Initialize mailer object */
+$mailer = new Mailer;
+?>"
+      associated_classes
+	class_ref 128852 // Mailer
+      end
+    end
+
+    artifact 131028 "pluginUtils"
+      stereotype "source"
+      php_src "<?php
+// Provide function needed for plugins to register themselves into a list
+// of all plugins
+
+$numberOfPlugins = 0;
+$listOfPlugins = array();
+function addPlugin($pluginInstance) {
+  global $numberOfPlugins, $listOfPlugins;
+
+  $listOfPlugins[$numberOfPlugins] = $pluginInstance;
+
+  $numberOfPlugins++;
+}
+
+// Use reflection to invoke given function on all plugins. Return list
+// of returned values.
+function performFunctionOnAllPlugins($functionName, $param1, $param2) {
+  global $listOfPlugins;
+
+  $returnListSize = 0;
+
+  foreach($listOfPlugins as $plugin) {
+    $reflector = new ReflectionObject($plugin);
+    if($reflector->hasMethod($functionName)) {
+      $returnList[$returnListSize++] = $reflector->getMethod($functionName)->
+          invoke($plugin, $param1, $param2);
+    }
+  }
+  return $returnList;
+}
+?>"
+      associated_classes
+      end
+    end
+
+    artifact 131156 "recommend"
+      stereotype "source"
+      php_src "<?php
+/**
+ * recommend.php
+ *
+ * This class has function(s) that recommend items to users based on
+ * database history.
+ */
+
+if (strpos(strtolower($_SERVER['PHP_SELF']), 'recommend.php') !== false) {
+   header(\"Location: \".SITE_BASE_URL.\"/index.php\"); //Gracefully leave page
+}
+${definition}
+
+
+?>"
+      associated_classes
+	class_ref 128980 // Recommend
+      end
+    end
+
+    artifact 131284 "session"
+      stereotype "source"
+      php_src "<?php
+/**
+ * Session.php
+ *
+ * The Session class is meant to simplify the task of keeping track of logged in
+ * users and also guests.
+ */
+
+if(strpos(strtolower($_SERVER['PHP_SELF']), 'session.php') !== false) {
+   header(\"Location: \".SITE_BASE_URL.\"/index.php\"); //Gracefully leave page
+}
+
+require_once(\"include/users.php\");
+require_once(\"include/database.php\");
+require_once(\"include/mailer.php\");
+require_once(\"include/form.php\");
+${definition}
+
+;
+
+/**
+ * Initialize session object - This must be initialized before the form object
+ * because the form uses session variables, which cannot be accessed unless the
+ * session has started.
+ */
+$session = new Session;
+?>
+"
+      associated_classes
+	class_ref 129108 // Session
+      end
+    end
+
+    artifact 131412 "sidemenu"
+      stereotype "source"
+      php_src "<?php
+/**
+ * sidemenu.php
+ */
+
+if (strpos(strtolower($_SERVER['PHP_SELF']), 'sidemenu.php') !== false) {
+   header(\"Location: \".SITE_BASE_URL.\"/index.php\"); //Gracefully leave page
+}
+
+/**
+ * Display general main menu.
+ */
+//Tie in Main menu with media type plugin system if possible/doable by demo time...
+echo \"<a id=\\\"sectionmenu\\\"></a>\\n\";
+echo \"<h1>Main menu:</h1>\\n\";
+echo \"<p class=\\\"menublock\\\">\\n\";
+echo \"<a class=\\\"nav\\\" href=\\\"\".SITE_BASE_URL.\"/index.php\\\">Browse</a><br class=\\\"hide\\\" />\";
+echo \"<a class=\\\"nav sub\\\" href=\\\"\".SITE_BASE_URL.\"/index.php?type=BOOK\\\">Books</a><br class=\\\"hide\\\" />\\n\";
+echo \"<a class=\\\"nav sub\\\" href=\\\"\".SITE_BASE_URL.\"/index.php?type=CD\\\">CDs</a><br class=\\\"hide\\\" />\\n\";
+echo \"<a class=\\\"nav sub\\\" href=\\\"\".SITE_BASE_URL.\"/index.php?type=DVD\\\">DVDs</a><br class=\\\"hide\\\" />\\n\";
+echo \"<a class=\\\"nav sub\\\" href=\\\"\".SITE_BASE_URL.\"/index.php?type=PERIODICAL\\\">Periodicals</a><br class=\\\"hide\\\" />\\n\";
+echo \"<a class=\\\"nav\\\" href=\\\"\".SITE_BASE_URL.\"/search.php\\\">Search</a><br class=\\\"hide\\\" />\\n\";
+
+if(!$session->logged_in) {
+	echo \"<a class=\\\"nav\\\" href=\\\"\".SITE_BASE_URL.\"/newuser.php\\\">Register</a><br class=\\\"hide\\\" />\\n\";
+}
+
+echo \"<a class=\\\"hide\\\" href=\\\"#top\\\">Back to top</a>\\n\";
+echo \"</p>\\n\";
+
+/**
+ * Display relavent menus based on user privileges.
+ */
+if($session->isCustomer()) { //Customer, Teller OR Administrator
+   //should anything go here in a customer menu (i.e., stuff not for guests)?
+}
+
+if($session->isTeller() || $session->isAdmin()) { //Teller or Admin
+   echo \"<h1>Teller menu:</h1>\\n\";
+   echo \"<p class=\\\"menublock\\\">\\n\";
+   echo \"<a class=\\\"nav\\\" href=\\\"\".SITE_BASE_URL.\"/checkout.php\\\">Check Out</a><br class=\\\"hide\\\" />\\n\";
+   echo \"<a class=\\\"nav\\\" href=\\\"\".SITE_BASE_URL.\"/checkin.php\\\">Check In</a><br class=\\\"hide\\\" />\\n\";
+   if($session->isTeller()) {
+      echo \"<a class=\\\"nav\\\" href=\\\"\".SITE_BASE_URL.\"/newuser.php\\\">Register New Member</a><br class=\\\"hide\\\" />\\n\";
+   }
+   echo \"<a class=\\\"hide\\\" href=\\\"#top\\\">Back to top</a>\\n\";
+   echo \"</p>\\n\";
+}
+
+if($session->isAdmin()) { //Admin
+   //should anything go here in an administrator menu?
+   echo \"<h1>Administrator menu:</h1>\\n\";
+   echo \"<a class=\\\"nav\\\" href=\\\"\".SITE_BASE_URL.\"/admin/admin.php\\\">Admin Center</a><br class=\\\"hide\\\" />\\n\";
+   echo \"<a class=\\\"nav\\\" href=\\\"\".SITE_BASE_URL.\"/admin/userhistory.php\\\">Borrowed Items History</a><br class=\\\"hide\\\" />\\n\";
+   echo \"<a class=\\\"nav\\\" href=\\\"\".SITE_BASE_URL.\"/admin/newitem.php\\\">Add New Item</a><br class=\\\"hide\\\" />\\n\";
+   echo \"<a class=\\\"nav\\\" href=\\\"\".SITE_BASE_URL.\"/newuser.php\\\">Register New Member</a><br class=\\\"hide\\\" />\\n\";
+   echo \"<a class=\\\"hide\\\" href=\\\"#top\\\">Back to top</a>\\n\";
+   echo \"</p>\\n\";
+}
+?>"
+      associated_classes
+      end
+    end
+
+    artifact 131540 "topmenu"
+      stereotype "source"
+      php_src "<?php
+/**
+ * topmenu.php
+ */
+
+if (strpos(strtolower($_SERVER['PHP_SELF']), 'topmenu.php') !== false) {
+   header(\"Location: \".SITE_BASE_URL.\"/index.php\"); //Gracefully leave page
+}
+
+?>
+   <div id=\"nav\">
+    <ul>
+     <li <?php echo ($_SERVER['PHP_SELF'] == '/index.php' || $_SERVER['PHP_SELF'] == '/' ? 'id=\"current\"' : '')?>>
+      <a href=\"<?php echo SITE_BASE_URL?>/index.php\">Front page</a>
+     </li>
+<?php
+/**
+ * Display relavent links based on user privileges.
+ */
+if($session->isCustomer()) { //Customer, Teller OR Administrator
+   echo \"     <li \".($_SERVER['PHP_SELF'] == '/userhistory.php' ? 'id=\"current\"' : '').\">\"
+       .\"<a href=\\\"\".SITE_BASE_URL.\"/userhistory.php\\\">View My History</a></li>\";
+
+   echo \"     <li \".($_SERVER['PHP_SELF'] == '/userinfo.php' ? 'id=\"current\"' : '').\">\"
+       .\"<a href=\\\"\".SITE_BASE_URL.\"/userinfo.php\\\">View My Account</a></li>\";
+}
+
+if($session->isTeller() || $session->isAdmin()) { //Teller or Admin
+   echo \"     <li \".($_SERVER['PHP_SELF'] == '/newuser.php' ? 'id=\"current\"' : '').\">\"
+       .\"<a href=\\\"\".SITE_BASE_URL.\"/newuser.php\\\">Register New Member</a></li>\";
+}
+
+if($session->isAdmin()) { //Admin
+   echo \"     <li \".($_SERVER['PHP_SELF'] == '/admin/admin.php' ? 'id=\"current\"' : '').\">\"
+       .\"<a href=\\\"\".SITE_BASE_URL.\"/admin/admin.php\\\">Admin Center</a></li>\";
+}
+?>
+    </ul>
+    <p class=\"hide\"><a href=\"#top\">Back to top</a></p>
+   </div>"
+      associated_classes
+      end
+    end
+
+    artifact 131668 "userpanel"
+      stereotype "source"
+      php_src "<?php
+/**
+ * userpanel.php
+ * Used on all pages user is logged into.
+ */
+
+if (strpos(strtolower($_SERVER['PHP_SELF']), 'userpanel.php') !== false) {
+   header(\"Location: \".SITE_BASE_URL.\"/index.php\"); //Gracefully leave page
+}
+require_once(\"include/session.php\");
+?>
+
+  <!-- Sliding Panel -->
+  <div id=\"toppanel\">
+   <div class=\"tab\">
+    <ul class=\"login\">
+     <li class=\"left\">&nbsp;</li>
+     <li>Welcome <?php echo $session->user->username; ?>!</li>
+<?php
+/**
+ * User has already logged.  Provide logout link.
+ */
+if($session->logged_in) {
+?>
+     <li class=\"sep\">|</li>
+     <li><a href=\"<?php echo SITE_BASE_URL; ?>/process.php?logout\">Logout</a></li>
+<?php
+}
+?>
+     <li class=\"right\">&nbsp;</li>
+    </ul>
+   </div>
+  </div>
+  <!-- /Sliding Panel -->
+"
+      associated_classes
+      end
+    end
+
+    artifact 131796 "users"
+      stereotype "source"
+      php_src "<?php
+
+/* vim: set expandtab tabstop=3 shiftwidth=3 softtabstop=3: */
+
+/**
+ * The Users subpackage was developed to better model the user system of LibDBDatabase.
+ *
+ * PHP version 5
+ *
+ * LICENSE:
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the \"Software\"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ *
+ * @package    LibDBDatabase
+ * @subpackage Users
+ * @author     Nicholas Ford <Nicholas+OSSCode@Nicks-Net.us>
+ * @copyright  2009 Nicholas Ford
+ * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @version    CVS: <?php
+$
+?> Id:$
+ */
+
+/*
+* Place includes, constant defines and $_GLOBAL settings here.
+* Make sure they have appropriate docblocks to avoid phpDocumentor
+* construing they are documented by the page-level docblock.
+*/
+require_once(\"include/database.php\");
+${definition}
+
+
+?>
+"
+      associated_classes
+	class_ref 129236 // Person
+	class_ref 129364 // User
+	class_ref 129492 // Employee
+	class_ref 129620 // Guest
+	class_ref 129748 // Customer
+	class_ref 129876 // Teller
+	class_ref 130004 // Administrator
+      end
+    end
+  end
+
+  classview 128596 "include"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    class 128596 "MySQLDB"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      attribute 128468 "connection"
+	public explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 128596 "_numActiveCustomers"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "The MySQL database connection"
+      end
+
+      attribute 128724 "_numActiveGuests"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "Number of active customers viewing site"
+      end
+
+      attribute 128852 "_numAdmins"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "Number of active guests viewing site"
+      end
+
+      attribute 128980 "_numCustomers"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "Number of administrators"
+      end
+
+      operation 129748 "__construct"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${visibility}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "Number of signed-up customers
+
+Constructor for the Database Class.
+"
+      end
+
+      operation 129876 "confirmUserPass"
+	public explicit_return_type ""
+	nparams 2
+	  param inout name "username" explicit_type ""
+	  param inout name "password" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+confirmUserPass - Checks whether or not the given username is in the
+database, if so it checks if the given password is the same password in
+the database for that user. If the user doesn't exist or if the passwords
+don't match up, it returns an error code (1 or 2). On success it returns
+0.
+"
+      end
+
+      operation 130004 "confirmUserUID"
+	public explicit_return_type ""
+	nparams 2
+	  param inout name "username" explicit_type ""
+	  param inout name "uid" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+confirmUserUID - Checks whether or not the given username is in the
+database, if so it checks if the given uid is the same uid in the database
+for that user. If the user doesn't exist or if the uids don't match up, it
+returns an error code (1 or 2). On success it returns 0.
+"
+      end
+
+      operation 130132 "confirmUID"
+	public explicit_return_type ""
+	nparams 2
+	  param inout name "uid" explicit_type ""
+	  param inout name "table" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+confirmUID - Checks whether or not the given uid is in the database. If
+the uid doesn't exist it returns false, true otherwise.
+"
+      end
+
+      operation 130260 "confirmItemID"
+	public explicit_return_type ""
+	nparams 2
+	  param inout name "itemID" explicit_type ""
+	  param inout name "table" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+confirmItemID - Checks whether or not the given itemID is in the database.
+If the itemID doesn't exist it returns false, true otherwise.
+"
+      end
+
+      operation 130388 "usernameTaken"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "username" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+usernameTaken - Returns true if the username has been taken by another
+user, false otherwise.
+"
+      end
+
+      operation 130516 "usernameBanned"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "username" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+usernameBanned - Returns true if the username has been banned by an admin.
+"
+      end
+
+      operation 130644 "hireTeller"
+	public explicit_return_type ""
+	nparams 2
+	  param inout name "uid" explicit_type ""
+	  param inout name "hireTime" explicit_type ""
+	    defaultvalue "NULL"
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+hireTeller - Inserts the given uid and current timestamp (date of hire)
+into database. Appropriate usertype is set. Returns true on success,
+false otherwise.
+"
+      end
+
+      operation 130772 "hireAdministrator"
+	public explicit_return_type ""
+	nparams 2
+	  param inout name "uid" explicit_type ""
+	  param inout name "hireTime" explicit_type ""
+	    defaultvalue "NULL"
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+hireAdministrator - Inserts the given uid and current timestamp (date of
+hire) into database. Appropriate usertype is set. Returns true on
+success, false otherwise.
+"
+      end
+
+      operation 130900 "removeUser"
+	public explicit_return_type ""
+	nparams 2
+	  param inout name "uid" explicit_type ""
+	  param inout name "table" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}${)}
+{
+  ${body}}
+"
+	
+	
+      end
+
+      operation 131028 "updateUserField"
+	package explicit_return_type ""
+	nparams 4
+	  param inout name "uid" explicit_type ""
+	  param inout name "table" explicit_type ""
+	  param inout name "field" explicit_type ""
+	  param inout name "value" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}, ${p2}${v2}, ${p3}${v3}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+updateUserField - Updates a field, specified by the field parameter, in
+the user's row in the given table in the database.
+"
+      end
+
+      operation 131156 "updateItemField"
+	package explicit_return_type ""
+	nparams 4
+	  param inout name "itemID" explicit_type ""
+	  param inout name "table" explicit_type ""
+	  param inout name "field" explicit_type ""
+	  param inout name "value" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}, ${p2}${v2}, ${p3}${v3}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+updateItemField - Updates a field, specified by the field parameter, in
+the item's row in the given table in the database.
+"
+      end
+
+      operation 131284 "getUID"
+	package explicit_return_type ""
+	nparams 1
+	  param inout name "username" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+getUID - Returns the result array from a mysql query asking for the uid
+for the given username. If query fails, NULL is returned.
+"
+      end
+
+      operation 131412 "getUserInfo"
+	package explicit_return_type ""
+	nparams 2
+	  param inout name "uid" explicit_type ""
+	  param inout name "table" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+getUserInfo - Returns the result array from a mysql query asking for all
+information stored regarding the given UID. If query fails, NULL is
+returned.
+"
+      end
+
+      operation 131540 "getItemInfo"
+	package explicit_return_type ""
+	nparams 2
+	  param inout name "itemID" explicit_type ""
+	  param inout name "table" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+getItemInfo - Returns the result array from a mysql query asking for all
+information stored regarding the given itemID. If query fails, Null is
+returned.
+"
+      end
+
+      operation 131668 "getNumAdmins"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+getNumAdmins - Returns the number of administrators users. The first time
+the function is called on page load, the database is queried, on
+subsequent calls, the store result is returned. This is to improve
+efficiency, effectively not querying the database when no call is made.
+"
+      end
+
+      operation 131796 "getNumTellers"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+getNumTellers - Returns the number of teller users. The first time the
+function is called on page load, the database is queried, on subsequent
+calls, the store result is returned. This is to improve efficiency,
+effectively not querying the database when no call is made.
+"
+      end
+
+      operation 131924 "getNumCustomers"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+getNumCustomers - Returns the number of signed-up users of the website,
+banned Customers not included. The first time the function is called on
+page load, the database is queried, on subsequent calls, the stored result
+is returned. This is to improve efficiency, effectively not querying the
+database when no call is made.
+"
+      end
+
+      operation 132052 "addActiveUser"
+	package explicit_return_type ""
+	nparams 2
+	  param inout name "uid" explicit_type ""
+	  param inout name "time" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+addActiveUser - Updates user's last active timestamp in the database, and
+also adds them to the table of active users, or updates timestamp if
+already there.
+"
+      end
+
+      operation 132180 "removeActiveUser"
+	package explicit_return_type ""
+	nparams 1
+	  param inout name "uid" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+      end
+
+      operation 132308 "removeInactiveUsers"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+      end
+
+      operation 132436 "calcNumActiveUsers"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+calcNumActiveUsers - Finds out how many active users are viewing site and
+sets class variable accordingly.
+"
+      end
+
+      operation 132564 "getNumActiveUsers"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+      end
+
+      operation 132692 "addActiveGuest"
+	package explicit_return_type ""
+	nparams 2
+	  param inout name "ip" explicit_type ""
+	  param inout name "time" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}${)}
+{
+  ${body}}
+"
+	
+	
+      end
+
+      operation 132820 "removeActiveGuest"
+	package explicit_return_type ""
+	nparams 1
+	  param inout name "ip" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+      end
+
+      operation 132948 "removeInactiveGuests"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+      end
+
+      operation 133076 "calcNumActiveGuests"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+calcNumActiveGuests - Finds out how many active guests are viewing site
+and sets class variable accordingly.
+"
+      end
+
+      operation 133204 "getNumActiveGuests"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+      end
+
+      operation 133332 "query"
+	package explicit_return_type ""
+	nparams 1
+	  param inout name "query" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+query - Performs the given query on the database and returns the result,
+which may be false, true or a resource identifier.
+"
+      end
+    end
+
+    class 128724 "Form"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Form.php
+
+The Form class is meant to simplify the task of keeping track of errors in user
+submitted forms and the form field values that were entered correctly.
+"
+      attribute 129108 "values"
+	package explicit_type ""
+	init_value " array()"
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 129236 "errors"
+	package explicit_type ""
+	init_value " array()"
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "Holds submitted form field values"
+      end
+
+      attribute 129364 "num_errors"
+	package explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "Holds submitted form error messages"
+      end
+
+      operation 133460 "__construct"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${visibility}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "The number of errors in submitted form
+ Class constructor "
+      end
+
+      operation 133588 "setValue"
+	package explicit_return_type ""
+	nparams 2
+	  param inout name "field" explicit_type ""
+	  param inout name "value" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+setValue - Records the value typed into the given form field by the user.
+"
+      end
+
+      operation 133716 "setError"
+	package explicit_return_type ""
+	nparams 2
+	  param inout name "field" explicit_type ""
+	  param inout name "errmsg" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+setError - Records new form error given the form field name and the error message attached to it.
+"
+      end
+
+      operation 133844 "value"
+	package explicit_return_type ""
+	nparams 1
+	  param inout name "field" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+value - Returns the value attached to the given field, if none exists, the empty string is returned.
+"
+      end
+
+      operation 133972 "error"
+	package explicit_return_type ""
+	nparams 1
+	  param inout name "field" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+error - Returns the error message attached to the given field, if none exists, the empty string is returned.
+"
+      end
+
+      operation 134100 "getErrorArray"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+getErrorArray - Returns the array of error messages
+"
+      end
+    end
+
+    class 128852 "Mailer"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 134228 "sendWelcome"
+	package explicit_return_type ""
+	nparams 4
+	  param inout name "user" explicit_type ""
+	  param inout name "email" explicit_type ""
+	  param inout name "pass" explicit_type ""
+	  param inout name "selfreg" explicit_type ""
+	    defaultvalue "true"
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}, ${p2}${v2}, ${p3}${v3}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+sendWelcome - Sends a welcome message to the newly registered user,
+also supplying the username and password.
+"
+      end
+
+      operation 134356 "sendNewPass"
+	package explicit_return_type ""
+	nparams 3
+	  param inout name "user" explicit_type ""
+	  param inout name "email" explicit_type ""
+	  param inout name "pass" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}, ${p2}${v2}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+sendNewPass - Sends the newly generated password to the user's
+email address that was specified at sign-up.
+"
+      end
+    end
+
+    class 128980 "Recommend"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 134484 "__construct"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${visibility}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment " Empty constructor to make the compiler shut up "
+      end
+
+      operation 134612 "recommend"
+	class_operation public explicit_return_type ""
+	nparams 1
+	  param inout name "itemid" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment " Given an itemid that identifies an item, the function will return
+the item most borrowed by users who borrowed the input item
+(other than the input item itself) 
+	Returns:
+ -2   -> if $itemid wasn't set
+-1   -> if there is no item with the input $itemid
+null -> if there is no recommendation to make 
+(maybe the only user that borrowed $itemid 
+never borrowed anything else, so there is 
+no data to work with)
+positive integer -> the itemid of the recommended item
+"
+      end
+    end
+
+    class 129108 "Session"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      attribute 129492 "database"
+	public type class_ref 128596 // MySQLDB
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 129620 "user"
+	public type class_ref 129236 // Person
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "Connection to database"
+      end
+
+      attribute 129748 "time"
+	public explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "User object for current user"
+      end
+
+      attribute 129876 "logged_in"
+	public explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "Time user was last active (page loaded)"
+      end
+
+      attribute 130004 "url"
+	public explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "True if user is logged in, false otherwise"
+      end
+
+      attribute 130132 "referrer"
+	public explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "The page url current being viewed"
+      end
+
+      attribute 130260 "form"
+	public explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "Last recorded site page viewed"
+      end
+
+      operation 134740 "__construct"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${visibility}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+Note: referrer should really only be considered the actual page referrer
+in process.php, any other time it may be inaccurate.
+
+ Class constructor "
+      end
+
+      operation 134868 "startSession"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+startSession - Performs all the actions necessary to initialize this
+session object. Tries to determine if the user has logged in already, and
+sets the variables accordingly. Also takes advantage of this page load to
+update the active visitors tables.
+"
+      end
+
+      operation 134996 "checkLogin"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+checkLogin - Checks if the user has already previously logged in, and a
+session with the user has already been established. Also checks to see if
+user has been remembered. If so, the database is queried to make sure of
+the user's authenticity.  Returns true if the user has logged in.
+"
+      end
+
+      operation 135124 "hashPassword"
+	package explicit_return_type ""
+	nparams 2
+	  param inout name "plainText" explicit_type ""
+	  param inout name "salt" explicit_type ""
+	    defaultvalue "null"
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+hashPassword - Hash's the user's password for secure storage. Returns a
+sha1 salted hash for a password.
+"
+      end
+
+      operation 135252 "login"
+	package explicit_return_type ""
+	nparams 3
+	  param inout name "subuname" explicit_type ""
+	  param inout name "subpass" explicit_type ""
+	  param inout name "subremember" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}, ${p2}${v2}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+login - The user has submitted his username and password through the login
+form, this function checks the authenticity of that information in the
+database and creates the session. Effectively logging in the user if all
+goes well.
+"
+      end
+
+      operation 135380 "logout"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+logout - Gets called when the user wants to be logged out of the website.
+It deletes any cookies that were stored on the users computer as a result
+of him wanting to be remembered, and also unsets session variables and
+demotes his usertype to guest.
+"
+      end
+
+      operation 135508 "register"
+	package explicit_return_type ""
+	nparams 1
+	  param inout name "subInfo" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+register - Gets called when the user has just submitted the registration
+form. Determines if there were any errors with the entry fields, if so, it
+records the errors and returns 1. If no errors were found, it registers
+the new user and returns 0. Returns 2 if registration failed.
+"
+      end
+
+      operation 135636 "isAdmin"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+isAdmin - Returns true if currently logged in user is an administrator,
+false otherwise.
+"
+      end
+
+      operation 135764 "isTeller"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+isTeller - Returns true if currently logged in user is a teller,
+false otherwise.
+"
+      end
+
+      operation 135892 "isCustomer"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+isCustomer - Returns true if currently logged in user is a customer, false
+otherwise. NOTE: All users are considered customers except guests.
+"
+      end
+
+      operation 136020 "generateRandStr"
+	package explicit_return_type ""
+	nparams 1
+	  param inout name "length" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+generateRandStr - Generates a string made up of randomized letters (lower
+and upper case) and digits, the length is a specified parameter.
+"
+      end
+
+      classrelation 130004 // <association>
+	relation 130004 ----
+	  a role_name "" multiplicity "1" private
+	    php "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	    classrelation_ref 130004 // <association>
+	  b role_name "" multiplicity "*" private
+	    php "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	    classrelation_ref 130132 // <association>
+      end
+
+      classrelation 130260 // <dependency>
+	relation 130132 -_->
+	  a default
+	    classrelation_ref 130260 // <dependency>
+	  b parent class_ref 128596 // MySQLDB
+      end
+    end
+
+    class 129236 "Person"
+      abstract visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Describes a person to have certain attributes.
+
+@package    LibDBDatabase
+@subpackage Users
+@author     Nicholas Ford <Nicholas+OSSCode@Nicks-Net.us>
+@copyright  2009 Nicholas Ford
+@license    http://www.opensource.org/licenses/mit-license.html  MIT License
+@version    Release: @package_version@
+"
+      attribute 130388 "lastName"
+	public explicit_type "string"
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "
+The person's last name. Required.
+@var ${type}
+"
+      end
+
+      attribute 130516 "firstName"
+	public explicit_type "string"
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "
+The person's first name. Required.
+@var ${type}
+"
+      end
+
+      attribute 130644 "birthDate"
+	public explicit_type "int"
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "
+The person's birthdate as a unix timestamp. Required.
+@var ${type}
+"
+      end
+
+      attribute 130772 "gender"
+	public explicit_type "char"
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "
+The person's gender. Possible values are 'M' and 'F'.
+@var ${type}
+"
+      end
+
+      attribute 130900 "address"
+	public explicit_type "array"
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "
+The person's address
+@var ${type}
+"
+      end
+
+      attribute 131028 "phone"
+	public explicit_type "string"
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "
+The person's phone number
+@var ${type}
+"
+      end
+
+      operation 136148 "__construct"
+	package explicit_return_type ""
+	nparams 1
+	  param inout name "info" explicit_type "array"
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${visibility}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+Constructor for the Person Class.
+
+@param ${t0} ${p0} the information to set this Person.
+"
+      end
+
+      operation 136276 "setAddress"
+	public explicit_return_type "void"
+	nparams 5
+	  param inout name "line1" explicit_type "string"
+	  param inout name "line2" explicit_type "string"
+	  param inout name "city" explicit_type "string"
+	  param inout name "state" explicit_type "string"
+	  param inout name "zip" explicit_type "string"
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}, ${p2}${v2}, ${p3}${v3}, ${p4}${v4}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+@param ${t0} ${p0}
+@param ${t1} ${p1}
+@param ${t2} ${p2}
+@param ${t3} ${p3}
+@param ${t4} ${p4}
+
+@return ${type}
+
+@access ${visibility}
+"
+      end
+
+      operation 136404 "getAge"
+	public explicit_return_type "int"
+	nparams 1
+	  param inout name "day" explicit_type "string"
+	    defaultvalue "NULL"
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+@param ${t0} ${p0} unix timestamp of the day to determine the person's age on
+
+@return ${type} the age of the person for the given day.
+            False if provide a time before the person was born.
+
+@access ${visibility}
+"
+      end
+
+      classrelation 130132 // <association>
+	relation_ref 130004 // <association>
+      end
+    end
+
+    class 129364 "User"
+      abstract visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Describes a user of the system to be a person with additional attributes.
+
+@package    LibDBDatabase
+@subpackage Users
+@author     Nicholas Ford <Nicholas+OSSCode@Nicks-Net.us>
+@copyright  2009 Nicholas Ford
+@license    http://www.opensource.org/licenses/mit-license.html  MIT License
+@version    Release: @package_version@
+"
+      classrelation 128212 // <generalisation>
+	relation 128212 ---|>
+	  a public
+	    php "${type}"
+	    classrelation_ref 128212 // <generalisation>
+	  b parent class_ref 129236 // Person
+      end
+
+      attribute 131156 "database"
+	public explicit_type "object"
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "
+The connection to the database. Required.
+@var ${type}
+"
+      end
+
+      attribute 131284 "_uid"
+	private explicit_type "int"
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "
+The users unique id number. Auto-Generated.
+@var ${type}
+@access ${visibility}
+"
+      end
+
+      attribute 131412 "_lastVisit"
+	private explicit_type "int"
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "
+The users time of last visit. Auto-Generated.
+@var ${type}
+@access ${visibility}
+"
+      end
+
+      attribute 131540 "_regTime"
+	private explicit_type "int"
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "
+The users time of registration. Auto-Generated.
+@var ${type}
+@access ${visibility}
+"
+      end
+
+      attribute 131668 "username"
+	public explicit_type "string"
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "
+The users username for logging into the system. Required.
+@var ${type}
+"
+      end
+
+      attribute 131796 "password"
+	public explicit_type "string"
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "
+The users salted hash password for logging into the system. Required.
+@var ${type}
+"
+      end
+
+      attribute 131924 "email"
+	public explicit_type "string"
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "
+The users email address. Required.
+@var ${type}
+"
+      end
+
+      operation 136532 "__construct"
+	package explicit_return_type ""
+	nparams 1
+	  param inout name "info" explicit_type "array"
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${visibility}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+Constructor for the User Class.
+
+@param ${t0} ${p0} the information to set this User.
+"
+      end
+
+      operation 136660 "getUID"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+      end
+
+      operation 136788 "getLastVisit"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+      end
+
+      operation 136916 "getRegistrationTime"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+      end
+
+      operation 137044 "update"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "info" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+Method to update the user's information in the database.
+"
+      end
+
+      operation 137172 "register"
+	protected explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+Method to register the user's information to the database.
+"
+      end
+
+      operation 137300 "updateUserType"
+	abstract protected explicit_return_type ""
+	nparams 1
+	  param inout name "usertype" explicit_type "int"
+	
+	
+	php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)};"
+	
+	
+	comment "
+Overridden method to update the user's role in the system
+
+@param ${t0} usertype used to determine what kind of user
+"
+      end
+    end
+
+    class 129492 "Employee"
+      abstract visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Describes an employee to be a user of the system with additional attributes.
+
+@package    LibDBDatabase
+@subpackage Users
+@author     Nicholas Ford <Nicholas+OSSCode@Nicks-Net.us>
+@copyright  2009 Nicholas Ford
+@license    http://www.opensource.org/licenses/mit-license.html  MIT License
+@version    Release: @package_version@
+"
+      classrelation 128340 // <generalisation>
+	relation 128340 ---|>
+	  a public
+	    php "${type}"
+	    classrelation_ref 128340 // <generalisation>
+	  b parent class_ref 129364 // User
+      end
+
+      attribute 132052 "dateHired"
+	public explicit_type "int"
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+	comment "
+The employee's date of hire as a unix timestamp. Auto-Generated.
+@var ${type}
+"
+      end
+
+      operation 137428 "__construct"
+	package explicit_return_type ""
+	nparams 2
+	  param inout name "userInfo" explicit_type "array"
+	  param inout name "empInfo" explicit_type "array"
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${visibility}function ${name}${(}${p0}${v0}, ${p1}${v1}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+Constructor for the Employee Class.
+
+@param ${t0} ${p0} the information to set this User.
+@param ${t1} ${p1} the information to set this Employee.
+"
+      end
+
+      operation 137556 "update"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "info" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+Method to update the Employee's information in the database.
+"
+      end
+    end
+
+    class 129620 "Guest"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_final php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "\\
+Types of Users of the System *
+\\*******************************
+
+Describes a guest to be a user of the system with additional attributes.
+
+@package    LibDBDatabase
+@subpackage Users
+@author     Nicholas Ford <Nicholas+OSSCode@Nicks-Net.us>
+@copyright  2009 Nicholas Ford
+@license    http://www.opensource.org/licenses/mit-license.html  MIT License
+@version    Release: @package_version@
+"
+      classrelation 128468 // <generalisation>
+	relation 128468 ---|>
+	  a public
+	    php "${type}"
+	    classrelation_ref 128468 // <generalisation>
+	  b parent class_ref 129364 // User
+      end
+
+      attribute 132180 "_ipAddress"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl "  ${comment}${visibility}${const}${static}${var}${name}${value};
+"
+	python_decl ""
+	idl_decl ""
+      end
+
+      operation 137684 "__construct"
+	package explicit_return_type ""
+	nparams 2
+	  param inout name "ipAddress" explicit_type ""
+	  param inout name "time" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${visibility}function ${name}${(}${p0}${v0}, ${p1}${v1}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+Constructor for the Guest Class.
+"
+      end
+
+      operation 137812 "update"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+Overridden method to update out the user's information to the database.
+"
+      end
+
+      operation 137940 "register"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+Overridden method to register the user's information to the database.
+"
+      end
+
+      operation 138068 "updateUserType"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "usertype" explicit_type "int"
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+Overridden method to update the user's role in the system
+
+@param ${t0} usertype used to determine what kind of user
+"
+      end
+    end
+
+    class 129748 "Customer"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_final php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Describes a customer to be a user of the system with additional attributes.
+
+@package    LibDBDatabase
+@subpackage Users
+@author     Nicholas Ford <Nicholas+OSSCode@Nicks-Net.us>
+@copyright  2009 Nicholas Ford
+@license    http://www.opensource.org/licenses/mit-license.html  MIT License
+@version    Release: @package_version@
+"
+      classrelation 128596 // <generalisation>
+	relation 128596 ---|>
+	  a public
+	    php "${type}"
+	    classrelation_ref 128596 // <generalisation>
+	  b parent class_ref 129364 // User
+      end
+
+      operation 138196 "__construct"
+	package explicit_return_type ""
+	nparams 1
+	  param inout name "info" explicit_type "array"
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${visibility}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "Customers(balance, history)
+
+Constructor for the Customer Class.
+
+@param ${t0} ${p0} the information to set this User.
+"
+      end
+
+      operation 138324 "update"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "info" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+Method to update the customer's information in the database.
+"
+      end
+
+      operation 138452 "register"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+      end
+
+      operation 138580 "updateUserType"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "usertype" explicit_type "int"
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+Overridden method to update the user's role in the system
+
+@param ${t0} usertype used to determine what kind of user
+"
+      end
+    end
+
+    class 129876 "Teller"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_final php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Describes a teller to be an employee.
+
+@package    LibDBDatabase
+@subpackage Users
+@author     Nicholas Ford <Nicholas+OSSCode@Nicks-Net.us>
+@copyright  2009 Nicholas Ford
+@license    http://www.opensource.org/licenses/mit-license.html  MIT License
+@version    Release: @package_version@
+"
+      classrelation 128724 // <generalisation>
+	relation 128724 ---|>
+	  a public
+	    php "${type}"
+	    classrelation_ref 128724 // <generalisation>
+	  b parent class_ref 129492 // Employee
+      end
+
+      operation 138708 "__construct"
+	package explicit_return_type ""
+	nparams 2
+	  param inout name "userInfo" explicit_type "array"
+	  param inout name "empInfo" explicit_type "array"
+	    defaultvalue "NULL"
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${visibility}function ${name}${(}${p0}${v0}, ${p1}${v1}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+Constructor for the Teller Class.
+
+@param ${t0} ${p0} the information to set this User.
+@param ${t1} ${p1} the information to set this Employee.
+"
+      end
+
+      operation 138836 "update"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "info" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+Method to update the Teller's information in the database.
+"
+      end
+
+      operation 138964 "register"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+      end
+
+      operation 139092 "updateUserType"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "usertype" explicit_type "int"
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+Overridden method to update the user's role in the system
+
+@param ${t0} usertype used to determine what kind of user
+"
+      end
+    end
+
+    class 130004 "Administrator"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_final php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Describes an administrator to be an employee.
+
+@package    LibDBDatabase
+@subpackage Users
+@author     Nicholas Ford <Nicholas+OSSCode@Nicks-Net.us>
+@copyright  2009 Nicholas Ford
+@license    http://www.opensource.org/licenses/mit-license.html  MIT License
+@version    Release: @package_version@
+"
+      classrelation 128852 // <generalisation>
+	relation 128852 ---|>
+	  a public
+	    php "${type}"
+	    classrelation_ref 128852 // <generalisation>
+	  b parent class_ref 129492 // Employee
+      end
+
+      operation 139220 "__construct"
+	package explicit_return_type ""
+	nparams 2
+	  param inout name "userInfo" explicit_type "array"
+	  param inout name "empInfo" explicit_type "array"
+	    defaultvalue "NULL"
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${visibility}function ${name}${(}${p0}${v0}, ${p1}${v1}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+Constructor for the Administrator Class.
+
+@param ${t0} ${p0} the information to set this User.
+@param ${t1} ${p1} the information to set this Employee.
+"
+      end
+
+      operation 139348 "update"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "info" explicit_type ""
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+Method to update the Administrator's information in the database.
+"
+      end
+
+      operation 139476 "register"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+      end
+
+      operation 139604 "updateUserType"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "usertype" explicit_type "int"
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+Overridden method to update the user's role in the system
+
+@param ${t0} usertype used to determine what kind of user
+"
+      end
+    end
+
+    classdiagram 128212 "asdf"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    class 131540 "Search"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 130388 // <dependency>
+	relation 130260 -_->
+	  a default
+	    classrelation_ref 130388 // <dependency>
+	  b parent class_ref 129108 // Session
+      end
+
+      classrelation 131156 // <dependency>
+	relation 131028 -_->
+	  a default
+	    classrelation_ref 131156 // <dependency>
+	  b parent class_ref 132308 // Plugin
+      end
+    end
+
+    class 131668 "Checkout"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 130516 // <dependency>
+	relation 130388 -_->
+	  a default
+	    classrelation_ref 130516 // <dependency>
+	  b parent class_ref 129108 // Session
+      end
+    end
+
+    class 131796 "Checkin"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 130644 // <dependency>
+	relation 130516 -_->
+	  a default
+	    classrelation_ref 130644 // <dependency>
+	  b parent class_ref 129108 // Session
+      end
+    end
+
+    class 131924 "Index"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 130772 // <dependency>
+	relation 130644 -_->
+	  a default
+	    classrelation_ref 130772 // <dependency>
+	  b parent class_ref 129108 // Session
+      end
+    end
+
+    class 132052 "Newuser"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 130900 // <dependency>
+	relation 130772 -_->
+	  a default
+	    classrelation_ref 130900 // <dependency>
+	  b parent class_ref 129108 // Session
+      end
+    end
+
+    class 132180 "Userhistory"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 131028 // <dependency>
+	relation 130900 -_->
+	  a default
+	    classrelation_ref 131028 // <dependency>
+	  b parent class_ref 129108 // Session
+      end
+    end
+
+    class 132308 "Plugin"
+      abstract visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 141140 "search"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+      end
+
+      classrelation 131668 // <dependency>
+	relation 131540 -_->
+	  a default
+	    classrelation_ref 131668 // <dependency>
+	  b parent class_ref 128596 // MySQLDB
+      end
+    end
+  end
+end
