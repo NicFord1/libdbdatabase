@@ -1,0 +1,30 @@
+format 66
+
+classinstancecanvas 128138 classinstance_ref 128138 // 
+  xyz 163.408 28.6982 2000
+end
+classinstancecanvas 128266 classinstance_ref 128266 // 
+  xyz 157.408 145.905 2000
+end
+classinstancecanvas 128522 classinstance_ref 128522 // 
+  xyz 147.219 269.053 2000
+end
+classinstancecanvas 128906 classinstance_ref 129674 // 
+  xyz 37.3296 206.703 2000
+end
+classinstancecanvas 129162 classinstance_ref 129802 // 
+  xyz 276.803 145.905 2000
+end
+objectlinkcanvas 128650 norel
+  from ref 128266 z 2001 to ref 128522
+  no_role_a no_role_b
+objectlinkcanvas 128778 norel
+  from ref 128138 z 2001 to ref 128266
+  no_role_a no_role_b
+objectlinkcanvas 129034 norel
+  from ref 128906 z 2001 to ref 128266
+  no_role_a no_role_b
+objectlinkcanvas 129290 norel
+  from ref 128266 z 2001 to ref 129162
+  no_role_a no_role_b
+end

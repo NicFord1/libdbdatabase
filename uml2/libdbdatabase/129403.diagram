@@ -1,0 +1,15 @@
+format 66
+
+classcanvas 128123 class_ref 129403 // SearchMedia
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 149 266 2000
+end
+note 128379 "SearchMedia will have methods that query the database for media and return the results as a container of objects which implements comparable."
+  xyzwh 6 217 2000 135 115
+note 128635 "A groupmember has some old login authentication code we will be using, but we haven't all looked at it yet, so we don't know exactly how this will fit into the whole program yet."
+  xyzwh 298 33 2000 181 105
+note 128763 "We're having a little trouble using Hibernate, so we don't know how the Java/SQL interface is going to work yet."
+  xyzwh 286 343 2000 199 79
+note 128891 "We don't have much in the way of class diagrams yet because we don't know enough yet about how the program will interact with the SQL database, so we are hesitant to design the program when it's likely large chunks of it will be thrown out."
+  xyzwh 271 174 2000 240 104
+end

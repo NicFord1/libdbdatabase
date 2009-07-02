@@ -1,0 +1,7 @@
+window_sizes 1440 844 337 1013 600 82
+show_stereotypes
+selected activity_ref 128123 // Activity
+open
+  usecaseview_ref 128123 // libdb UseCase
+end
+end

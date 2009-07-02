@@ -1,0 +1,14 @@
+window_sizes 1920 1020 281 1633 720 82
+diagrams
+  classdiagram_ref 130314 // User
+    1302 691 100 4 0 0
+  active  classdiagram_ref 129162 // Media
+    1629 864 100 4 0 0
+end
+show_stereotypes
+selected class_ref 130954 // Book
+open
+  classview_ref 128010 // sketch
+  classview_ref 129162 // OO Data Design
+end
+end
