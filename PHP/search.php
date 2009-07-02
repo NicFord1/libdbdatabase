@@ -172,10 +172,30 @@ if(!isset($_GET["q"]) || empty($_GET["q"])) {
 } else {
    echo $_GET["q"];
 }?>"/>
-       <input type="submit" />
-      </form>
+		<SELECT NAME="mediaType">
 <?php
+	//echo "<OPTION SELECTED> tst </OPTION>";
+   // Load media plugins which will perform search for us.
+   opendir("plugins");
+   $numOfPlugins = 0;
+   while($file = readdir()) {
+     if(is_file("plugins/$file")) {
+     	require_once("plugins/$file");
+     	
+     	//$file = str_replace('.php', "", $file) . 's';
+     	if($numOfPlugins === 0)
+     		echo "<OPTION SELECTED>". str_replace('.php', "", $file) . 's' ."</OPTION>";
+     	else
+     		echo "<OPTION>". str_replace('.php', "", $file) . 's' ."</OPTION>";
+     echo (string)$file;
+       
+       $numOfPlugins = $numOfPlugins + 1;
+     }
+   }
+   echo "</SELECT><input type='submit' /></form>"; 
+
 $searchQuery = @$_GET['q'] ;
+$searchType = @$_GET['mediaType'];
 $trimmed = trim($searchQuery); //trim whitespace from the stored variable
 
 if($trimmed == "") {
@@ -184,20 +204,17 @@ if($trimmed == "") {
   echo "<p>We dont seem to have a search parameter!</p>";
   exit;
 } else {
-   // Load media plugins which will perform search for us.
-   opendir("plugins");
-   while($file = readdir()) {
-     if(is_file("plugins/$file")) {
-       require_once("plugins/$file");
-     }
-   }
-
+   
+   
+   
    // Tell plugins to search for items
    // $searchresults is a list of lists of items. An item is a map from
    // column name to data.
-   $searchresults = performFunctionOnAllPlugins("search", $trimmed, $database);
-
-   $numresults = count($searchresults);
+   //$searchresults = performFunctionOnAllPlugins("search", $trimmed, $database);
+	$searchresults = performFunctionOnOnePlugin("search", $trimmed, $database, $searchType);
+	
+   $numresults = 0;
+   
    $count = $numresults;
 
    // Aggregate all column names that we need
@@ -207,12 +224,19 @@ if($trimmed == "") {
      if(!is_array($aresultlist) OR !isset($searchresults)) {
        continue;
      }
-     foreach($aresultlist as $aresult) {
+     for($i=0; $i<count($aresultlist); $i++)
+     {
        // Copy results to a flat list
-       $results[$numresults++] = $aresult;
-
+       if(count($aresultlist[$i]) === 0)
+       		;
+       else
+       		$results[$numresults++] = $aresultlist[$i];
+	
+       //echo count($aresultlist[$i]) . "\n";
+       
+       
        // Now aggregate the columns
-       $columnsForThisItem = array_keys($aresult);
+       $columnsForThisItem = array_keys($aresultlist[$i]);
 
        foreach($columnsForThisItem as $newcolumn) {
          if(!array_key_exists($newcolumn, $column_names)) {
@@ -223,92 +247,111 @@ if($trimmed == "") {
    }
    $itemFields = array_keys($column_names);
    
-   if($numresults == 0)
-   		exit;
-
-   echo "<br /><table><tr><tbody>";
-   echo "<col id='title'>
-		<col id='authors'>
-		<col id='description'>";
-
-   // Print first row of table, showing the column names
-	echo "<tr>";
+   if($numresults > 0)
+	{
+	   echo "<br /><table><tr><tbody>";
+	   echo "<col id='title'>
+			<col id='authors'>
+			<col id='description'>";
 	
-	if($session->isTeller() or $session->isAdmin())
-		echo "<th>Checkout</th>";
+	   // Print first row of table, showing the column names
+		echo "<tr>";	
+		echo "<th></th>"; // MORE INFO
+		
+	   for($i=1; $i<count($itemFields); $i++) {
+	   	//print $itemFields[0] . "\n";
+	   	if(($itemFields[$i] == "Title" or $itemFields[$i] == "Album") or
+	   		($itemFields[$i] == "Author" or $itemFields[$i] == "Artist") or
+	   		$itemFields[$i] == "Description")
+	     			echo "<th>$itemFields[$i]</th>";
+	    else if(empty($itemFields[$i]))
+	    	echo "";
+	    //echo "$itemFields[$i]\n"; 	
+	     
+	   }
+	   echo "</tr>";
+	   echo "</thead><tbody>";
+	   echo "<tfoot>
+			<tr><td>
+			Search matched $numresults result";
+	    
+	   echo ($numresults === 1) ? "" : "s" ;
+			 
+	   echo "</td></tr></tfoot>";
 	
-	echo "<th>MoreInfo</th>";
+	   
 	
-   for($i=0; $i<count($itemFields); $i++) {
-   	if($itemFields[$i] == "Title" or $itemFields[$i] == "Author" or $itemFields[$i] == "Description" or $itemFields[$i] == "Artist")
-     	echo "<th>$itemFields[$i]</th>";
-    else if(empty($itemFields[$i]))
-    	echo "";
-    //echo "$itemFields[$i]\n"; 	
-     
-   }
-   echo "</tr>";
-   echo "</thead><tbody>";
-   echo "<tfoot>
-		<tr><td colspan='3'><ol>
-		<li>The footer</li>
-		</ol></td></tr>
-		</tfoot>";
-
-   
-
-   $rowCount = 1;
-   // Print item rows
-   foreach($results as $aresult) {
- 
-   	  if($rowCount % 2 == 1 )
-      	echo "<tr>";
-      else
-      	echo "<tr class='odd'";
-      $rowCount = $rowCount + 1;
-   	
-    if(count($aresult) == 0)
-    	continue;
-    	
-  	if($session->isTeller() or $session->isAdmin()){
-		if(isset($aresult['ISBN'])){
-			$argToPass = "isbn=" . $aresult['ISBN'];
-		}
-		else if(isset($aresult['ISSN'])){
-			$argToPass = "issn=" . $aresult['ISSN'];
-		}
-		else if(isset($aresult['UPC'])){
-			$argToPass = "upc=" . $aresult['UPC'];
-		}
-		else if(isset($aresult['SICI'])){
-			$argToPass = "sici=" . $aresult['SICI'];
-		}
-		else{
-			$argToPass = "";
-		}
-		//echo $argToPass;
-  		echo "<td><a href='checkout.php?$argToPass&' title='CheckOut'><font size='2' color='#00FF00'>Checkout</font></a></td>\n";
-  		}
-  		
-   		 echo "<td><a href='popup.php?itemid=" . $aresult['ITEMID']. "&KeepThis=true&TB_iframe=true&height=265&width=645' title=\"MoreInfo\" class=\"thickbox\"><font size='2' color='#FF0000'>MoreInfo</font></a></td>";
-
-    foreach($itemFields as $field) {
-      if(array_key_exists($field, $aresult)) {
-        $text = $aresult[$field];
-      }else {
-        $text = "n/a";
-      }
-
-      
-      if($field == "Title" or $field == "Author" or $field == "Description")
-      	echo "<td>".$text."</td>";
-    }
- 	echo "</tr>";
-   }
- $count++ ;
-
-
-   echo "</tbody></table>";
+	   $rowCount = 1;
+	   // Print item rows
+	   foreach($results as $aresult) {
+	 
+	   	  if($rowCount % 2 == 1 )
+	      	echo "<tr>";
+	      else
+	      	echo "<tr class='odd'";
+	      $rowCount = $rowCount + 1;
+	   	
+	    if(count($aresult) == 0)
+	    	continue;
+	
+	   		 echo "<td style='text-align:center;vertical-align:middle;padding-right:25px;'>".
+	   		 "<a href='popup.php?itemid=" . $aresult['ITEMID']. "&KeepThis=true&TB_iframe=true&height=265&width=645'" .
+	   		  "title=\"more info\" class=\"thickbox\">" .
+	   		 	"<img src='img/info-24x24.png' border='0' alt='more info'></a>";    	
+	    	
+	    	
+	  	if($session->isTeller() or $session->isAdmin()){
+			if(isset($aresult['ISBN']) and !empty($aresult['ISBN'])){
+				$argToPass = "isbn=" . $aresult['ISBN'];
+			}
+			else if(isset($aresult['ISSN']) and !empty($aresult['ISSN'])){
+				$argToPass = "issn=" . $aresult['ISSN'];
+			}
+			else if(isset($aresult['UPC'])and !empty($aresult['UPC']) ){
+				$argToPass = "upc=" . $aresult['UPC'];
+			}
+			else if(isset($aresult['SICI']) and !empty($aresult['SICI'])){
+				$argToPass = "sici=" . $aresult['SICI'];
+			}
+			else{
+				$argToPass = "";
+			}
+			//echo $argToPass;
+	  		echo "<a href='checkout.php?$argToPass&' title='CheckOut'>".
+	  			"<img src='img/cart-24x24.png' border='0' alt='check out item'></a></td>";
+	  		}else
+	  			echo "</td>";
+	  		
+	
+	
+	    foreach($itemFields as $field) {
+	      if(array_key_exists($field, $aresult)) {
+	        $text = (string)$aresult[$field];
+	      }else if($field == ""){
+	      	continue;
+	      } 
+	      else{
+	        $text = "n/a";
+	      }
+	
+	      if(strlen($text)> 75)
+	  		$text = substr($text,0,75) . "...";
+	      
+	      if(($field == "Title" or $field == "Album")or 
+	      	 ($field == "Author" or $field == "Artist")or
+	      	 $field == "Description")
+	      	echo "<td>".$text."</td>";
+	    }
+	 	echo "</tr>";
+	   }
+	 $count++ ;
+	
+	
+	   echo "</tbody></table>";
+	}
+	else
+		echo "No results found to given query!";
+	
 }
 ?>
       <p class="hide"><a href="#top">Back to top</a></p>
