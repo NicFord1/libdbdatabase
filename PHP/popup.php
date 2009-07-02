@@ -145,6 +145,30 @@ if(isset($_GET['itemid'])){
     }
  	echo "</tr>";
    }
+	echo"<tr><td colspan=7>";
+	include_once("include/recommend.php");
+	$itemidrec = Recommend::recommend($itemid);
+	if($itemidrec > 0){
+	$qrecommend = "SELECT title 
+		FROM ((SELECT itemid, title FROM `ldb_books`)
+		UNION(SELECT itemid, title FROM `ldb_cds`)
+		UNION(SELECT itemid, title FROM `ldb_dvds`)
+		UNION(SELECT itemid, title FROM `ldb_periodicals`)) as T
+		WHERE itemid = '$itemidrec'";
+		
+		//run the itemidrec query
+		$resultsrecommend = mysql_query($qrecommend);
+		if($resultsrecommend) {
+			$numresultsrecommend = mysql_num_rows($resultsrecommend);
+		}
+		if ($numresultsrecommend > 0){
+			$rowtitlerec = mysql_fetch_array($database->query($qrecommend));
+			$titlerec = $rowtitlerec["title"];
+			
+			echo "<p>Users who borrowed this item also borrowed \"$titlerec\".</p>";
+		}
+	}
+	echo"</td></tr>";
    echo "</tbody></table>";
 }
 ?>
