@@ -115,13 +115,12 @@ if($trimmed == "") {
    // column name to data.
    $searchresults = performFunctionOnAllPlugins("search", $trimmed, $database);
 
-   $numresults = count($searchresults);
 
    // Aggregate all column names that we need
    $column_names[] = array();
 
    foreach($searchresults as $aresultlist) {
-     if(!is_array($aresultlist) OR !isset($searchresults)) {
+     if(!is_array($aresultlist) OR !isset($aresultlist)) {
        continue;
      }
      foreach($aresultlist as $aresult) {
@@ -138,7 +137,7 @@ if($trimmed == "") {
        }
      }
    }
-   $itemFields = array_keys($column_names);
+   $itemFields = array_keys($column_names, 1);
 
    echo "<br /><table border='1'><tr>";
 
@@ -146,6 +145,8 @@ if($trimmed == "") {
    for($i=0; $i<count($itemFields); $i++) {
      echo "<td>$itemFields[$i]</td>";
    }
+
+   echo "</tr>";
 
    // Print item rows
    foreach($results as $aresult) {
