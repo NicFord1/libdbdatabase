@@ -6,11 +6,11 @@ classcanvas 128084 class_ref 128596 // MySQLDB
 end
 classcanvas 128212 class_ref 128724 // Form
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
-  xyz 12 205 2005
+  xyz 625 818 2005
 end
 classcanvas 128340 class_ref 128852 // Mailer
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
-  xyz 271 38 2005
+  xyz 487 805 2005
 end
 classcanvas 128468 class_ref 128980 // Recommend
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
@@ -50,27 +50,27 @@ classcanvas 130132 class_ref 130004 // Administrator
 end
 classcanvas 130772 class_ref 131540 // Search
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
-  xyz 42 1029 2000
+  xyz 46 1078 2000
 end
 classcanvas 130900 class_ref 131668 // Checkout
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
-  xyz 163 1029 2000
+  xyz 173 1078 2000
 end
 classcanvas 131028 class_ref 131796 // Checkin
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
-  xyz 294 1028 2000
+  xyz 293 1076 2000
 end
 classcanvas 131156 class_ref 131924 // Index
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
-  xyz 413 1027 2000
+  xyz 414 1078 2000
 end
 classcanvas 131284 class_ref 132052 // Newuser
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
-  xyz 524 1026 2000
+  xyz 554 1073 2000
 end
 classcanvas 131412 class_ref 132180 // Userhistory
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
-  xyz 651 1025 2000
+  xyz 812 1071 2000
 end
 classcanvas 132308 class_ref 130132 // BookPlugin
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
@@ -87,6 +87,22 @@ end
 classcanvas 132948 class_ref 130388 // DVDPlugin
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
   xyz 47 800 2011
+end
+classcanvas 133844 class_ref 133460 // PluginUtils
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 9 936 2000
+end
+classcanvas 134356 class_ref 133716 // Login
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 638 1072 2006
+end
+classcanvas 134612 class_ref 133844 // Admincenter
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 704 1072 2005
+end
+classcanvas 134868 class_ref 133972 // Forgotpass
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 469 1078 2005
 end
 relationcanvas 128980 relation_ref 128212 // <generalisation>
   from ref 128852 z 2001 to ref 128724
@@ -158,11 +174,6 @@ relationcanvas 132180 relation_ref 130900 // <dependency>
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
-relationcanvas 132564 relation_ref 131028 // <dependency>
-  from ref 130772 z 2001 to ref 132436
-  no_role_a no_role_b
-  no_multiplicity_a no_multiplicity_b
-end
 relationcanvas 132692 relation_ref 131156 // <generalisation>
   from ref 132308 z 2001 to ref 132436
   no_role_a no_role_b
@@ -180,6 +191,41 @@ relationcanvas 133204 relation_ref 131412 // <generalisation>
 end
 relationcanvas 133332 relation_ref 131540 // <dependency>
   from ref 132436 z 2001 to ref 128084
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 133972 relation_ref 132948 // <composition>
+  from ref 133844 z 2001 to ref 132436
+  no_role_a no_role_b
+  multiplicity_a_pos 138 777 3000 multiplicity_b_pos 83 917 3000
+end
+relationcanvas 134100 relation_ref 133076 // <dependency>
+  from ref 130772 z 2001 to ref 133844
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 134228 relation_ref 133204 // <dependency>
+  from ref 131284 z 2006 to ref 128212
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 134484 relation_ref 133332 // <dependency>
+  from ref 134356 z 2007 to ref 128212
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 134740 relation_ref 133460 // <dependency>
+  from ref 134612 z 2006 to ref 128212
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 134996 relation_ref 133588 // <dependency>
+  from ref 134868 z 2006 to ref 128340
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 135124 relation_ref 133716 // <dependency>
+  from ref 131284 z 2006 to ref 128340
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
