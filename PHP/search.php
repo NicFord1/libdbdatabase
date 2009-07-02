@@ -6,6 +6,86 @@
  */
 require_once("include/session.php");
 ?>
+<style type="text/css">
+
+ol
+{
+	margin:0;
+	padding: 0 1.5em;
+}
+
+table
+{
+	color:#FFF;
+	background:#737CA1 url(img/blue_background.png) repeat-x top left;
+	border:5px solid #737CA1;
+	border-collapse:collapse;
+	width:44.2em;
+	height:20em;
+}
+
+
+
+thead
+{
+
+}
+
+thead th
+{
+	padding:1em 1em .5em;
+ 	border-bottom:1px dotted #737CA1;
+ 	font-size:100%;
+ 	text-align:left;
+}
+
+
+
+thead tr
+{
+
+}
+
+td, th
+{
+	background:transparent;
+	padding:.5em 1em;
+}
+
+tbody tr
+{
+
+}
+
+
+tbody tr.odd td
+{
+	background:transparent url(img/orange_background.png) repeat top left;
+}
+
+tfoot
+{
+
+}
+
+tfoot td
+{
+	padding-bottom:1.5em;
+}
+
+tfoot tr
+{
+
+}
+
+* html tr.odd td
+{
+	background:none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='img/orange_background.png', sizingMethod='scale');
+}
+
+
+</style>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -18,6 +98,7 @@ require_once("include/session.php");
   <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/andreas06.css" type="text/css" media="screen,projection" />
   <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/slide.css"  type="text/css" media="screen,projection" />
   <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/validate.css"  type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/thickbox.css" type="text/css" media="screen" />
 
   <!-- javascripts -->
   <!-- PNG FIX for IE6 -->
@@ -33,6 +114,7 @@ require_once("include/session.php");
 
   <!-- Sliding effect -->
   <script src="<?=SITE_BASE_URL?>/js/slide.js" type="text/javascript"></script>
+  <script type="text/javascript" src="<?=SITE_BASE_URL?>/js/thickbox.js"></script>
 
  </head>
 
@@ -115,12 +197,14 @@ if($trimmed == "") {
    // column name to data.
    $searchresults = performFunctionOnAllPlugins("search", $trimmed, $database);
 
+   $numresults = count($searchresults);
+   $count = $numresults;
 
    // Aggregate all column names that we need
    $column_names[] = array();
 
    foreach($searchresults as $aresultlist) {
-     if(!is_array($aresultlist) OR !isset($aresultlist)) {
+     if(!is_array($aresultlist) OR !isset($searchresults)) {
        continue;
      }
      foreach($aresultlist as $aresult) {
@@ -137,39 +221,94 @@ if($trimmed == "") {
        }
      }
    }
-   $itemFields = array_keys($column_names, 1);
+   $itemFields = array_keys($column_names);
+   
+   if($numresults == 0)
+   		exit;
 
-   echo "<br /><table border='1'><tr>";
+   echo "<br /><table><tr><tbody>";
+   echo "<col id='title'>
+		<col id='authors'>
+		<col id='description'>";
 
    // Print first row of table, showing the column names
+	echo "<tr>";
+	
+	if($session->isTeller() or $session->isAdmin())
+		echo "<th>Checkout</th>";
+	
+	echo "<th>MoreInfo</th>";
+	
    for($i=0; $i<count($itemFields); $i++) {
-     echo "<td>$itemFields[$i]</td>";
+   	if($itemFields[$i] == "Title" or $itemFields[$i] == "Author" or $itemFields[$i] == "Description" or $itemFields[$i] == "Artist")
+     	echo "<th>$itemFields[$i]</th>";
+    else if(empty($itemFields[$i]))
+    	echo "";
+    //echo "$itemFields[$i]\n"; 	
+     
    }
-
    echo "</tr>";
+   echo "</thead><tbody>";
+   echo "<tfoot>
+		<tr><td colspan='3'><ol>
+		<li>The footer</li>
+		</ol></td></tr>
+		</tfoot>";
 
+   
+
+   $rowCount = 1;
    // Print item rows
    foreach($results as $aresult) {
-    echo "<tr>";
-
+ 
+   	  if($rowCount % 2 == 1 )
+      	echo "<tr>";
+      else
+      	echo "<tr class='odd'";
+      $rowCount = $rowCount + 1;
+   	
     if(count($aresult) == 0)
     	continue;
+    	
+  	if($session->isTeller() or $session->isAdmin()){
+		if(isset($aresult['ISBN'])){
+			$argToPass = "isbn=" . $aresult['ISBN'];
+		}
+		else if(isset($aresult['ISSN'])){
+			$argToPass = "issn=" . $aresult['ISSN'];
+		}
+		else if(isset($aresult['UPC'])){
+			$argToPass = "upc=" . $aresult['UPC'];
+		}
+		else if(isset($aresult['SICI'])){
+			$argToPass = "sici=" . $aresult['SICI'];
+		}
+		else{
+			$argToPass = "";
+		}
+		//echo $argToPass;
+  		echo "<td><a href='checkout.php?$argToPass&' title='CheckOut'><font size='2' color='#00FF00'>Checkout</font></a></td>\n";
+  		}
+  		
+   		 echo "<td><a href='popup.php?itemid=" . $aresult['ITEMID']. "&KeepThis=true&TB_iframe=true&height=265&width=645' title=\"MoreInfo\" class=\"thickbox\"><font size='2' color='#FF0000'>MoreInfo</font></a></td>";
 
     foreach($itemFields as $field) {
       if(array_key_exists($field, $aresult)) {
         $text = $aresult[$field];
-      } else {
+      }else {
         $text = "n/a";
       }
-      echo "<td>".$text."</td>";
-    }
 
-    echo "</tr>";
+      
+      if($field == "Title" or $field == "Author" or $field == "Description")
+      	echo "<td>".$text."</td>";
+    }
+ 	echo "</tr>";
    }
  $count++ ;
 
 
-   echo "</table><br />";
+   echo "</tbody></table>";
 }
 ?>
       <p class="hide"><a href="#top">Back to top</a></p>
