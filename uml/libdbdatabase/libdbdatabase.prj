@@ -85,7 +85,7 @@ ${members}}
       comment "The Java code will maintain the database and do whatever else we need it to do."
     end
 
-    class 128394 "GUI"
+    class 128394 "HTMLConnection"
       visibility package 
       cpp_decl ""
       java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
@@ -96,16 +96,25 @@ ${members}}
       idl_decl ""
       explicit_switch_type ""
       
-      comment "The GUI will allow users to easily perform whatever library tasks they need to perform."
-      classrelation 129364 // <composition>
-	relation_ref 129236 // <composition>
-      end
-
+      comment "The HTML website will allow users to easily perform whatever library tasks they
+need to perform and will display requested information to the user."
       classrelation 130004 // <dependency>
 	relation 129748 -_->
 	  a default
 	    classrelation_ref 130004 // <dependency>
 	  b parent class_ref 129546 // ConstraintChecker
+      end
+
+      classrelation 135124 // <association>
+	relation 133972 ----
+	  a role_name "" multiplicity "1" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 135124 // <association>
+	  b role_name "" multiplicity "1" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 135252 // <association>
       end
     end
 
@@ -146,7 +155,7 @@ ${members}}
     end
 
     classinstance 128138 ""
-      type class_ref 128394 // GUI
+      type class_ref 128394 // HTMLConnection
       attributes
         end
       relations
@@ -291,42 +300,6 @@ ${members}}
     classdiagram 128812 "LibraryCore"
       draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
       size A4
-    end
-
-    class 129580 "LibraryCore"
-      visibility package 
-      cpp_decl ""
-      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
-${members}}
-"
-      php_decl ""
-      python_2_2 python_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
-      classrelation 129236 // <composition>
-	relation 129236 *---
-	  a role_name "" private
-	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	    classrelation_ref 129236 // <composition>
-	  b role_name "" private
-	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	    classrelation_ref 129364 // <composition>
-      end
-
-      classrelation 129492 // <composition>
-	relation 129364 *---
-	  a role_name "" private
-	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	    classrelation_ref 129492 // <composition>
-	  b role_name "" private
-	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
-"
-	    classrelation_ref 129620 // <composition>
-      end
     end
 
     classdiagram 129068 "Item"
@@ -871,6 +844,10 @@ ${members}}
 
       classrelation 132692 // <association>
 	relation_ref 132052 // <association>
+      end
+
+      classrelation 134356 // <association>
+	relation_ref 133460 // <association>
       end
     end
 
@@ -1592,6 +1569,14 @@ ${members}}
 "
 	    classrelation_ref 132436 // <association>
       end
+
+      classrelation 134100 // <association>
+	relation_ref 133332 // <association>
+      end
+
+      classrelation 134612 // <association>
+	relation_ref 133588 // <association>
+      end
     end
 
     class 132618 "Employee"
@@ -1735,7 +1720,7 @@ ${members}}
     end
 
     classdiagram 129236 "System"
-      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+      draw_all_relations no hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
       size A4
     end
 
@@ -1750,22 +1735,27 @@ ${members}}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 129620 // <composition>
-	relation_ref 129364 // <composition>
-      end
-
       classrelation 129748 // <dependency>
 	relation 129492 -_->
 	  a default
 	    classrelation_ref 129748 // <dependency>
-	  b parent class_ref 128394 // GUI
+	  b parent class_ref 128394 // HTMLConnection
       end
 
-      classrelation 129876 // <dependency>
-	relation 129620 -_->
-	  a default
-	    classrelation_ref 129876 // <dependency>
-	  b parent class_ref 129492 // DatabaseInterface
+      classrelation 135252 // <association>
+	relation_ref 133972 // <association>
+      end
+
+      classrelation 135380 // <association>
+	relation 134100 ----
+	  a role_name "" multiplicity "*" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 135380 // <association>
+	  b role_name "" multiplicity "1" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 135508 // <association>
       end
     end
 
@@ -1796,7 +1786,7 @@ ${members}}
     end
 
     classdiagram 129364 "DatabaseView"
-      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+      draw_all_relations no hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
       size A4
     end
 
@@ -1837,6 +1827,90 @@ ${members}}
     end
 
     class 130772 "Queue"
+      visibility package 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 133204 "UserHistoryRecord"
+      visibility package 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 133972 // <association>
+	relation 133332 ----
+	  a role_name "" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 133972 // <association>
+	  b role_name "" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 134100 // <association>
+      end
+
+      classrelation 134228 // <association>
+	relation 133460 ----
+	  a role_name "" multiplicity "1" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 134228 // <association>
+	  b role_name "" multiplicity "*" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 134356 // <association>
+      end
+
+      classrelation 134484 // <association>
+	relation 133588 ----
+	  a role_name "" multiplicity "1" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 134484 // <association>
+	  b role_name "" multiplicity "*" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 134612 // <association>
+      end
+    end
+
+    class 133332 "WebpageScript"
+      visibility package 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 134740 // <dependency>
+	relation 133716 -_->
+	  a default
+	    classrelation_ref 134740 // <dependency>
+	  b parent class_ref 129492 // DatabaseInterface
+      end
+
+      classrelation 135508 // <association>
+	relation_ref 134100 // <association>
+      end
+    end
+
+    class 133460 "Search"
       visibility package 
       cpp_decl ""
       java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {

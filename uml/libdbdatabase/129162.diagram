@@ -25,32 +25,32 @@ Ex: For a music CD, the 'author' would be the artist, and the 'publisher' would 
   xyzwh 87 310 2000 145 124
 relationcanvas 131082 relation_ref 129674 // <generalisation>
   geometry VHV
-  from ref 128266 z 2001 to point 92 463
-  line 131594 z 2001 to point 325 463
+  from ref 128266 z 2001 to point 116 541
+  line 131594 z 2001 to point 355 541
   line 131722 z 2001 to ref 128010
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 131210 relation_ref 129802 // <generalisation>
   geometry VHV
-  from ref 129546 z 2001 to point 259 463
-  line 131850 z 2001 to point 325 463
+  from ref 129546 z 2001 to point 283 541
+  line 131850 z 2001 to point 355 541
   line 131978 z 2001 to ref 128010
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 131338 relation_ref 129930 // <generalisation>
   geometry VHV
-  from ref 129674 z 2001 to point 424 463
-  line 132106 z 2001 to point 325 463
+  from ref 129674 z 2001 to point 447 541
+  line 132106 z 2001 to point 355 541
   line 132234 z 2001 to ref 128010
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 131466 relation_ref 130058 // <generalisation>
   geometry VHV
-  from ref 129802 z 2001 to point 577 463
-  line 132362 z 2001 to point 325 463
+  from ref 129802 z 2001 to point 600 541
+  line 132362 z 2001 to point 355 541
   line 132490 z 2001 to ref 128010
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
