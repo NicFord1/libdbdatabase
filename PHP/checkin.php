@@ -93,13 +93,13 @@ if(!($session->isTeller() || $session->isAdmin()))
 		<tr>
 		<td>Media ID number: </td>
 		 <td><input type="text" name="q" value="<?php
-		 	if(isset($_GET['isbn']) && !empty($_GET['isbn'])){
+		 	if(isset($_GET['isbn']) && !empty($_GET['isbn'])) {
 				echo $_GET['isbn'];
-			} else if(isset($_GET['issn']) && !empty($_GET['issn'])){
+			} else if(isset($_GET['issn']) && !empty($_GET['issn'])) {
 				echo $_GET['issn'];
-			} else if(isset($_GET['upc']) && !empty($_GET['upc'])){
+			} else if(isset($_GET['upc']) && !empty($_GET['upc'])) {
 				echo $_GET['upc'];
-			} if(!isset($_POST["q"]) || empty($_POST["q"])) {
+			} else if(!isset($_POST["q"]) || empty($_POST["q"])) {
 				echo "";
 			} else {
 				echo $_POST["q"];
@@ -109,24 +109,24 @@ if(!($session->isTeller() || $session->isAdmin()))
 			<?php
 				$selected;
 				if((isset($_GET['isbn']) && !empty($_GET['isbn'])) ||
-					$_POST["idtype"] == "ISBN"){
+					$_POST["idtype"] == "ISBN") {
 					$selected = 1;
 				} else if((isset($_GET['issn']) && !empty($_GET['issn'])) ||
-					$_POST["idtype"] == "ISSN"){
+					$_POST["idtype"] == "ISSN") {
 					$selected = 2;
 				} else if((isset($_GET['upc']) && !empty($_GET['upc'])) ||
-					$_POST["idtype"] == "UPC"){
+					$_POST["idtype"] == "UPC") {
 					$selected = 3;
-				} else if(!isset($_POST["idtype"]) || empty($_POST["idtype"])){
+				} else if(!isset($_POST["idtype"]) || empty($_POST["idtype"])) {
 					$selected = 0;
-				} else if($_POST["idtype"] == "SICI"){
+				} else if($_POST["idtype"] == "SICI") {
 					$selected = 4;
 				}
 			?>
-		  <option value="ISBN" <?php if($selected == 1){ echo "selected"; } ?>>ISBN</option>
-		  <option value="ISSN" <?php if($selected == 2){ echo "selected"; } ?>>ISSN</option>
-		  <option value="UPC" <?php if($selected == 3){ echo "selected"; } ?>>UPC</option>
-		  <option value="SICI" <?php if($selected == 4){ echo "selected"; } ?>>SICI</option>
+		  <option value="ISBN" <?php if($selected == 1) { echo "selected"; } ?>>ISBN</option>
+		  <option value="ISSN" <?php if($selected == 2) { echo "selected"; } ?>>ISSN</option>
+		  <option value="UPC" <?php if($selected == 3) { echo "selected"; } ?>>UPC</option>
+		  <option value="SICI" <?php if($selected == 4) { echo "selected"; } ?>>SICI</option>
 		  </select>
 		  </td>
         </tr>
