@@ -132,7 +132,7 @@ if($session->logged_in && !($session->isAdmin())) {
      <a id="main"></a>
      <div id="contentalt">
       <h1>New Item Center</h1>
-      <img src="<?php echo SITE_BASE_URL?>/img/gravatar-newuser.png" height="80" width="80" alt="New User Gravatar" />
+      <img src="<?php echo SITE_BASE_URL?>/img/gravatar-books.png" height="80" width="80" alt="Books Gravatar" />
 
       <font size="5" color="#ff0000">
        <b>::::::::::::::::::::::::::::::::::::::::::::</b>
@@ -146,8 +146,14 @@ if($session->form->num_errors > 0) {
 
 <?php
 
-    echo "<h1>Add a New Item to Our Library</h1>";
-
+    echo "<p><h1>Add a New Item to Our Library</h1></p>";
+	if(isset($_POST['successmsg']) && !empty($_POST['successmsg'])){
+		$successmsg = $_POST['successmsg'];
+		echo "<p><h3>$successmsg</h3></p>";
+		unset($_POST['successmsg']);
+	} else{
+		echo "<p><h3>&nbsp;</h3></p>";
+	}
 ?>
 	<form action="<?php echo $_SERVER['PHP_SELF']?>" method="POST">
 Item Type: 
@@ -311,7 +317,7 @@ Item Type:
         </tr>
 
        </table>
-      </form>
+      
 <?php
 	function getFromPost($idstring){
 		if(isset($_POST["$idstring"])){
@@ -339,12 +345,6 @@ Item Type:
 	$regreleaseyear = getFromPost('regreleaseyear');
 	$regtimestamp = strtotime("$regreleaseyear-$regreleasemonth-$regreleaseday  01:00:00");
 	
-	echo "<pre>$itemtype \n $$regquantity \n $regisbn \n $regisbnreq \n $regissn "
-	."\n $regupc \n $regsici \n $regtitle \n $regauthor "
-	."\n $reggenre \n $regpublisher \n $regdescription \n "
-	."$regreleasemonth $regreleaseday $regreleaseyear "
-	."\n $regtimestamp</pre>";
-
 	//create the itemid in ldb_items
 	$qmakeitemid = "INSERT INTO ".DB_TBL_PRFX."items (itemtype, quantity) VALUES('$itemtype', $regquantity)";
 	mysql_query($qmakeitemid);
@@ -356,21 +356,26 @@ Item Type:
 		$q = "INSERT INTO ".DB_TBL_PRFX."books (itemid, isbn, title, author, genre, publisher, releasedate, description) "
 					."VALUES($maxitemid, '$regisbnreq','$regtitle', '$regauthor', '$reggenre', '$regpublisher', $regtimestamp,'$regdescription')";	
 		mysql_query($q);
+		echo "<input type=\"hidden\" name=\"successmsg\" value=\"The book has been successfully added to the database. (".date("Y-n-j H:i:s").")\">";
 	}else if($itemtype == 'CD'){
 		$q = "INSERT INTO ".DB_TBL_PRFX."cds (itemid, upc, title, author, genre, publisher, releasedate, description) "
 					."VALUES($maxitemid, '$regupc','$regtitle', '$regauthor', '$reggenre', '$regpublisher', $regtimestamp,'$regdescription')";	
 		mysql_query($q);
+		echo "<input type=\"hidden\" name=\"successmsg\" value=\"The CD has been successfully added to the database. (".date("Y-n-j H:i:s").")\">";
 	}else if($itemtype == 'DVD'){
 		$q = "INSERT INTO ".DB_TBL_PRFX."dvds (itemid, upc, title, author, genre, publisher, releasedate, description) "
 					."VALUES($maxitemid, '$regupc','$regtitle', '$regauthor', '$reggenre', '$regpublisher', $regtimestamp,'$regdescription')";	
 		mysql_query($q);
+		echo "<input type=\"hidden\" name=\"successmsg\" value=\"The DVD has been successfully added to the database. (".date("Y-n-j H:i:s").")\">";
 	}else if($itemtype == 'Periodical'){
 		$q = "INSERT INTO ".DB_TBL_PRFX."periodicals (itemid, isbn, issn, sici, title, editor, genre, publisher, releasedate, description) "
 					."VALUES($maxitemid, '$regisbn', '$regissn', '$regsici', '$regtitle', '$regauthor', '$reggenre', '$regpublisher', $regtimestamp,'$regdescription')";	
 		mysql_query($q);
+		echo "<input type=\"hidden\" name=\"successmsg\" value=\"The Periodical has been successfully added to the database. (".date("Y-n-j H:i:s").")\">";
 	}
 	
 ?>
+		</form>
       <p class="hide"><a href="#top">Back to top</a></p>
      </div>
     </div>
