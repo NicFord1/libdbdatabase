@@ -98,7 +98,7 @@ tfoot tr
   <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/andreas06.css" type="text/css" media="screen,projection" />
   <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/slide.css"  type="text/css" media="screen,projection" />
   <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/validate.css"  type="text/css" media="screen,projection" />
-  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/thickbox.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="<?=SITE_BASE_URL?>/css/thickbox.css" type="text/css" media="screen,projection" />
 
   <!-- javascripts -->
   <!-- PNG FIX for IE6 -->
@@ -114,7 +114,7 @@ tfoot tr
 
   <!-- Sliding effect -->
   <script src="<?=SITE_BASE_URL?>/js/slide.js" type="text/javascript"></script>
-  <script type="text/javascript" src="<?=SITE_BASE_URL?>/js/thickbox.js"></script>
+  <script type="text/javascript" src="<?=SITE_BASE_URL?>/js/thickbox.min.js"></script>
 
  </head>
 
@@ -181,18 +181,18 @@ if(!isset($_GET["q"]) || empty($_GET["q"])) {
    while($file = readdir()) {
      if(is_file("plugins/$file")) {
      	require_once("plugins/$file");
-     	
+
      	//$file = str_replace('.php', "", $file) . 's';
      	if($numOfPlugins === 0)
      		echo "<OPTION SELECTED>". str_replace('.php', "", $file) . 's' ."</OPTION>";
      	else
      		echo "<OPTION>". str_replace('.php', "", $file) . 's' ."</OPTION>";
      echo (string)$file;
-       
+
        $numOfPlugins = $numOfPlugins + 1;
      }
    }
-   echo "</SELECT><input type='submit' /></form>"; 
+   echo "</SELECT><input type='submit' /></form>";
 
 $searchQuery = @$_GET['q'] ;
 $searchType = @$_GET['mediaType'];
@@ -204,17 +204,17 @@ if($trimmed == "") {
   echo "<p>We dont seem to have a search parameter!</p>";
   exit;
 } else {
-   
-   
-   
+
+
+
    // Tell plugins to search for items
    // $searchresults is a list of lists of items. An item is a map from
    // column name to data.
    //$searchresults = performFunctionOnAllPlugins("search", $trimmed, $database);
 	$searchresults = performFunctionOnOnePlugin("search", $trimmed, $database, $searchType);
-	
+
    $numresults = 0;
-   
+
    $count = $numresults;
 
    // Aggregate all column names that we need
@@ -231,10 +231,10 @@ if($trimmed == "") {
        		;
        else
        		$results[$numresults++] = $aresultlist[$i];
-	
+
        //echo count($aresultlist[$i]) . "\n";
-       
-       
+
+
        // Now aggregate the columns
        $columnsForThisItem = array_keys($aresultlist[$i]);
 
@@ -246,18 +246,18 @@ if($trimmed == "") {
      }
    }
    $itemFields = array_keys($column_names);
-   
+
    if($numresults > 0)
 	{
 	   echo "<br /><table><tr><tbody>";
 	   echo "<col id='title'>
 			<col id='authors'>
 			<col id='description'>";
-	
+
 	   // Print first row of table, showing the column names
-		echo "<tr>";	
+		echo "<tr>";
 		echo "<th></th>"; // MORE INFO
-		
+
 	   for($i=1; $i<count($itemFields); $i++) {
 	   	//print $itemFields[0] . "\n";
 	   	if(($itemFields[$i] == "Title" or $itemFields[$i] == "Album") or
@@ -266,40 +266,40 @@ if($trimmed == "") {
 	     			echo "<th>$itemFields[$i]</th>";
 	    else if(empty($itemFields[$i]))
 	    	echo "";
-	    //echo "$itemFields[$i]\n"; 	
-	     
+	    //echo "$itemFields[$i]\n";
+
 	   }
 	   echo "</tr>";
 	   echo "</thead><tbody>";
 	   echo "<tfoot>
 			<tr><td>
 			Search matched $numresults result";
-	    
+
 	   echo ($numresults === 1) ? "" : "s" ;
-			 
+
 	   echo "</td></tr></tfoot>";
-	
-	   
-	
+
+
+
 	   $rowCount = 1;
 	   // Print item rows
 	   foreach($results as $aresult) {
-	 
+
 	   	  if($rowCount % 2 == 1 )
 	      	echo "<tr>";
 	      else
 	      	echo "<tr class='odd'";
 	      $rowCount = $rowCount + 1;
-	   	
+
 	    if(count($aresult) == 0)
 	    	continue;
-	
+
 	   		 echo "<td style='text-align:center;vertical-align:middle;padding-right:25px;'>".
 	   		 "<a href='popup.php?itemid=" . $aresult['ITEMID']. "&KeepThis=true&TB_iframe=true&height=265&width=645'" .
 	   		  "title=\"more info\" class=\"thickbox\">" .
-	   		 	"<img src='img/info-24x24.png' border='0' alt='more info'></a>";    	
-	    	
-	    	
+	   		 	"<img src='img/info.png' border='0' alt='more info'></a>";
+
+
 	  	if($session->isTeller() or $session->isAdmin()){
 			if(isset($aresult['ISBN']) and !empty($aresult['ISBN'])){
 				$argToPass = "isbn=" . $aresult['ISBN'];
@@ -318,26 +318,26 @@ if($trimmed == "") {
 			}
 			//echo $argToPass;
 	  		echo "<a href='checkout.php?$argToPass&' title='CheckOut'>".
-	  			"<img src='img/cart-24x24.png' border='0' alt='check out item'></a></td>";
+	  			"<img src='img/cart.png' border='0' alt='check out item'></a></td>";
 	  		}else
 	  			echo "</td>";
-	  		
-	
-	
+
+
+
 	    foreach($itemFields as $field) {
 	      if(array_key_exists($field, $aresult)) {
 	        $text = (string)$aresult[$field];
 	      }else if($field == ""){
 	      	continue;
-	      } 
+	      }
 	      else{
 	        $text = "n/a";
 	      }
-	
+
 	      if(strlen($text)> 75)
 	  		$text = substr($text,0,75) . "...";
-	      
-	      if(($field == "Title" or $field == "Album")or 
+
+	      if(($field == "Title" or $field == "Album")or
 	      	 ($field == "Author" or $field == "Artist")or
 	      	 $field == "Description")
 	      	echo "<td>".$text."</td>";
@@ -345,13 +345,13 @@ if($trimmed == "") {
 	 	echo "</tr>";
 	   }
 	 $count++ ;
-	
-	
+
+
 	   echo "</tbody></table>";
 	}
 	else
 		echo "No results found to given query!";
-	
+
 }
 ?>
       <p class="hide"><a href="#top">Back to top</a></p>
