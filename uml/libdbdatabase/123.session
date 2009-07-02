@@ -6,8 +6,8 @@ diagrams
     1161 846 100 4 0 0
 end
 show_stereotypes
-selected attribute_ref 139515 // phone
+selected classrelation_ref 129915 // <association>
 open
-  class_ref 129019 // customers
+  class_ref 129275 // items
 end
 end

@@ -1,6 +1,6 @@
 format 66
 "libdbdatabase"
-  revision 18
+  revision 20
   modified_by 123 "Drew"
 
 
@@ -2299,11 +2299,11 @@ ${members}}
       
       classrelation 131707 // <association>
 	relation 130683 ----
-	  a role_name "" private
+	  a role_name "" multiplicity "1" private
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 131707 // <association>
-	  b role_name "" private
+	  b role_name "" multiplicity "0..1" private
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 131835 // <association>
@@ -2344,11 +2344,11 @@ ${members}}
       
       classrelation 132219 // <association>
 	relation 130939 ----
-	  a role_name "" private
+	  a role_name "" multiplicity "1" private
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 132219 // <association>
-	  b role_name "" private
+	  b role_name "" multiplicity "0..1" private
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 132347 // <association>
@@ -2389,11 +2389,11 @@ ${members}}
       
       classrelation 130171 // <association>
 	relation 129403 ----
-	  a role_name "" private
+	  a role_name "" multiplicity "1" private
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 130171 // <association>
-	  b role_name "" private
+	  b role_name "" multiplicity "1" private
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 130299 // <association>
@@ -2528,11 +2528,11 @@ ${members}}
 
       classrelation 131451 // <association>
 	relation 130555 ----
-	  a role_name "" private
+	  a role_name "" multiplicity "1" private
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 131451 // <association>
-	  b role_name "" private
+	  b role_name "" multiplicity "*" private
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 131579 // <association>
@@ -2611,11 +2611,11 @@ ${members}}
 
       classrelation 131963 // <association>
 	relation 130811 ----
-	  a role_name "" private
+	  a role_name "" multiplicity "0..1" private
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 131963 // <association>
-	  b role_name "" private
+	  b role_name "" multiplicity "1" private
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 132091 // <association>
@@ -2627,11 +2627,11 @@ ${members}}
 
       classrelation 132475 // <association>
 	relation 131067 ----
-	  a role_name "" private
+	  a role_name "" multiplicity "0..1" private
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 132475 // <association>
-	  b role_name "" private
+	  b role_name "" multiplicity "1" private
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 132603 // <association>
@@ -2812,11 +2812,11 @@ ${members}}
       
       classrelation 129915 // <association>
 	relation 129275 ----
-	  a role_name "" private
+	  a role_name "" multiplicity "*" private
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 129915 // <association>
-	  b role_name "" private
+	  b role_name "" multiplicity "1" private
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 130043 // <association>
@@ -2925,11 +2925,11 @@ ${members}}
       
       classrelation 132731 // <association>
 	relation 131195 ----
-	  a role_name "" private
+	  a role_name "" multiplicity "1" private
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 132731 // <association>
-	  b role_name "" private
+	  b role_name "" multiplicity "1" private
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 132859 // <association>
@@ -3060,11 +3060,11 @@ ${members}}
       
       classrelation 132987 // <association>
 	relation 131323 ----
-	  a role_name "" private
+	  a role_name "" multiplicity "1" private
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 132987 // <association>
-	  b role_name "" private
+	  b role_name "" multiplicity "1" private
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 133115 // <association>
@@ -3195,11 +3195,11 @@ ${members}}
       
       classrelation 133243 // <association>
 	relation 131451 ----
-	  a role_name "" private
+	  a role_name "" multiplicity "1" private
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 133243 // <association>
-	  b role_name "" private
+	  b role_name "" multiplicity "1" private
 	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
 	    classrelation_ref 133371 // <association>
