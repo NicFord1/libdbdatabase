@@ -1,0 +1,52 @@
+class Teller
+!!!138708.php!!!	__construct(inout userInfo : array, inout empInfo : array = NULL)
+
+      parent::__construct($userInfo, $empInfo);
+
+      if(isset($userInfo['uid']) && ($this->database->confirmUserUID($userInfo['username'], $userInfo['uid']) == 0)) {
+         $dbEmpInfo = $this->database->getUserInfo($userInfo['uid'], DB_TBL_TELLERS);
+      }
+
+      if($dbEmpInfo) {
+         parent::__construct($userInfo, $dbEmpInfo);
+      }
+!!!138836.php!!!	update(inout info : )
+
+   	$result = parent::update($info);
+      if($result == 0) { //employee successfully updated, now update Teller specifics
+         if($this->database->confirmUID($this->getUID(), DB_TBL_TELLERS)) { //user is a teller
+            if(isset($info['hiredate'])) {
+               $this->dateHired = trim($info['hiredate']);
+               $this->database->updateUserField($this->getUID(), DB_TBL_TELLERS, "hiredate", $this->dateHired);
+            }
+         } else { //not a known Teller in our system
+         	$result = 3;
+         }
+      } else if($result == 1) { //user doesn't exist, make sure not in Teller table
+      	$this->database->removeUser($this->getUID(), DB_TBL_TELLERS);
+      }
+      return $result;
+!!!138964.php!!!	register()
+
+      $result = parent::register();
+      if($result) { //perform Teller Specific actions
+         $result = $this->database->hireTeller($this->getUID(), $this->dateHired);
+      }
+      return $result;
+!!!139092.php!!!	updateUserType(inout usertype : int)
+
+   	if($usertype == TELLER) {
+   		return TELLER; //already a Teller
+   	} else if($usertype == ADMIN) {
+   		if($this->database->hireAdministrator($this->getUID())) {
+   			$this->database->removeUser($this->getUID(), DB_TBL_TELLERS);
+   			return ADMIN;
+   		} else {
+   			return false; //didn't successfully hire as Administrator
+   		}
+   	} else if($usertype == CUST){
+   		$this->database->removeUser($this->getUID(), DB_TBL_TELLERS);
+   	   return CUST;
+   	} else {
+         return false; //invalid usertype
+   	}

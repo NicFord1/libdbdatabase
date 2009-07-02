@@ -1,0 +1,34 @@
+class Person
+!!!136148.php!!!	__construct(inout info : array)
+
+      date_default_timezone_set('America/New_York');
+      $this->lastName = trim($info['lastname']);
+      $this->firstName = trim($info['firstname']);
+      $this->birthDate = trim($info['birthdate']);
+      $this->gender = trim($info['gender']);
+      $this->setAddress(trim($info['addrline1']), trim($info['addrline2']), trim($info['city']), trim($info['state']), trim($info['zip']));
+      $this->phone = trim($info['phone']);
+!!!136276.php!!!	setAddress(inout line1 : string, inout line2 : string, inout city : string, inout state : string, inout zip : string) : void
+
+      $this->address = array("line1"=>$line1, "line2"=>$line2, "city"=>$city, "state"=>$state, "zip"=>$zip);
+!!!136404.php!!!	getAge(inout day : string = NULL) : int
+
+      if(!$day) {
+      	date_default_timezone_set('America/New_York');
+         $day = time();
+      }
+
+      if($this->birthDate < 0) {
+      	$age = $day + ($this->birthDate * -1);
+      } else {
+      	$age = $day - $this->birthDate;
+      }
+
+      $year = 60 * 60 * 24 * 365;
+      $age = floor($age / $year);
+
+      if($age > 0) {
+      	return $age;
+      } else {
+      	return false;
+      }

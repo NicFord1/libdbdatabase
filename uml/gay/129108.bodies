@@ -1,0 +1,283 @@
+class Session
+!!!134740.php!!!	__construct()
+
+   	$this->database = new MySQLDB;
+   	date_default_timezone_set('America/New_York');
+      $this->time = time();
+      $this->startSession();
+      $this->form = new Form;
+!!!134868.php!!!	startSession()
+
+      session_start();   //Tell PHP to start the session
+
+      /* Determine if user is logged in */
+      $this->logged_in = $this->checkLogin();
+
+      /* Set guest value to users not logged in, and update active guests table accordingly. */
+      if(!$this->logged_in) {
+         $this->user = new Guest($_SERVER['REMOTE_ADDR'], $this->time);
+      } else { /* Update users last active timestamp */
+         $this->database->addActiveUser($this->user->getUID(), $this->time);
+      }
+
+      /* Remove inactive visitors from database */
+      $this->database->removeInactiveUsers();
+      $this->database->removeInactiveGuests();
+
+
+      if(isset($_SESSION['url'])) { /* Set referrer page */
+         $this->referrer = $_SESSION['url'];
+      } else {
+         $this->referrer = "/";
+      }
+
+      /* Set current url */
+      $this->url = $_SESSION['url'] = $_SERVER['PHP_SELF'];
+!!!134996.php!!!	checkLogin()
+
+      /* Check if user has been remembered */
+      if(isset($_COOKIE['cookname']) && isset($_COOKIE['cookid'])) {
+         $_SESSION['username'] = $_COOKIE['cookname'];
+         $_SESSION['uid'] = $_COOKIE['cookid'];
+      }
+
+      /* Username and uid have been set and not guest */
+      if(isset($_SESSION['username']) && isset($_SESSION['uid']) &&
+         $_SESSION['username'] != GUEST) {
+         /* Confirm that username and uid are valid */
+         if($this->database->confirmUserUID($_SESSION['username'], $_SESSION['uid']) != 0) {
+            /* Variables are incorrect, user not logged in */
+            unset($_SESSION['username']);
+            unset($_SESSION['uid']);
+            return false;
+         } else {/* User is logged in, set class variables */
+            $info = array("uid"=>$_SESSION['uid'], "username"=>$_SESSION['username']);
+            if($this->database->confirmUID($info['uid'], DB_TBL_ADMINS)) {
+            	$this->user = new Administrator($info);
+            } else if($this->database->confirmUID($info['uid'], DB_TBL_TELLERS)) {
+            	$this->user = new Teller($info);
+            } else {
+            	$this->user = new Customer($info);
+            }
+            return true;
+         }
+      } else { /* User not logged in */
+         return false;
+      }
+!!!135124.php!!!	hashPassword(inout plainText : , inout salt :  = null)
+
+      if ($salt == null) {
+         $salt = substr(md5(time() * rand()), 0, SALT_LENGTH);
+      } else {
+         $salt = substr($salt, 0, SALT_LENGTH);
+      }
+
+      // return a sha1 salted hash password
+      return $salt . sha1($salt . $plainText);
+!!!135252.php!!!	login(inout subuname : , inout subpass : , inout subremember : )
+
+      /* Username error checking */
+      $field = "uname";  //Use field name for username
+
+      if(!$subuname || strlen($subuname = trim($subuname)) == 0) {
+         $this->form->setError($field, "* Username not entered");
+      } else {
+         /* Check if username is not alphanumeric */
+         if(!eregi("^([0-9a-z])*$", $subuname)) {
+            $this->form->setError($field, "* Username not alphanumeric");
+         }
+      }
+
+      /* Password error checking */
+      $field = "pass";  //Use field name for password
+      if(!$subpass) {
+         $this->form->setError($field, "* Password not entered");
+      }
+
+      /* Return if form errors exist */
+      if($this->form->num_errors > 0) {
+         return false;
+      }
+
+      /* Checks that username is in database and password is correct */
+      $subuname = stripslashes($subuname);
+      $userinfo = $this->database->getUserInfo($this->database->getUID($subuname), DB_TBL_CUSTOMERS);
+
+      if($userinfo != null) {
+         $salt = substr($userinfo['password'], 0, SALT_LENGTH);
+         $salted = $this->hashPassword($subpass, $salt);
+         $result = $this->database->confirmUserPass($subuname, $salted, DB_TBL_CUSTOMERS);
+      } else {
+         $result = 1;
+      }
+
+      /* Check error codes */
+      if($result == 1) {
+         $field = "uname";
+         $this->form->setError($field, "* Username not found");
+      } else if($result == 2) {
+         $field = "pass";
+         $this->form->setError($field, "* Invalid password");
+      }
+
+      if($this->form->num_errors > 0) { /* Return if form errors exist */
+         return false;
+      }
+
+      /* Username and password correct, register session variables */
+      $_SESSION['username'] = $userinfo['username'];
+      $_SESSION['uid']   =  $userinfo['uid'];
+
+      if($this->database->confirmUID($userinfo['uid'], DB_TBL_ADMINS)) {
+      	$this->user = new Administrator($userinfo);
+      } else if($this->database->confirmUID($userinfo['uid'], DB_TBL_TELLERS)) {
+      	$this->user = new Teller($userinfo);
+      } else {
+      	$this->user = new Customer($userinfo);
+      }
+
+      $this->database->addActiveUser($this->uid, $this->time);
+      $this->database->removeActiveGuest($_SERVER['REMOTE_ADDR']);
+
+      /**
+       * The user has requested to be remembered, so we set two cookies. One to
+       * hold their username, and one to hold their uid. It expires by the time
+       * specified in config.php. Now, next time they come to the site, they
+       * will be logged in automatically, but only if they didn't logout.
+       */
+      if($subremember) {
+      	date_default_timezone_set('America/New_York');
+         setcookie("cookname", $this->user->username, time()+COOKIE_EXPIRE, COOKIE_PATH);
+         setcookie("cookid",   $this->user->getUID(),   time()+COOKIE_EXPIRE, COOKIE_PATH);
+      }
+      return true; /* Login completed successfully */
+!!!135380.php!!!	logout()
+
+      /**
+       * Delete cookies - the time must be in the past, so just negate what you
+       * added when creating the cookie.
+       */
+      if(isset($_COOKIE['cookname']) && isset($_COOKIE['cookid'])) {
+      	date_default_timezone_set('America/New_York');
+         setcookie("cookname", "", time()-COOKIE_EXPIRE, COOKIE_PATH);
+         setcookie("cookid",   "", time()-COOKIE_EXPIRE, COOKIE_PATH);
+      }
+
+      /* Unset PHP session variables */
+      unset($_SESSION['username']);
+      unset($_SESSION['uid']);
+
+      /* Reflect fact that user has logged out */
+      $this->logged_in = false;
+
+      /* Remove from active users table and add to active guests tables. */
+      $this->database->removeActiveUser($this->user->username);
+      $this->database->addActiveGuest($_SERVER['REMOTE_ADDR'], $this->time);
+
+      /* Set user guest */
+      $this->user = new Guest($_SERVER['REMOTE_ADDR'], $this->time);
+!!!135508.php!!!	register(inout subInfo : )
+
+      global $mailer;
+
+      /* Username error checking */
+      $field = "reguname";
+      $subInfo['username'] = stripslashes($subInfo['username']);
+
+      /* Check if username is not alphanumeric */
+      if(!eregi("^([0-9a-z])+$", $subInfo['username'])) {
+         $this->form->setError($field, "* Username not alphanumeric");
+      } else if(strcasecmp($subInfo['username'], GUEST) == 0) {
+      /* Check if username is reserved */
+         $this->form->setError($field, "* Username reserved word");
+      } else if($this->database->usernameTaken($subInfo['username'])) {
+      /* Check if username is already in use */
+         $this->form->setError($field, "* Username already in use");
+      } else if($this->database->usernameBanned($subInfo['username'])) {
+      /* Check if username is banned */
+         $this->form->setError($field, "* Username banned");
+      }
+
+      /* Password error checking */
+      $field = "regpass";  //Use field name for password
+
+      $subInfo['passconf'] = trim($subInfo['passconf']);
+      if(strcasecmp($subInfo['password'], $subInfo['passconf']) != 0) {
+         $this->form->setError("regpassconf", "* Enter the same password as above");
+      }
+
+      /* Check if password is not alphanumeric */
+      if(!eregi("^([0-9a-z])+$", ($subInfo['password'] = trim($subInfo['password'])))) {
+         $this->form->setError($field, "* Password not alphanumeric");
+      } else { //valid password, encrypt it now (save copy for welcome email)
+         $subpass = $subInfo['password'];
+      	$subInfo['password'] = $this->hashPassword($subInfo['password']);
+      }
+
+      /* Email error checking */
+      $field = "regemail";
+      $subInfo['email'] = stripslashes($subInfo['email']);
+
+      if(!eregi("^([0-9a-zA-Z]+[-._+])*[0-9a-zA-Z]+@([-0-9a-zA-Z]+[.])+[a-zA-Z]{2,6}$", $subInfo['email'])) {
+      	$this->form->setError($field, "* Email not valid");
+      }
+
+      /* Errors exist, have user correct them */
+      if($this->form->num_errors > 0) {
+         return 1;  //Errors with form
+      } else { /* No errors, add the new account to the */
+         /* The first user to register will default to an administrator. */
+         if($this->database->getNumCustomers()) {
+         	if($this->isAdmin()){
+               $usertype = $subInfo['usertype']; //administrator registering new user
+         	} else {
+         		$usertype = CUST; //user registering isn't an admin, restrict to creating customer only
+         	}
+         } else {
+            $usertype = ADMIN; // no users in database yet, create administrator
+         }
+
+         date_default_timezone_set('America/New_York');
+         $subInfo['regtime'] = time();
+         if($usertype == CUST) {
+         	$this->user = new Customer($subInfo);
+         } else if($usertype == TELLER) {
+         	$this->user = new Teller($subInfo, array("hiredate"=>time()));
+         } else if($usertype == ADMIN) {
+            $this->user = new Administrator($subInfo, array("hiredate"=>time()));
+         }
+
+         if($this->user->register()) {
+            if(EMAIL_WELCOME) {
+               $mailer->sendWelcome($subInfo['username'],$subInfo['email'],$subpass);
+            }
+            return 0;  //New user added succesfully
+         } else {
+            return 2;  //Registration attempt failed
+         }
+      }
+!!!135636.php!!!	isAdmin()
+
+      return (get_class($this->user) == ADMIN);
+!!!135764.php!!!	isTeller()
+
+      return (get_class($this->user) == TELLER);
+!!!135892.php!!!	isCustomer()
+
+      return ((get_class($this->user) == CUST) ||
+              (get_class($this->user) == TELLER) ||
+              (get_class($this->user) == ADMIN));
+!!!136020.php!!!	generateRandStr(inout length : )
+
+      $randstr = "";
+      for($i=0; $i<$length; $i++) {
+         $randnum = mt_rand(0,61);
+         if($randnum < 10) { //0-9
+            $randstr .= chr($randnum+48);
+         } else if($randnum < 36) { //uppercase
+            $randstr .= chr($randnum+55);
+         } else { //lowercase
+            $randstr .= chr($randnum+61);
+         }
+      }
+      return $randstr;

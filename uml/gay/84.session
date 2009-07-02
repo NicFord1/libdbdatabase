@@ -1,0 +1,14 @@
+window_sizes 1024 719 231 787 512 82
+diagrams
+  active  classdiagram_ref 128212 // asdf
+    787 563 100 4 628 0
+end
+show_stereotypes
+selected 
+  package_ref 128596 // include
+open
+  deploymentview_ref 128212 // PHP
+  classview_ref 128212 // PHP
+  classview_ref 128468 // admin
+end
+end

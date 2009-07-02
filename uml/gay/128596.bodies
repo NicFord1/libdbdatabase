@@ -1,0 +1,359 @@
+class MySQLDB
+!!!129748.php!!!	__construct()
+
+      /* Make connection to database */
+      $this->connection = mysql_connect(DB_SERVER, DB_USER, DB_PASS) or die(mysql_error());
+      mysql_select_db(DB_NAME, $this->connection) or die(mysql_error());
+
+      /**
+       * Only query database to find out number of Customers when
+       * getNumCustomers() is called for the first time, until then, default
+       * value set.
+       */
+      $this->_numAdmins = -1;
+      $this->_numCustomers = -1;
+
+      if(TRACK_VISITORS) { /* Calculate number of users & guests on site. */
+         $this->calcNumActiveUsers();
+         $this->calcNumActiveGuests();
+      }
+!!!129876.php!!!	confirmUserPass(inout username : , inout password : )
+
+      if(!get_magic_quotes_gpc()) {
+         $username = addslashes($username);
+      }
+
+      /* Verify that user is in database */
+      $q = "SELECT password FROM ".DB_TBL_CUSTOMERS." WHERE username = '$username'";
+      $result = $this->query($q);
+      if(!$result || (mysql_numrows($result) < 1)) {
+         return 1; //Indicates username failure
+      }
+
+      /* Retrieve password from result, strip slashes */
+      $dbarray = mysql_fetch_array($result);
+      $dbarray['password'] = stripslashes($dbarray['password']);
+      $password = stripslashes($password);
+
+      if($password == $dbarray['password']) { /* Validate that password is correct */
+         return 0; //Success! Username and password confirmed
+      } else {
+         return 2; //Indicates password failure
+      }
+!!!130004.php!!!	confirmUserUID(inout username : , inout uid : )
+
+      if(!get_magic_quotes_gpc()) {
+	      $username = addslashes($username);
+      }
+
+      /* Verify that user is in database */
+      $q = "SELECT uid FROM ".DB_TBL_CUSTOMERS." WHERE username = '$username'";
+      $result = $this->query($q);
+      if(!$result || (mysql_numrows($result) < 1)) {
+         return 1; //Indicates username failure
+      }
+
+      /* Retrieve uid from result, strip slashes */
+      $dbarray = mysql_fetch_array($result);
+      $dbarray['uid'] = stripslashes($dbarray['uid']);
+      $uid = stripslashes($uid);
+
+      if($uid == $dbarray['uid']) { /* Validate that uid is correct */
+         return 0; //Success! UID confirmed
+      } else {
+         return 2; //Indicates UID invalid
+      }
+!!!130132.php!!!	confirmUID(inout uid : , inout table : )
+
+      if(!get_magic_quotes_gpc()) {
+         $uid = addslashes($uid);
+         $table = addslashes($table);
+      }
+
+      /* Verify that user is in database */
+      $q = "SELECT * FROM $table WHERE uid = '$uid'";
+      $result = $this->query($q);
+      if(!$result || (mysql_numrows($result) < 1)) {
+         return false; //Indicates uid failure
+      } else {
+         return true; //Success! UID confirmed
+      }
+!!!130260.php!!!	confirmItemID(inout itemID : , inout table : )
+
+      if(!get_magic_quotes_gpc()) {
+         $itemID = addslashes($itemID);
+         $table = addslashes($table);
+      }
+
+      /* Verify that item is in database */
+      $q = "SELECT * FROM $table WHERE itemid = '$itemID'";
+      $result = $this->query($q);
+      if(!$result || (mysql_numrows($result) < 1)) {
+         return false; //Indicates itemID failure
+      } else {
+         return true; //Success! itemID confirmed
+      }
+!!!130388.php!!!	usernameTaken(inout username : )
+
+      if(!get_magic_quotes_gpc()) {
+         $username = addslashes($username);
+      }
+      $q = "SELECT username FROM ".DB_TBL_CUSTOMERS." WHERE username = '$username'";
+      $result = $this->query($q);
+      return (mysql_numrows($result) > 0);
+!!!130516.php!!!	usernameBanned(inout username : )
+
+      if(!get_magic_quotes_gpc()) {
+         $username = addslashes($username);
+      }
+      $q = "SELECT username FROM ".DB_TBL_BANNED_USERS." WHERE username = '$username'";
+      $result = $this->query($q);
+      return (mysql_numrows($result) > 0);
+!!!130644.php!!!	hireTeller(inout uid : , inout hireTime :  = NULL)
+
+      if(!get_magic_quotes_gpc()) {
+         $uid = addslashes($uid);
+         $hireTime = addslashes($hireTime);
+      }
+
+      if(!$hireTime) {
+      	$hireTime = time();
+      }
+
+      if($this->confirmUID($uid, DB_TBL_CUSTOMERS)) { //Existing Customer?
+         if($this->confirmUID($uid, DB_TBL_ADMINS)) { //Check if only Admin
+         	$retval = $this->removeUser($uid, DB_TBL_ADMINS);
+            if($retval) { //wasn't only admin
+            	$q = "INSERT INTO ".DB_TBL_TELLERS." VALUES ('$uid', '$hireTime')";
+               $retval = $this->query($q);
+            }
+         } else { //wasn't an admin
+         	$q = "INSERT INTO ".DB_TBL_TELLERS." VALUES ('$uid', '$hireTime')";
+            $retval = $this->query($q);
+         }
+      } else { //not an existing customer
+         $retval = false;
+      }
+      return $retval;
+!!!130772.php!!!	hireAdministrator(inout uid : , inout hireTime :  = NULL)
+
+      if(!get_magic_quotes_gpc()) {
+         $uid = addslashes($uid);
+         $hireTime = addslashes($hireTime);
+      }
+
+      if(!$hireTime) {
+      	$hireTime = time();
+      }
+
+      if($this->confirmUID($uid, DB_TBL_CUSTOMERS)) { //Existing Customer?
+      	$q = "INSERT INTO ".DB_TBL_ADMINS." VALUES ('$uid', '$hireTime')";
+         $retval = $this->query($q);
+
+         if($retval) { //keep a 'clean' database
+         	$this->removeUser($uid, DB_TBL_TELLERS);
+         }
+      } else {
+      	$retval = false;
+      }
+      return $retval;
+!!!130900.php!!!	removeUser(inout uid : , inout table : )
+
+      if(!get_magic_quotes_gpc()) {
+         $uid = addslashes($uid);
+         $table = addslashes($table);
+      }
+
+   	//Make sure if user is the only Administrator, they aren't removed.
+   	if($table == DB_TBL_ADMINS) {
+         if($this->getNumAdmins() < 2) {
+         	$q = false;
+         } else {
+            $q = "DELETE FROM $table WHERE uid = '$uid'";
+         }
+   	} else if($table == DB_TBL_TELLERS) {
+   		$q = "DELETE FROM $table WHERE uid = '$uid'";
+   	} else if($table == DB_TBL_CUSTOMERS) {
+   		if($this->confirmUID($uid, DB_TBL_ADMINS)) {
+            if($this->getNumAdmins() < 2) {//don't remove if only admin
+            	$q = false;
+            } else { //remove from both customer and admin tables
+               $this->removeUser($uid, DB_TBL_ADMINS);
+            	$q = "DELETE FROM $table WHERE uid = '$uid'";
+            }
+   		} else if($this->confirmUID($uid, DB_TBL_TELLERS)) {
+            $this->removeUser($uid, DB_TBL_TELLERS);
+   			$q = "DELETE FROM $table WHERE uid = '$uid'";
+   		} else {
+   			$q = "DELETE FROM $table WHERE uid = '$uid'";
+   		}
+   	} else {
+   		$q = false;
+   	}
+   	return $this->query($q);
+!!!131028.php!!!	updateUserField(inout uid : , inout table : , inout field : , inout value : )
+
+      if(!get_magic_quotes_gpc()) {
+         $uid = addslashes($uid);
+         $table = addslashes($table);
+         $field = addslashes($field);
+         $value = addslashes($value);
+      }
+
+      $q = "UPDATE ".$table." SET ".$field." = '$value' WHERE uid = '$uid'";
+      return $this->query($q);
+!!!131156.php!!!	updateItemField(inout itemID : , inout table : , inout field : , inout value : )
+
+      if(!get_magic_quotes_gpc()) {
+         $itemID = addslashes($itemID);
+         $table = addslashes($table);
+         $field = addslashes($field);
+         $value = addslashes($value);
+      }
+
+      $q = "UPDATE ".$table." SET ".$field." = '$value' WHERE itemid = '$itemID'";
+      return $this->query($q);
+!!!131284.php!!!	getUID(inout username : )
+
+      if(!get_magic_quotes_gpc()) {
+         $username = addslashes($username);
+      }
+
+      $q = "SELECT uid FROM ".DB_TBL_CUSTOMERS." WHERE username = '$username'";
+      $result = $this->query($q);
+
+      /* Error occurred, return given name by default */
+      if(!$result || (mysql_numrows($result) < 1)) {
+         return NULL;
+      }
+      return mysql_result($result, 0);
+!!!131412.php!!!	getUserInfo(inout uid : , inout table : )
+
+      if(!get_magic_quotes_gpc()) {
+         $uid = addslashes($uid);
+         $table = addslashes($table);
+      }
+
+      $q = "SELECT * FROM $table WHERE uid = '$uid'";
+      $result = $this->query($q);
+
+      if(!$result || (mysql_numrows($result) < 1)) { /* Error occurred, return given name by default */
+         return NULL;
+      }
+      return mysql_fetch_array($result);
+!!!131540.php!!!	getItemInfo(inout itemID : , inout table : )
+
+      if(!get_magic_quotes_gpc()) {
+         $itemID = addslashes($itemID);
+         $table = addslashes($table);
+      }
+
+	   $q = "SELECT * FROM $table WHERE itemid = '$itemID'";
+	   $result = $this->query($q);
+
+	   if(!$result || (mysql_numrows($result) < 1)) { /* Error occurred, return given name by default */
+	      return NULL;
+	   }
+	   return mysql_fetch_array($result);
+!!!131668.php!!!	getNumAdmins()
+
+      if($this->_numAdmins < 0) {
+         $q = "SELECT * FROM ".DB_TBL_ADMINS;
+         $result = $this->query($q);
+         $this->_numAdmins = mysql_numrows($result);
+      }
+      return $this->_numAdmins;
+!!!131796.php!!!	getNumTellers()
+
+      if($this->_numTellers < 0) {
+         $q = "SELECT * FROM ".DB_TBL_TELLERS;
+         $result = $this->query($q);
+         $this->_numTellers = mysql_numrows($result);
+      }
+      return $this->_numTellers;
+!!!131924.php!!!	getNumCustomers()
+
+      if($this->_numCustomers < 0) {
+         $q = "SELECT * FROM ".DB_TBL_CUSTOMERS;
+         $result = $this->query($q);
+         $this->_numCustomers = mysql_numrows($result);
+      }
+      return $this->_numCustomers;
+!!!132052.php!!!	addActiveUser(inout uid : , inout time : )
+
+      if(!get_magic_quotes_gpc()) {
+         $uid = addslashes($uid);
+         $time = addslashes($time);
+      }
+
+      $q = "UPDATE ".DB_TBL_CUSTOMERS." SET lastvisit = '$time' WHERE uid = '$uid'";
+      $this->query($q);
+
+      if(!TRACK_VISITORS) return;
+      $q = "REPLACE INTO ".DB_TBL_ACTIVE_USERS." VALUES ('$uid', '$time')";
+      $this->query($q);
+      $this->calcNumActiveUsers();
+!!!132180.php!!!	removeActiveUser(inout uid : )
+
+      if(!get_magic_quotes_gpc()) {
+         $uid = addslashes($uid);
+      }
+
+      if(!TRACK_VISITORS) return;
+      $q = "DELETE FROM ".DB_TBL_ACTIVE_USERS." WHERE uid = '$uid'";
+      $this->query($q);
+      $this->calcNumActiveUsers();
+!!!132308.php!!!	removeInactiveUsers()
+
+      if(!TRACK_VISITORS) return;
+      $timeout = time()-USER_TIMEOUT*60;
+      $q = "DELETE FROM ".DB_TBL_ACTIVE_USERS." WHERE timestamp < $timeout";
+      $this->query($q);
+      $this->calcNumActiveUsers();
+!!!132436.php!!!	calcNumActiveUsers()
+
+      $q = "SELECT * FROM ".DB_TBL_ACTIVE_USERS;
+      $result = $this->query($q);
+      $this->_numActiveUsers = mysql_numrows($result);
+!!!132564.php!!!	getNumActiveUsers()
+
+		return $this->_numActiveUsers;
+!!!132692.php!!!	addActiveGuest(inout ip : , inout time : )
+
+      if(!get_magic_quotes_gpc()) {
+         $ip = addslashes($ip);
+         $time = addslashes($time);
+      }
+
+      if(!TRACK_VISITORS) return;
+      $q = "REPLACE INTO ".DB_TBL_ACTIVE_GUESTS." VALUES ('$ip', '$time')";
+      $this->query($q);
+      $this->calcNumActiveGuests();
+!!!132820.php!!!	removeActiveGuest(inout ip : )
+
+      if(!get_magic_quotes_gpc()) {
+         $ip = addslashes($ip);
+      }
+
+      if(!TRACK_VISITORS) return;
+      $q = "DELETE FROM ".DB_TBL_ACTIVE_GUESTS." WHERE ip = '$ip'";
+      $this->query($q);
+      $this->calcNumActiveGuests();
+!!!132948.php!!!	removeInactiveGuests()
+
+      if(!TRACK_VISITORS) return;
+      $timeout = time()-GUEST_TIMEOUT*60;
+      $q = "DELETE FROM ".DB_TBL_ACTIVE_GUESTS." WHERE timestamp < $timeout";
+      $this->query($q);
+      $this->calcNumActiveGuests();
+!!!133076.php!!!	calcNumActiveGuests()
+
+      $q = "SELECT * FROM ".DB_TBL_ACTIVE_GUESTS;
+      $result = $this->query($q);
+      $this->_numActiveGuests = mysql_numrows($result);
+!!!133204.php!!!	getNumActiveGuests()
+
+		return $this->_numActiveGuests;
+!!!133332.php!!!	query(inout query : )
+
+      return mysql_query($query, $this->connection);

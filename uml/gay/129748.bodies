@@ -1,0 +1,29 @@
+class Customer
+!!!138196.php!!!	__construct(inout info : array)
+
+      parent::__construct($info);
+!!!138324.php!!!	update(inout info : )
+
+   	$result = parent::update($info);
+      if($result == 0) { //user successfully updated, now update customer specifics
+         //nothing else to update
+      }
+      return $result;
+!!!138452.php!!!	register()
+
+      return parent::register();
+!!!138580.php!!!	updateUserType(inout usertype : int)
+
+   	if($usertype == CUST) {
+   		return CUST; //already a Customer
+   	} else if($usertype == TELLER) {
+   		if($this->database->hireTeller($this->getUID())) {
+   			return TELLER;
+   		}
+   	} else if($usertype == ADMIN) {
+   		if($this->database->hireAdministrator($this->getUID())) {
+   			return ADMIN;
+   		}
+   	} else {
+         return false; //invalid usertype
+   	}

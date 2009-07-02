@@ -1,0 +1,1254 @@
+format 66
+"admin" // PHP::admin
+  revision 1
+  modified_by 84 "DARYL TEWELL"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default show_stereotype_properties default
+  
+  deploymentview 128468 "admin"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+    artifact 129748 "admin"
+      stereotype "source"
+      php_src "<?php
+/**
+ * admin.php
+ *
+ * This is the Admin Center page. Only administrators are allowed to view this page. This page displays the
+ * database table of users and banned users. Admins can choose to delete specific users, delete inactive users,
+ * ban users, edit user accounts, etc.
+ */
+require_once(\"../include/session.php\");
+require_once(\"../include/users.php\");
+
+/**
+ * displayUsers - Displays the users database table in a nicely formatted html table.
+ */
+function displayUsers() {
+   global $database;
+
+   $q = \"SELECT uid,username,regtime,lastvisit FROM \".DB_TBL_CUSTOMERS.\" ORDER BY regtime ASC,username\";
+   $result = $database->query($q);
+
+   /* Error occurred, return given name by default */
+   $num_rows = mysql_numrows($result);
+
+   if(!$result || ($num_rows < 0)) {
+      echo \"Error displaying info\";
+      return;
+   }
+
+   if($num_rows == 0) {
+      echo \"Database table empty\";
+      return;
+   }
+
+   /* Display table contents */
+   echo \"<table id=\\\"users\\\" align=\\\"left\\\" border=\\\"1\\\" cellspacing=\\\"0\\\" cellpadding=\\\"3\\\">\\n\";
+   echo \"<tr>\\n\";
+   echo \"<th>Username</th>\\n\";
+   echo \"<th>User Type</th>\\n\";
+   echo \"<th>Registration Time</th>\\n\";
+   echo \"<th>Last Active</th>\\n\";
+   echo \"<th>Actions</th>\\n\";
+   echo \"</tr>\\n\";
+
+   while($usersinfo = mysql_fetch_array($result, MYSQL_ASSOC)) {
+   	$user = NULL;
+
+      if($database->confirmUID($usersinfo['uid'], DB_TBL_ADMINS)) {
+         $qry = \"SELECT * FROM \".DB_TBL_ADMINS.\" WHERE uid='\".$usersinfo['uid'].\"'\";
+         $qresult = $database->query($qry);
+         $empsinfo = mysql_fetch_array($qresult, MYSQL_ASSOC);
+      	$user = new Administrator($usersinfo);
+      } else if ($database->confirmUID($usersinfo['uid'], DB_TBL_TELLERS)) {
+         $qry = \"SELECT * FROM \".DB_TBL_TELLERS.\" WHERE uid='\".$usersinfo['uid'].\"'\";
+         $qresult = $database->query($qry);
+         $empsinfo = mysql_fetch_array($qresult, MYSQL_ASSOC);
+      	$user = new Teller($usersinfo);
+      } else {
+      	$user = new Customer($usersinfo);
+      }
+
+      date_default_timezone_set('EST');
+      $rtime = date(\"r\", $user->getRegistrationTime());
+      $lvtime = $user->getLastVisit();
+      if($lvtime) {
+         $lvtime = date(\"r\", $lvtime);
+      } else {
+         $lvtime = \"Never\";
+      }
+
+		echo \"<tr><td>\".$user->username.\"</td><td>\".get_class($user).\"</td>\"
+		    .\"<td>\".$rtime.\"</td><td>\".$lvtime.\"</td>\"
+		    .\"<td><a href=\\\"userinfo.php?uid=\".$user->getUID().\"\\\">\"
+          .\"<img class=\\\"clearimg\\\" src=\\\"\".SITE_BASE_URL.\"/img/user_edit.png\\\" alt=\\\"Edit\\\" /></a> \"
+
+		    .\"<form action=\\\"adminprocess.php\\\" method=\\\"POST\\\">\"
+			 .\"<input type=\\\"hidden\\\" name=\\\"deluser\\\" value=\\\"\".$user->getUID().\"\\\" />\"
+			 .\"<input type=\\\"hidden\\\" name=\\\"subdeluser\\\" value=\\\"1\\\" />\"
+			 .\"<input type=\\\"image\\\" src=\\\"\".SITE_BASE_URL.\"/img/user_delete.png\\\" alt=\\\"Delete\\\">\"
+			 .\"</form>\"
+
+			 .\"<form action=\\\"adminprocess.php\\\" method=\\\"POST\\\">\"
+			 .\"<input type=\\\"hidden\\\" name=\\\"banuser\\\" value=\\\"\".$user->username.\"\\\" />\"
+			 .\"<input type=\\\"hidden\\\" name=\\\"subbanuser\\\" value=\\\"1\\\" />\"
+			 .\"<input type=\\\"image\\\" src=\\\"\".SITE_BASE_URL.\"/img/user_ban.png\\\" alt=\\\"Ban\\\" />\"
+			 .\"</form>\"
+
+			 .\"</td></tr>\\n\";
+   }
+   echo \"</table><br>\\n\";
+}
+
+/**
+ * displayBannedUsers - Displays the banned users database table in a nicely formatted html table.
+ */
+function displayBannedUsers() {
+   global $database;
+
+   $q = \"SELECT username,timestamp FROM \".DB_TBL_BANNED_USERS.\" ORDER BY username\";
+   $result = $database->query($q);
+
+   /* Error occurred, return given name by default */
+   $num_rows = mysql_numrows($result);
+
+   if(!$result || ($num_rows < 0)) {
+      echo \"Error displaying info\";
+      return;
+   }
+   if($num_rows == 0) {
+      echo \"Database table empty\";
+      return;
+   }
+
+   /* Display table contents */
+   echo \"<table id=\\\"banned\\\" align=\\\"left\\\" border=\\\"1\\\" cellspacing=\\\"0\\\" cellpadding=\\\"3\\\">\\n\";
+   echo \"<tr>\\n\";
+   echo \"<th>Username</th>\\n\";
+   echo \"<th>Time Banned</th>\\n\";
+   echo \"<th>Actions</th>\\n\";
+   echo \"</tr>\\n\";
+
+   while($usersinfo = mysql_fetch_array($result, MYSQL_ASSOC)) {
+      $uname = $usersinfo['username'];
+      date_default_timezone_set('EST');
+      $time  = date(\"r\", $usersinfo['timestamp']);
+
+      echo \"<tr><td>$uname</td><td>$time</td><td>\"
+          .\"<form action=\\\"adminprocess.php\\\" method=\\\"POST\\\">\"
+          .\"<input type=\\\"hidden\\\" name=\\\"delbanuser\\\" value=\\\"$uname\\\" />\"
+          .\"<input type=\\\"hidden\\\" name=\\\"subdelbanned\\\" value=\\\"1\\\" />\"
+          .\"<input type=\\\"image\\\" src=\\\"\".SITE_BASE_URL.\"/img/user_delete.png\\\" alt=\\\"Delete\\\">\"
+          .\"</form>\"
+          .\"</td></tr>\\n\";
+   }
+   echo \"</table><br />\\n\";
+}
+
+
+if(!$session->isAdmin()) { /* User not an administrator, redirect to front page automatically. */
+   header(\"Location: \".SITE_BASE_URL.\"/index.php\");
+} else { /* Administrator is viewing page, so display all forms. */
+?>
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">
+ <head>
+  <title>LibDBDatabase</title>
+  <meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\" />
+  <meta name=\"description\" content=\"LibDBDatabase: Library Database\" />
+  <meta name=\"keywords\" content=\"library,database\" />
+  <meta name=\"author\" content=\"LibDBDatabase / Original design: Andreas Viklund - http://andreasviklund.com/\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL?>/css/andreas06.css\" type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL?>/css/slide.css\"  type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL?>/css/validate.css\"  type=\"text/css\" media=\"screen,projection\" />
+
+  <!-- javascripts -->
+  <!-- PNG FIX for IE6 -->
+  <!-- http://24ways.org/2007/supersleight-transparent-png-in-ie6 -->
+  <!--[if lte IE 6]>
+   <script type=\"text/javascript\" src=\"<?php echo SITE_BASE_URL?>/js/pngfix/supersleight-min.js\"></script>
+  <![endif]-->
+
+  <!-- jQuery -->
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.validate.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.metadata.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.maskedinput.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.tablehover.min.js\" type=\"text/javascript\"></script>
+
+  <script type=\"text/javascript\">
+     $(document).ready(function() {
+        $('#users').tableHover();
+        $('#banned').tableHover();
+     });
+  </script>
+
+
+  <!-- Sliding effect -->
+  <script src=\"<?php echo SITE_BASE_URL?>/js/slide.js\" type=\"text/javascript\"></script>
+ </head>
+
+ <body>
+  <?php include_once(\"../include/userpanel.php\"); ?>
+
+  <div id=\"container\">
+
+   <a id=\"top\"></a>
+   <p class=\"hide\">
+    Skip to:
+    <a href=\"#menu\">site menu</a>
+    | <a href=\"#sectionmenu\">section menu</a>
+    | <a href=\"#main\">main content</a>
+   </p>
+
+   <div id=\"sitename\">
+    <h1>LibDBDatabase</h1>
+    <span>Library Database System</span>
+    <a id=\"menu\"></a>
+   </div>
+
+   <?php include_once(\"../include/topmenu.php\"); ?>
+
+   <div id=\"wrap1\">
+    <div id=\"wrap2\">
+
+     <div id=\"topbox\">
+      <strong>
+       <span class=\"hide\">Currently viewing: </span>
+       <a href=\"<?php echo SITE_BASE_URL?>/index.php\">LibDBDatabase</a> &raquo; <a href=\"<?php echo $_SERVER['PHP_SELF']?>\">Admin Center</a>
+      </strong>
+     </div>
+
+     <div id=\"leftside\">
+      <?php include_once(\"../include/sidemenu.php\"); ?>
+     </div>
+
+     <a id=\"main\"></a>
+     <div id=\"contentalt\">
+      <h1>Admin Center</h1>
+      <img src=\"<?php echo SITE_BASE_URL?>/img/gravatar-admin.png\" height=\"80\" width=\"80\" alt=\"Admin Gravatar\" />
+
+      <font size=\"5\" color=\"#ff0000\">
+       <b>::::::::::::::::::::::::::::::::::::::::::::</b>
+      </font>
+      <br /><br />
+<?php
+if($session->form->num_errors > 0) {
+   echo \"      <font size=\\\"4\\\" color=\\\"#ff0000\\\">\"
+       .\"!*** Error with request, please fix ***!</font><br /><br />\";
+}
+?>
+
+      <table align=\"left\" border=\"0\" cellspacing=\"5\" cellpadding=\"5\">
+       <tr>
+        <td>
+<?php
+/**
+ * Display Users Table
+ */
+?>
+         <h3>Users Table Contents:</h3>
+         <?php echo $session->form->error(\"deluser\");?>
+         <?php echo $session->form->error(\"banuser\");?>
+         <?php echo displayUsers();?>
+        </td>
+       </tr>
+       <tr>
+        <td>
+         <br />
+<?php
+/**
+ * Display Banned Users Table
+ */
+?>
+         <h3>Banned Users Table Contents:</h3>
+         <?php echo displayBannedUsers();?>
+        </td>
+       </tr>
+       <tr>
+        <td>
+         <hr />
+        </td>
+       </tr>
+      </table>
+
+      <p class=\"hide\"><a href=\"#top\">Back to top</a></p>
+     </div>
+    </div>
+
+    <?php include_once(\"../include/footer.php\"); ?>
+
+   </div>
+  </div>
+ </body>
+</html>
+<?php } ?>"
+      associated_classes
+      end
+    end
+
+    artifact 129876 "adminprocess"
+      stereotype "source"
+      php_src "<?php
+/**
+ * adminprocess.php
+ *
+ * The adminprocess class is meant to simplify the task of processing
+ * admin submitted forms from the admin center, these deal with
+ * member system adjustments.
+ */
+include(\"../include/session.php\");
+${definition}
+
+;
+
+/* Initialize process */
+$adminprocess = new AdminProcess;
+?>"
+      associated_classes
+	class_ref 128468 // AdminProcess
+      end
+    end
+
+    artifact 130004 "userhistory"
+      stereotype "source"
+      php_src "<?
+/**
+ * userhistory.php
+ *
+ * This is the User Center page. Only administrators & tellers are allowed to view this page while logged in.
+ * This page allows for the creation of new user accounts.  Only admins can create new admins & tellers.  All other users
+ * can only create regular customers.
+ */
+require_once(\"../include/session.php\");
+require_once(\"../include/database.php\");
+require_once(\"../include/db-config.php\");
+require_once(\"../include/config.php\");
+
+if(!$session->isAdmin()) {
+   header(\"Location: \".SITE_BASE_URL.\"/index.php\");
+}
+
+/**
+ * displayHistory - Displays the borrowed items database table in a nicely
+ * formatted html table filtered for user of course.
+ */
+function displayHistory() {
+   global $session, $database;
+
+   if(isset($_GET['uid']) && !empty($_GET['uid'])) {
+   	$uid = trim($_GET['uid']);
+      $q = \"SELECT * FROM \".DB_TBL_PRFX.\"borroweditems WHERE uid='\".$uid.\"' ORDER BY histnum ASC\";
+      $user = $session->database->getUserInfo($uid, DB_TBL_CUSTOMERS);
+      if($user) {
+      	echo \"<h1>\".$user['username'].\"'s History</h1>\\n\";
+      } else {
+      	echo \"<h1>Borrowed Items History</h1>\\n\";
+      }
+   } else {
+   	echo \"<h1>Borrowed Items History</h1>\\n\";
+      $q = \"SELECT * FROM \".DB_TBL_PRFX.\"borroweditems ORDER BY uid ASC, histnum\";
+   }
+
+   $result = $database->query($q);
+
+   /* Error occurred, return given name by default */
+   $num_rows = mysql_numrows($result);
+
+   if(!$result || ($num_rows < 0)) {
+      echo \"Error displaying info\";
+      return;
+   }
+
+   if($num_rows == 0) {
+      echo \"Database table empty\";
+      return;
+   }
+
+   /* Display table contents */
+   echo \"<table id=\\\"history\\\" align=\\\"center\\\" border=\\\"1\\\" cellspacing=\\\"0\\\" cellpadding=\\\"3\\\">\\n\";
+   echo \"<tr>\\n\";
+   if(!isset($user)) {
+      echo \"<th>User</th>\\n\";
+   }
+   echo \"<th>History Number</th>\\n\";
+   echo \"<th>Item ID</th>\\n\";
+   echo \"<th>Title</th>\\n\";
+   echo \"<th>Due Date</th>\";
+   echo \"<th>Returned</th>\\n\";
+   echo \"</tr>\\n\";
+
+   while($item = mysql_fetch_array($result, MYSQL_ASSOC)) {
+      $itemqry = \"SELECT * FROM \".DB_TBL_PRFX.\"items WHERE itemid='\".$item['itemid'].\"'\";
+      $itemqresult = $database->query($itemqry);
+      $iteminfo = mysql_fetch_array($itemqresult, MYSQL_ASSOC);
+
+      if($iteminfo['itemtype'] == \"BOOK\") {
+         $qry = \"SELECT * FROM \".DB_TBL_PRFX.\"books WHERE itemid='\".$item['itemid'].\"'\";
+         $qresult = $database->query($qry);
+         $itemtypeinfo = mysql_fetch_array($qresult, MYSQL_ASSOC);
+      } else if ($iteminfo['itemtype'] == \"PERIODICAL\") {
+         $qry = \"SELECT * FROM \".DB_TBL_PRFX.\"periodicals WHERE itemid='\".$item['itemid'].\"'\";
+         $qresult = $database->query($qry);
+         $itemtypeinfo = mysql_fetch_array($qresult, MYSQL_ASSOC);
+      } else if ($iteminfo['itemtype'] == \"DVD\") {
+         $qry = \"SELECT * FROM \".DB_TBL_PRFX.\"dvds WHERE itemid='\".$item['itemid'].\"'\";
+         $qresult = $database->query($qry);
+         $itemtypeinfo = mysql_fetch_array($qresult, MYSQL_ASSOC);
+      } else if ($iteminfo['itemtype'] == \"CD\") {
+         $qry = \"SELECT * FROM \".DB_TBL_PRFX.\"cds WHERE itemid='\".$item['itemid'].\"'\";
+         $qresult = $database->query($qry);
+         $itemtypeinfo = mysql_fetch_array($qresult, MYSQL_ASSOC);
+      } else {
+         $itemtypeinfo = NULL;
+      }
+
+      echo \"<tr>\";
+      if(!isset($user)) {
+         $user = $database->getUserInfo($item['uid'], DB_TBL_CUSTOMERS);
+      	echo \"<td><a href=\\\"\".SITE_BASE_URL.\"/admin/userhistory.php?uid=\".$item['uid'].\"\\\">\".$user['username'].\"</a></td>\\n\";
+         unset($user);
+      }
+      echo \"<td>\".$item['histnum'].\"</td>\\n\";
+      echo \"<td>\".$item['itemid'].\"</td>\\n\";
+      echo \"<td>\".$itemtypeinfo['title'].\"</td>\\n\";
+      date_default_timezone_set('America/New_York');
+      echo \"<td>\".date('l, F jS Y', $item['duedate']).\"</td>\\n\";
+      if($item['returned']) {
+         echo \"<td>Yes</td>\\n\";
+      } else {
+         echo \"<td>No</td>\\n\";
+      }
+      echo \"</tr>\\n\";
+   }
+   echo \"</table><br /><br />\\n\";
+}
+?>
+
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">
+ <head>
+  <title>LibDBDatabase</title>
+  <meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\" />
+  <meta name=\"description\" content=\"LibDBDatabase: Library Database\" />
+  <meta name=\"keywords\" content=\"library,database\" />
+  <meta name=\"author\" content=\"LibDBDatabase / Original design: Andreas Viklund - http://andreasviklund.com/\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL?>/css/andreas06.css\" type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL?>/css/slide.css\"  type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL?>/css/validate.css\"  type=\"text/css\" media=\"screen,projection\" />
+
+  <!-- javascripts -->
+  <!-- PNG FIX for IE6 -->
+  <!-- http://24ways.org/2007/supersleight-transparent-png-in-ie6 -->
+  <!--[if lte IE 6]>
+   <script type=\"text/javascript\" src=\"<?php echo SITE_BASE_URL?>/js/pngfix/supersleight-min.js\"></script>
+  <![endif]-->
+
+  <!-- jQuery -->
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery-1.3.2.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.validate.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL?>/js/jquery.metadata.js\" type=\"text/javascript\"></script>
+
+  <!-- Sliding effect -->
+  <script src=\"<?php echo SITE_BASE_URL?>/js/slide.js\" type=\"text/javascript\"></script>
+
+ </head>
+
+ <body>
+  <?php include_once(\"../include/userpanel.php\"); ?>
+
+  <div id=\"container\">
+
+   <a id=\"top\"></a>
+   <p class=\"hide\">
+    Skip to:
+    <a href=\"#menu\">site menu</a>
+    | <a href=\"#sectionmenu\">section menu</a>
+    | <a href=\"#main\">main content</a>
+   </p>
+
+   <div id=\"sitename\">
+    <h1>LibDBDatabase</h1>
+    <span>Library Database System</span>
+    <a id=\"menu\"></a>
+   </div>
+
+   <?php include_once(\"../include/topmenu.php\"); ?>
+
+   <div id=\"wrap1\">
+    <div id=\"wrap2\">
+
+     <div id=\"topbox\">
+      <strong>
+       <span class=\"hide\">Currently viewing: </span>
+       <a href=\"<?php echo SITE_BASE_URL?>/index.php\">LibDBDatabase</a> &raquo; <a href=\"<?php echo $_SERVER['PHP_SELF']?>\">History Center</a>
+      </strong>
+     </div>
+
+     <div id=\"leftside\">
+      <?php include_once(\"../include/sidemenu.php\"); ?>
+     </div>
+
+     <a id=\"main\"></a>
+     <div id=\"contentalt\">
+      <h1>History Center</h1>
+      <img src=\"<?php echo SITE_BASE_URL?>/img/gravatar-history.png\" height=\"80\" width=\"80\" alt=\"History Gravatar\" />
+
+      <font size=\"5\" color=\"#ff0000\">
+       <b>::::::::::::::::::::::::::::::::::::::::::::</b>
+      </font>
+      <br /><br />
+
+      <?php displayHistory(); ?>
+
+      <p class=\"hide\"><a href=\"#top\">Back to top</a></p>
+     </div>
+    </div>
+
+    <?php include_once(\"../include/footer.php\"); ?>
+
+   </div>
+  </div>
+ </body>
+</html>
+"
+      associated_classes
+      end
+    end
+
+    artifact 130132 "userinfo"
+      stereotype "source"
+      php_src "<?php
+/**
+ * userinfo.php
+ *
+ * This is the User Center page. Only administrators & tellers are allowed to view this page while logged in.
+ * This page allows for the creation of new user accounts.  Only admins can create new admins & tellers.  All
+ * other users can only create regular customers.
+ */
+require_once(\"../include/session.php\");
+
+if(!$session->logged_in) {
+   header(\"Location: \".SITE_BASE_URL.\"/index.php\");
+}
+?>
+
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">
+ <head>
+  <title>LibDBDatabase</title>
+  <meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\" />
+  <meta name=\"description\" content=\"LibDBDatabase: Library Database\" />
+  <meta name=\"keywords\" content=\"library,database\" />
+  <meta name=\"author\" content=\"LibDBDatabase / Original design: Andreas Viklund - http://andreasviklund.com/\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL; ?>/css/andreas06.css\" type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL; ?>/css/slide.css\"  type=\"text/css\" media=\"screen,projection\" />
+  <link rel=\"stylesheet\" href=\"<?php echo SITE_BASE_URL; ?>/css/validate.css\"  type=\"text/css\" media=\"screen,projection\" />
+
+  <!-- javascripts -->
+  <!-- PNG FIX for IE6 -->
+  <!-- http://24ways.org/2007/supersleight-transparent-png-in-ie6 -->
+  <!--[if lte IE 6]>
+   <script type=\"text/javascript\" src=\"<?php echo SITE_BASE_URL; ?>/js/pngfix/supersleight-min.js\"></script>
+  <![endif]-->
+
+  <!-- jQuery -->
+  <script src=\"<?php echo SITE_BASE_URL; ?>/js/jquery.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL; ?>/js/jquery.validate.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL; ?>/js/jquery.metadata.min.js\" type=\"text/javascript\"></script>
+  <script src=\"<?php echo SITE_BASE_URL; ?>/js/jquery.maskedinput.min.js\" type=\"text/javascript\"></script>
+
+  <script type=\"text/javascript\">
+     $.metadata.setType(\"attr\", \"validate\");
+
+     $(document).ready(function() {
+     	  $(\"#edzip\").mask(\"99999?-9999\");
+        $(\"#edphone\").mask(\"(999) 999-9999\");
+        // validate edit form on keyup and submit
+        $(\"#edituser\").validate({
+           rules: {
+              edemail: {
+                 required: true,
+                 email: true
+              },
+              edbirthmonth: {
+                 required: true
+              },
+              edbirthday: {
+                 required: true
+              },
+              edbirthyear: {
+                 required: true
+              }
+           },
+           messages: {
+              edemail: \"Please enter a valid email address\",
+              edbirthmonth: \"Please select a birth month\",
+              edbirthday: \"Please select a birth day\",
+              edbirthyear: \"Please select a birth year\"
+           }
+        });
+     });
+</script>
+
+
+  <!-- Sliding effect -->
+  <script src=\"<?php echo SITE_BASE_URL; ?>/js/slide.js\" type=\"text/javascript\"></script>
+
+ </head>
+
+ <body>
+  <?php include_once(\"../include/userpanel.php\"); ?>
+
+  <div id=\"container\">
+
+   <a id=\"top\"></a>
+   <p class=\"hide\">
+    Skip to:
+    <a href=\"#menu\">site menu</a>
+    | <a href=\"#sectionmenu\">section menu</a>
+    | <a href=\"#main\">main content</a>
+   </p>
+
+   <div id=\"sitename\">
+    <h1>LibDBDatabase</h1>
+    <span>Library Database System</span>
+    <a id=\"menu\"></a>
+   </div>
+
+   <?php include_once(\"../include/topmenu.php\"); ?>
+
+   <div id=\"wrap1\">
+    <div id=\"wrap2\">
+
+     <div id=\"topbox\">
+      <strong>
+       <span class=\"hide\">Currently viewing: </span>
+       <a href=\"<?php echo SITE_BASE_URL; ?>/index.php\">LibDBDatabase</a> &raquo;
+       <a href=\"<?php echo SITE_BASE_URL; ?>/admin/admin.php\">Admin Center</a> &raquo;
+       <a href=\"<?php echo $_SERVER['PHP_SELF']; ?>?uid=<?php echo $_GET['uid']; ?>\">User Center</a>
+      </strong>
+     </div>
+
+     <div id=\"leftside\">
+      <?php include_once(\"../include/sidemenu.php\"); ?>
+     </div>
+
+     <a id=\"main\"></a>
+     <div id=\"contentalt\">
+      <h1>User Center</h1>
+      <img src=\"<?php echo SITE_BASE_URL; ?>/img/gravatar-edituser.png\" height=\"80\" width=\"80\" alt=\"Edit User Gravatar\" />
+
+      <font size=\"5\" color=\"#ff0000\">
+       <b>::::::::::::::::::::::::::::::::::::::::::::</b>
+      </font>
+      <br /><br />
+<?php
+   if(!isset($_GET['uid']) && !isset($_SESSION['edituser'])) {
+      echo \"<font size=\\\"2\\\" color=\\\"#ff0000\\\">Target user not identified.</font>\\n\";
+   } else if($_GET['uid'] && !$database->confirmUID($_GET['uid'], DB_TBL_CUSTOMERS)) {
+	  echo \"<font size=\\\"2\\\" color=\\\"#ff0000\\\">Target user does not exist.</font>\\n\";
+   } else {
+      if($_GET['uid']) {
+         $subuserinfo = $database->getUserInfo($_GET['uid'], DB_TBL_CUSTOMERS);
+      } else {
+         $subuserinfo = $database->getUserInfo($session->form->value(\"eduid\"), DB_TBL_CUSTOMERS);
+      }
+
+      if($database->confirmUID($subuserinfo['uid'], DB_TBL_TELLERS)) {
+         $subempinfo = $database->getUserInfo($subuserinfo['uid'], DB_TBL_TELLERS);
+         $subuserinfo['usertype'] = TELLER;
+      } else if($database->confirmUID($subuserinfo['uid'], DB_TBL_ADMINS)) {
+         $subempinfo = $database->getUserInfo($subuserinfo['uid'], DB_TBL_ADMINS);
+         $subuserinfo['usertype'] = ADMIN;
+	  }
+
+      if($session->form->num_errors > 0) {
+         echo \"<font size=\\\"2\\\" color=\\\"#ff0000\\\">\".$session->form->num_errors.\" error(s) found</font>\\n\";
+      }
+
+      /* The user has submitted form without errors and user's account has been updated. */
+      if(isset($_SESSION['edituser'])) {
+         unset($_SESSION['edituser']);
+
+         echo \"<h1>User Account Edit Success!</h1>\";
+         echo \"<p><b>\".$subuserinfo['username'].\"</b>'s account has been successfully updated.</p>\";
+      }
+?>
+      <h1>Update <?php echo $subuserinfo['username'];?>'s Account</h1>
+      <form action=\"adminprocess.php\" method=\"POST\" id=\"edituser\">
+       <input type=\"hidden\" name=\"uid\" value=\"<?php echo $subuserinfo['uid'];?>\" />
+       <input type=\"hidden\" name=\"username\" value=\"<?php echo $subuserinfo['username'];?>\" />
+
+<?php
+      if(isset($subempinfo)) {
+?>
+       <input type=\"hidden\" name=\"edhiredate\" value=\"<?php
+         if($session->form->value(\"edhiredate\") == \"\") {
+            echo $subempinfo['hiredate'];
+         } else {
+            echo $session->form->value(\"edhiredate\");
+         }
+?>\" />
+<?php
+      }
+?>
+
+       <table align=\"left\" border=\"0\" cellspacing=\"0\" cellpadding=\"3\">
+        <tr>
+         <td>
+          <label for=\"newpass\" class=\"grey\">New Password:</label>
+         </td>
+         <td>
+          <input type=\"password\" name=\"newpass\" maxlength=\"30\" />
+         </td>
+         <td><?php echo $session->form->error(\"newpass\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"newpassconf\" class=\"grey\">Confirm New Password:</label>
+         </td>
+         <td>
+          <input type=\"password\" name=\"newpassconf\" maxlength=\"30\" />
+         </td>
+         <td><?php echo $session->form->error(\"newpassconf\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"edemail\" class=\"grey required\">Email:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" name=\"edemail\" maxlength=\"96\" value=\"<?php
+      if($session->form->value(\"edemail\") == \"\") {
+         echo $subuserinfo['email'];
+      } else {
+         echo $session->form->value(\"edemail\");
+      }
+?>\" />
+         </td>
+         <td><?php echo $session->form->error(\"edemail\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"edfname\" class=\"grey\">First Name:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" name=\"edfname\" maxlength=\"50\" value=\"<?php
+      if($session->form->value(\"edfname\") == \"\") {
+         echo $subuserinfo['firstname'];
+      } else {
+         echo $session->form->value(\"edfname\");
+      }
+?>\" />
+         </td>
+         <td><?php echo $session->form->error(\"edfname\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"edlname\" class=\"grey\">Last Name:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" name=\"edlname\" maxlength=\"50\" value=\"<?php
+      if($session->form->value(\"edlname\") == \"\") {
+         echo $subuserinfo['lastname'];
+      } else {
+         echo $session->form->value(\"edlname\");
+      }
+?>\" />
+         </td>
+         <td><?php echo $session->form->error(\"edlname\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label class=\"grey required\">Birthdate:</label>
+<?php
+      if($session->form->value(\"edbirthmonth\") == \"\") {
+         $subbirthmonth = date(\"n\", $subuserinfo['birthdate']);
+      } else {
+         $subbirthmonth = $session->form->value(\"edbirthmonth\");
+      }
+      if($session->form->value(\"edbirthday\") == \"\") {
+         $subbirthday = date(\"j\", $subuserinfo['birthdate']);
+      } else {
+         $subbirthday = $session->form->value(\"edbirthday\");
+      }
+      if($session->form->value(\"edbirthyear\") == \"\") {
+         $subbirthyear = date(\"o\", $subuserinfo['birthdate']);
+      } else {
+         $subbirthyear = $session->form->value(\"edbirthyear\");
+      }
+?>
+         </td>
+         <td>
+          <table>
+           <tr>
+            <td>
+             <select name=\"edbirthmonth\">
+              <option value=\"\"></option>
+              <option value=\"1\"<?php echo ($subbirthmonth==1 ? ' selected' : '')?>>January</option>
+              <option value=\"2\"<?php echo ($subbirthmonth==2 ? ' selected' : '')?>>February</option>
+              <option value=\"3\"<?php echo ($subbirthmonth==3 ? ' selected' : '')?>>March</option>
+              <option value=\"4\"<?php echo ($subbirthmonth==4 ? ' selected' : '')?>>April</option>
+              <option value=\"5\"<?php echo ($subbirthmonth==5 ? ' selected' : '')?>>May</option>
+              <option value=\"6\"<?php echo ($subbirthmonth==6 ? ' selected' : '')?>>June</option>
+              <option value=\"7\"<?php echo ($subbirthmonth==7 ? ' selected' : '')?>>July</option>
+              <option value=\"8\"<?php echo ($subbirthmonth==8 ? ' selected' : '')?>>August</option>
+              <option value=\"9\"<?php echo ($subbirthmonth==9 ? ' selected' : '')?>>September</option>
+              <option value=\"10\"<?php echo ($subbirthmonth==10 ? ' selected' : '')?>>October</option>
+              <option value=\"11\"<?php echo ($subbirthmonth==11 ? ' selected' : '')?>>November</option>
+              <option value=\"12\"<?php echo ($subbirthmonth==12 ? ' selected' : '')?>>December</option>
+             </select>
+
+             <select name=\"edbirthday\">
+              <option value=\"\"></option>
+<?php
+         for ($i = 1; $i <= 31; $i++) {
+            echo \"<option value='$i'\".($subbirthday==$i ? ' selected' : '').\">$i</option>\";
+         }
+?>
+             </select>
+
+             <select name=\"edbirthyear\">
+              <option value=\"\"></option>
+<?php
+         for ($i = date(\"Y\"); $i >= date(\"Y\")-120; $i--) {
+            echo \"<option value='$i'\".($subbirthyear==$i ? ' selected' : '').\">$i</option>\";
+         }
+?>
+             </select>
+            </td>
+           </tr>
+          </table>
+         </td>
+         <td><?php echo $session->form->error(\"edbirth\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"edgender\" class=\"grey\">Gender:</label>
+         </td>
+         <td>
+          <label for=\"male\"><input type=\"radio\" name=\"edgender\" id=\"male\" value=\"M\"
+<?php
+         if($session->form->value(\"edgender\") == \"\") {
+            if($subuserinfo['gender'] == \"M\") {
+               echo \"checked \";
+            }
+         } else {
+            if($session->form->value(\"edgender\") == \"M\") {
+               echo \"checked \";
+            }
+         }
+?>/>Male</label>
+          <label for=\"female\"><input type=\"radio\" name=\"edgender\" id=\"female\" value=\"F\" <?php
+         if($session->form->value(\"edgender\") == \"\") {
+            if($subuserinfo['gender'] == \"F\") {
+               echo \"checked \";
+            }
+         } else {
+            if($session->form->value(\"edgender\") == \"F\") {
+               echo \"checked \";
+            }
+         }
+?>/>Female</label>
+         </td>
+         <td><?php echo $session->form->error(\"edgender\")?></td>
+        </tr>
+
+        <tr><td colspan=\"2\">Address:</td></tr>
+        <tr>
+         <td>
+          <label for=\"edaddrline1\" class=\"grey\">Line 1:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" name=\"edaddrline1\" maxlength=\"80\" value=\"<?php
+         if($session->form->value(\"edaddrline1\") == \"\") {
+            echo $subuserinfo['addrline1'];
+         } else {
+            echo $session->form->value(\"edaddrline1\");
+         }
+?>\" />
+         </td>
+         <td><?php echo $session->form->error(\"edaddrline1\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"edaddrline2\" class=\"grey\">Line 2:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" name=\"edaddrline2\" maxlength=\"80\" value=\"<?php
+         if($session->form->value(\"edaddrline2\") == \"\") {
+            echo $subuserinfo['addrline2'];
+         } else {
+            echo $session->form->value(\"edaddrline2\");
+         }
+?>\" />
+         </td>
+         <td><?php echo $session->form->error(\"edaddrline2\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"edcity\" class=\"grey\">City:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" name=\"edcity\" maxlength=\"40\" value=\"<?php
+         if($session->form->value(\"edcity\") == \"\") {
+            echo $subuserinfo['city'];
+         } else {
+            echo $session->form->value(\"edcity\");
+         }
+?>\" />
+         </td>
+         <td><?php echo $session->form->error(\"edcity\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"edstate\" class=\"grey\">State:</label>
+         </td>
+         <td>
+          <select name=\"edstate\">
+           <option value=\"\">Select a State:</option>
+           <option value=\"AL\"<?php if($session->form->value(\"edstate\") == \"AL\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"AL\") echo \" selected\";?>>Alabama</option>
+           <option value=\"AK\"<?php if($session->form->value(\"edstate\") == \"AK\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"AK\") echo \" selected\";?>>Alaska</option>
+           <option value=\"AZ\"<?php if($session->form->value(\"edstate\") == \"AZ\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"AZ\") echo \" selected\";?>>Arizona</option>
+           <option value=\"AR\"<?php if($session->form->value(\"edstate\") == \"AR\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"AR\") echo \" selected\";?>>Arkansas</option>
+           <option value=\"CA\"<?php if($session->form->value(\"edstate\") == \"CA\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"CA\") echo \" selected\";?>>California</option>
+           <option value=\"CO\"<?php if($session->form->value(\"edstate\") == \"CO\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"CO\") echo \" selected\";?>>Colorado</option>
+           <option value=\"CT\"<?php if($session->form->value(\"edstate\") == \"CT\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"CT\") echo \" selected\";?>>Connecticut</option>
+           <option value=\"DC\"<?php if($session->form->value(\"edstate\") == \"DC\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"DC\") echo \" selected\";?>>District of Columbia</option>
+           <option value=\"DE\"<?php if($session->form->value(\"edstate\") == \"DE\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"DE\") echo \" selected\";?>>Delaware</option>
+           <option value=\"FL\"<?php if($session->form->value(\"edstate\") == \"FL\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"FL\") echo \" selected\";?>>Florida</option>
+           <option value=\"GA\"<?php if($session->form->value(\"edstate\") == \"GA\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"GA\") echo \" selected\";?>>Georgia</option>
+           <option value=\"HI\"<?php if($session->form->value(\"edstate\") == \"HI\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"HI\") echo \" selected\";?>>Hawaii</option>
+           <option value=\"ID\"<?php if($session->form->value(\"edstate\") == \"ID\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"ID\") echo \" selected\";?>>Idaho</option>
+           <option value=\"IL\"<?php if($session->form->value(\"edstate\") == \"IL\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"IL\") echo \" selected\";?>>Illinois</option>
+           <option value=\"IN\"<?php if($session->form->value(\"edstate\") == \"IN\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"IN\") echo \" selected\";?>>Indiana</option>
+           <option value=\"IA\"<?php if($session->form->value(\"edstate\") == \"IA\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"IA\") echo \" selected\";?>>Iowa</option>
+           <option value=\"KS\"<?php if($session->form->value(\"edstate\") == \"KS\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"KS\") echo \" selected\";?>>Kansas</option>
+           <option value=\"KY\"<?php if($session->form->value(\"edstate\") == \"KY\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"KY\") echo \" selected\";?>>Kentucky</option>
+           <option value=\"LA\"<?php if($session->form->value(\"edstate\") == \"LA\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"LA\") echo \" selected\";?>>Louisiana</option>
+           <option value=\"ME\"<?php if($session->form->value(\"edstate\") == \"ME\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"ME\") echo \" selected\";?>>Maine</option>
+           <option value=\"MD\"<?php if($session->form->value(\"edstate\") == \"MD\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"MD\") echo \" selected\";?>>Maryland</option>
+           <option value=\"MA\"<?php if($session->form->value(\"edstate\") == \"MA\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"MA\") echo \" selected\";?>>Massachusetts</option>
+           <option value=\"MI\"<?php if($session->form->value(\"edstate\") == \"MI\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"MI\") echo \" selected\";?>>Michigan</option>
+           <option value=\"MN\"<?php if($session->form->value(\"edstate\") == \"MN\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"MN\") echo \" selected\";?>>Minnesota</option>
+           <option value=\"MS\"<?php if($session->form->value(\"edstate\") == \"MS\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"MS\") echo \" selected\";?>>Mississippi</option>
+           <option value=\"MO\"<?php if($session->form->value(\"edstate\") == \"MO\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"MO\") echo \" selected\";?>>Missouri</option>
+           <option value=\"MT\"<?php if($session->form->value(\"edstate\") == \"MT\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"MT\") echo \" selected\";?>>Montana</option>
+           <option value=\"NE\"<?php if($session->form->value(\"edstate\") == \"NE\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"NE\") echo \" selected\";?>>Nebraska</option>
+           <option value=\"NV\"<?php if($session->form->value(\"edstate\") == \"NV\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"NV\") echo \" selected\";?>>Nevada</option>
+           <option value=\"NH\"<?php if($session->form->value(\"edstate\") == \"NH\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"NH\") echo \" selected\";?>>New Hampshire</option>
+           <option value=\"NJ\"<?php if($session->form->value(\"edstate\") == \"NJ\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"NJ\") echo \" selected\";?>>New Jersey</option>
+           <option value=\"NM\"<?php if($session->form->value(\"edstate\") == \"NM\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"NM\") echo \" selected\";?>>New Mexico</option>
+           <option value=\"NY\"<?php if($session->form->value(\"edstate\") == \"NY\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"NY\") echo \" selected\";?>>New York</option>
+           <option value=\"NC\"<?php if($session->form->value(\"edstate\") == \"NC\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"NC\") echo \" selected\";?>>North Carolina</option>
+           <option value=\"ND\"<?php if($session->form->value(\"edstate\") == \"ND\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"ND\") echo \" selected\";?>>North Dakota</option>
+           <option value=\"OH\"<?php if($session->form->value(\"edstate\") == \"OH\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"OH\") echo \" selected\";?>>Ohio</option>
+           <option value=\"OK\"<?php if($session->form->value(\"edstate\") == \"OK\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"OK\") echo \" selected\";?>>Oklahoma</option>
+           <option value=\"OR\"<?php if($session->form->value(\"edstate\") == \"OR\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"OR\") echo \" selected\";?>>Oregon</option>
+           <option value=\"PA\"<?php if($session->form->value(\"edstate\") == \"PA\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"PA\") echo \" selected\";?>>Pennsylvania</option>
+           <option value=\"PR\"<?php if($session->form->value(\"edstate\") == \"PR\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"PR\") echo \" selected\";?>>Puerto Rico</option>
+           <option value=\"RI\"<?php if($session->form->value(\"edstate\") == \"RI\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"RI\") echo \" selected\";?>>Rhode Island</option>
+           <option value=\"SC\"<?php if($session->form->value(\"edstate\") == \"SC\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"SC\") echo \" selected\";?>>South Carolina</option>
+           <option value=\"SD\"<?php if($session->form->value(\"edstate\") == \"SD\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"SD\") echo \" selected\";?>>South Dakota</option>
+           <option value=\"TN\"<?php if($session->form->value(\"edstate\") == \"TN\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"TN\") echo \" selected\";?>>Tennessee</option>
+           <option value=\"TX\"<?php if($session->form->value(\"edstate\") == \"TX\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"TX\") echo \" selected\";?>>Texas</option>
+           <option value=\"UT\"<?php if($session->form->value(\"edstate\") == \"UT\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"UT\") echo \" selected\";?>>Utah</option>
+           <option value=\"VT\"<?php if($session->form->value(\"edstate\") == \"VT\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"VT\") echo \" selected\";?>>Vermont</option>
+           <option value=\"VA\"<?php if($session->form->value(\"edstate\") == \"VA\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"VA\") echo \" selected\";?>>Virginia</option>
+           <option value=\"WA\"<?php if($session->form->value(\"edstate\") == \"WA\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"WA\") echo \" selected\";?>>Washington</option>
+           <option value=\"WV\"<?php if($session->form->value(\"edstate\") == \"WV\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"WV\") echo \" selected\";?>>West Virginia</option>
+           <option value=\"WI\"<?php if($session->form->value(\"edstate\") == \"WI\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"WI\") echo \" selected\";?>>Wisconsin</option>
+           <option value=\"WY\"<?php if($session->form->value(\"edstate\") == \"WY\") echo \" selected\";
+                                   else if($subuserinfo['state'] == \"WY\") echo \" selected\";?>>Wyoming</option>
+          </select>
+         </td>
+         <td><?php echo $session->form->error(\"edstate\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"edzip\" class=\"grey\">Zip:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" id=\"edzip\" name=\"edzip\" maxlength=\"10\" value=\"<?php
+   if($session->form->value(\"edzip\") == \"\") {
+      echo $subuserinfo['zip'];
+   } else {
+      echo $session->form->value(\"edzip\");
+   }
+?>\" />
+         </td>
+         <td><?php echo $session->form->error(\"edzip\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label for=\"edphone\" class=\"grey\">Phone:</label>
+         </td>
+         <td>
+          <input class=\"field\" type=\"text\" id=\"edphone\" name=\"edphone\" maxlength=\"26\" value=\"<?php
+   if($session->form->value(\"edphone\") == \"\") {
+      echo $subuserinfo['phone'];
+   } else {
+      echo $session->form->value(\"edphone\");
+   }
+?>\" />
+         </td>
+         <td><?php echo $session->form->error(\"edphone\")?></td>
+        </tr>
+
+        <tr>
+         <td>
+          <label class=\"grey\">Usertype:</label>
+         </td>
+         <td>
+          <select name=\"edutype\"<?php echo ($session->isAdmin() ? '' : ' disabled')?>>
+           <option value=\"<?php echo CUST; ?>\"<?php echo ($subuserinfo['usertype'] == CUST) ? ' selected' : '' ?>>Customer</option>
+           <option value=\"<?php echo TELLER; ?>\"<?php echo ($subuserinfo['usertype'] == TELLER) ? ' selected' : '' ?>>Teller</option>
+           <option value=\"<?php echo ADMIN; ?>\"<?php echo ($subuserinfo['usertype'] == ADMIN) ? ' selected' : '' ?>>Administrator</option>
+          </select>
+         </td>
+         <td><?php echo $session->form->error(\"edutype\")?></td>
+        </tr>
+
+        <tr>
+         <td colspan=\"2\" align=\"right\">
+          <input type=\"hidden\" name=\"subedit\" value=\"1\">
+          <input type=\"submit\" value=\"Save!\" class=\"bt_register\">
+         </td>
+        </tr>
+
+       </table>
+      </form>
+<?php
+} //end uid specified
+?>
+      <p class=\"hide\"><a href=\"#top\">Back to top</a></p>
+     </div>
+    </div>
+
+    <?php include_once(\"../include/footer.php\"); ?>
+
+   </div>
+  </div>
+ </body>
+</html>"
+      associated_classes
+      end
+    end
+  end
+
+  classview 128468 "admin"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    class 128468 "AdminProcess"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 128980 "__construct"
+	package explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${visibility}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment " Class constructor "
+      end
+
+      operation 129108 "procEditAccount"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+procEditAccount - Attempts to edit the user's account information, including the
+the password, which must be verified before a change is made.
+"
+      end
+
+      operation 129236 "procDeleteUser"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+procDeleteUser - If submitted username is correct, user is deleted from the database.
+"
+      end
+
+      operation 129364 "procBanUser"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+procBanUser - If the submitted username is correct, the user is banned from the member
+system, which entails removing the username from the users table and adding it to the
+banned users table.
+"
+      end
+
+      operation 129492 "procDeleteBannedUser"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+procDeleteBannedUser - If the submitted username is correct, the user is deleted from
+the banned users table, which enables someone to register with that username again.
+"
+      end
+
+      operation 129620 "_checkUsername"
+	private explicit_return_type ""
+	nparams 2
+	  param inout name "uname" explicit_type ""
+	  param inout name "ban" explicit_type ""
+	    defaultvalue "false"
+	
+	
+	preserve_php_body_indent php_def "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${p0}${v0}, ${p1}${v1}${)}
+{
+  ${body}}
+"
+	
+	
+	comment "
+_checkUsername - Helper function for the above processing, it makes sure the
+submitted username is valid, if not, it adds the appropritate error to the form.
+"
+      end
+    end
+  end
+end
