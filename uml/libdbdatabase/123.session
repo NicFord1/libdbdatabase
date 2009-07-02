@@ -1,0 +1,13 @@
+window_sizes 1440 1002 273 794 720 82
+diagrams
+  classdiagram_ref 129364 // DatabaseView
+    720 631 100 4 0 0
+  active  classdiagram_ref 128251 // Relational DB View
+    1161 846 100 4 0 0
+end
+show_stereotypes
+selected attribute_ref 139515 // phone
+open
+  class_ref 129019 // customers
+end
+end
