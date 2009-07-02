@@ -1,23 +1,13 @@
 window_sizes 1440 795 337 1097 604 136
 diagrams
-  classdiagram_ref 130314 // User
+  active  classdiagram_ref 130314 // User
     877 483 100 4 0 0
-  active  classdiagram_ref 129162 // Media
+  classdiagram_ref 129162 // Media
     1093 584 100 4 0 0
 end
 show_stereotypes
-selected attribute_ref 128138 // title
+selected classview_ref 129162 // OO Data Design
 open
-  operation_ref 128010 // getIDNum
-  operation_ref 128266 // getTitle
-  operation_ref 128650 // getGenre
-  operation_ref 128778 // getReleaseDate
-  attribute_ref 128522 // rating
-  operation_ref 128906 // getRating
-  operation_ref 129034 // getCost
-  operation_ref 129162 // getLateFee
-  attribute_ref 130314 // description
-  operation_ref 130314 // getDescription
   class_ref 130954 // Book
   classrelation_ref 129802 // <generalisation>
   attribute_ref 128085 // issn
@@ -49,3 +39,4 @@ open
   class_ref 133386 // Senior
 end
 end
+verbose
