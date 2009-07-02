@@ -1,6 +1,6 @@
 format 66
 "libdbdatabase"
-  revision 8
+  revision 9
   modified_by 123 "Drew"
 
 
@@ -1944,8 +1944,8 @@ ${members}}
       end
 
       activitynode 128251 initial ""
-	flow 130043 "<flow>"
-	  on activitynode_ref 128763 // decision
+	flow 136315 "<flow>"
+	  on activityaction_ref 129659 // activity action View Homepage
 	end
       end
 
@@ -1965,8 +1965,8 @@ ${members}}
 
       activityaction 128379 "Login Failed"
 	opaque_action
-	flow 128763 "<flow>"
-	  on activityaction_ref 128123 // activity action Login
+	flow 136571 "<flow>"
+	  on activityaction_ref 129659 // activity action View Homepage
 	end
       end
 
@@ -1980,14 +1980,7 @@ ${members}}
 	end
 
 	flow 132987 "<flow>"
-	  on activityaction_ref 131323 // activity action Exit Program
-	end
-      end
-
-      activityaction 129531 "Connected to Database"
-	opaque_action
-	flow 130811 "<flow>"
-	  on activityaction_ref 129659 // activity action Query Commands
+	  on activityaction_ref 131323 // activity action Close Browser
 	end
       end
 
@@ -1996,15 +1989,15 @@ ${members}}
 	  on activityaction_ref 128379 // activity action Login Failed
 	end
 
-	flow 130683 "<flow>"
-	  on activityaction_ref 129531 // activity action Connected to Database
+	flow 137211 "<flow>"
+	  on activityaction_ref 132731 // activity action Browse Media
 	end
       end
 
-      activityaction 129659 "Query Commands"
+      activityaction 129659 "View Homepage"
 	opaque_action
-	flow 130939 "<flow>"
-	  on activitynode_ref 130171 // decision
+	flow 136443 "<flow>"
+	  on activitynode_ref 128763 // decision
 	end
       end
 
@@ -2058,6 +2051,14 @@ ${members}}
 
 	flow 132603 "<flow>"
 	  on activityaction_ref 131195 // activity action Log Out
+	end
+
+	flow 136699 "<flow>"
+	  on activityaction_ref 132475 // activity action Create New User
+	end
+
+	flow 136955 "<flow>"
+	  on activityaction_ref 132603 // activity action Ban User
 	end
       end
 
@@ -2152,19 +2153,15 @@ ${members}}
 
       activityaction 131195 "Log Out"
 	opaque_action
-	flow 132731 "<flow>"
-	  on activitynode_ref 130299 // activity_final
-	end
-
-	flow 132859 "<flow>"
-	  on activitynode_ref 128763 // decision
+	flow 136187 "<flow>"
+	  on activityaction_ref 129659 // activity action View Homepage
 	end
       end
 
       activitynode 130299 activity_final ""
       end
 
-      activityaction 131323 "Exit Program"
+      activityaction 131323 "Close Browser"
 	opaque_action
 	flow 133115 "<flow>"
 	  on activitynode_ref 130427 // activity_final
@@ -2176,6 +2173,27 @@ ${members}}
 
       activitynode 130555 merge ""
 	flow 135035 "<flow>"
+	  on activitynode_ref 130171 // decision
+	end
+      end
+
+      activityaction 132475 "Create New User"
+	opaque_action
+	flow 136827 "<flow>"
+	  on activitynode_ref 130555 // merge
+	end
+      end
+
+      activityaction 132603 "Ban User"
+	opaque_action
+	flow 137083 "<flow>"
+	  on activitynode_ref 130555 // merge
+	end
+      end
+
+      activityaction 132731 "Browse Media"
+	opaque_action
+	flow 137339 "<flow>"
 	  on activitynode_ref 130171 // decision
 	end
       end
