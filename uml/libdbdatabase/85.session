@@ -1,42 +1,21 @@
-window_sizes 1440 795 337 1097 604 136
+window_sizes 1440 796 337 1097 605 136
 diagrams
-  active  classdiagram_ref 130314 // User
+  classdiagram_ref 130314 // User
     877 483 100 4 0 0
   classdiagram_ref 129162 // Media
-    1093 584 100 4 0 0
+    1093 584 100 4 275 0
+  classdiagram_ref 129236 // System
+    877 483 100 4 0 0
+  classdiagram_ref 129364 // DatabaseView
+    877 483 100 4 480 0
+  active  classdiagram_ref 128251 // Relational DB View
+    1093 585 100 4 0 0
 end
 show_stereotypes
-selected classview_ref 129162 // OO Data Design
+selected classdiagram_ref 128251 // Relational DB View
 open
-  class_ref 130954 // Book
-  classrelation_ref 129802 // <generalisation>
-  attribute_ref 128085 // issn
-  operation_ref 128085 // getISSN
-  class_ref 131210 // CD
-  class_ref 131338 // DVD
-  operation_ref 131338 // getUserID
-  operation_ref 132490 // setUserID
-  operation_ref 131594 // getLastName
-  operation_ref 132746 // setLastName
-  operation_ref 131722 // getAddress
-  operation_ref 132874 // setAddress
-  operation_ref 133002 // setBirthdate
-  attribute_ref 131466 // sex
-  operation_ref 131978 // getSex
-  operation_ref 133130 // setSex
-  operation_ref 132106 // getPhoneNumber
-  operation_ref 133258 // setPhoneNumber
-  operation_ref 132234 // getBalance
-  operation_ref 133386 // setBalance
-  attribute_ref 131850 // history
-  operation_ref 132362 // getHistory
-  class_ref 132618 // Employee
-  class_ref 132746 // Teller
-  class_ref 132874 // Administrator
-  class_ref 133002 // Customer
-  class_ref 133130 // Child
-  class_ref 133258 // Adult
-  class_ref 133386 // Senior
+  classview_ref 129162 // OO Data Design
+  classview_ref 128123 // Relational Data Design
 end
 end
 verbose
