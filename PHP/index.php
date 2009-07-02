@@ -13,11 +13,11 @@ function displayItems() {
 
    echo "<h1>Items in Our Library</h1>\n";
 
-   $q = "SELECT * FROM ".DB_TBL_PRFX."items ORDER BY itemtype ASC,itemid";
+   $q = "SELECT * FROM ".DB_TBL_PRFX."items ORDER BY itemid ASC";
 
    if(isset($_GET['type']) && !empty($_GET['type'])) {
    	$itemType = $_GET['type'];
-      $q = "SELECT * FROM ".DB_TBL_PRFX."items WHERE itemtype='$itemType' ORDER BY itemtype ASC,itemid";
+      $q = "SELECT * FROM ".DB_TBL_PRFX."items WHERE itemtype='$itemType' ORDER BY itemid ASC";
    }
 
    $result = $database->query($q);
@@ -39,6 +39,7 @@ function displayItems() {
    echo "<table id=\"items\" align=\"center\" border=\"1\" cellspacing=\"0\" cellpadding=\"3\">\n";
    echo "<tr>\n";
    echo "<th>itemID</th>\n";
+   echo "<th>Type</th>\n";
    echo "<th>Title</th>\n";
    echo "<th>Qty on Hand</th>";
    if($session->isTeller() || $session->isAdmin()) {
@@ -69,6 +70,7 @@ function displayItems() {
 
       echo "<tr>";
       echo "<td align=\"center\">".$item['itemid']."</td>\n";
+      echo "<td align=\"center\"><img src=\"".SITE_BASE_URL."/img/itemtypes/".$item['itemtype'].".png\" alt=\"".$item['itemtype']."\" align=\"center\" class=\"clearimg\" /></td>\n";
       echo "<td>".$iteminfo['title']."</td>\n";
       echo "<td align=\"center\">".$item['quantity']."</td>\n";
       if($session->isTeller() || $session->isAdmin()) {
