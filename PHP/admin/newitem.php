@@ -365,8 +365,8 @@ Item Type:
 					."VALUES($maxitemid, '$regupc','$regtitle', '$regauthor', '$reggenre', '$regpublisher', $regtimestamp,'$regdescription')";	
 		mysql_query($q);
 	}else if($itemtype == 'Periodical'){
-		$q = "INSERT INTO ".DB_TBL_PRFX."periodicals (itemid, isbn, issn, sici, title, author, genre, publisher, releasedate, description) "
-					."VALUES($maxitemid, '$regisbn', '$regissn', '$regsici','$regtitle', '$regauthor', '$reggenre', '$regpublisher', $regtimestamp,'$regdescription')";	
+		$q = "INSERT INTO ".DB_TBL_PRFX."periodicals (itemid, isbn, issn, sici, title, editor, genre, publisher, releasedate, description) "
+					."VALUES($maxitemid, '$regisbn', '$regissn', '$regsici', '$regtitle', '$regauthor', '$reggenre', '$regpublisher', $regtimestamp,'$regdescription')";	
 		mysql_query($q);
 	}
 	
