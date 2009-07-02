@@ -68,27 +68,27 @@ function displayItems() {
       }
 
       echo "<tr>";
-      echo "<td>".$item['itemid']."</td>\n";
+      echo "<td align=\"center\">".$item['itemid']."</td>\n";
       echo "<td>".$iteminfo['title']."</td>\n";
-      echo "<td>".$item['quantity']."</td>\n";
+      echo "<td align=\"center\">".$item['quantity']."</td>\n";
       if($session->isTeller() || $session->isAdmin()) {
          if($item['itemtype'] == "BOOK") {
-            echo "<td>"
+            echo "<td align=\"center\">"
                 ."<a href=\"".SITE_BASE_URL."/checkin.php?isbn=".$iteminfo['isbn']."\">In</a>"
                 ." / <a href=\"".SITE_BASE_URL."/checkout.php?isbn=".$iteminfo['isbn']."\">Out</a>"
                 ."</td>\n";
          } else if ($item['itemtype'] == "PERIODICAL") {
-            echo "<td>"
+            echo "<td align=\"center\">"
                 ."<a href=\"".SITE_BASE_URL."/checkin.php?issn=".$iteminfo['issn']."\">In</a>"
                 ." / <a href=\"".SITE_BASE_URL."/checkout.php?issn=".$iteminfo['issn']."\">Out</a>"
                 ."</td>\n";
          } else if ($item['itemtype'] == "DVD") {
-            echo "<td>"
+            echo "<td align=\"center\">"
                 ."<a href=\"".SITE_BASE_URL."/checkin.php?upc=".$iteminfo['upc']."\">In</a>"
                 ." / <a href=\"".SITE_BASE_URL."/checkout.php?upc=".$iteminfo['upc']."\">Out</a>"
                 ."</td>\n";
          } else if ($item['itemtype'] == "CD") {
-            echo "<td>"
+            echo "<td align=\"center\">"
                 ."<a href=\"".SITE_BASE_URL."/checkin.php?upc=".$iteminfo['upc']."\">In</a>"
                 ." / <a href=\"".SITE_BASE_URL."/checkout.php?upc=".$iteminfo['upc']."\">Out</a>"
                 ."</td>\n";
