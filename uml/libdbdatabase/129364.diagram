@@ -170,11 +170,11 @@ end
 relationcanvas 136788 relation_ref 133460 // <association>
   from ref 136532 z 2017 to ref 131668
   no_role_a no_role_b
-  multiplicity_a_pos 514 246 3000 multiplicity_b_pos 393 167 3000
+  multiplicity_a_pos 507 262 3000 multiplicity_b_pos 397 173 3000
 end
 relationcanvas 136916 relation_ref 133588 // <association>
   from ref 136532 z 2018 to ref 131540
   no_role_a no_role_b
-  multiplicity_a_pos 177 244 3000 multiplicity_b_pos 317 165 3000
+  multiplicity_a_pos 177 244 3000 multiplicity_b_pos 306 162 3000
 end
 end
