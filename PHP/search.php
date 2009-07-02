@@ -297,7 +297,7 @@ if($trimmed == "") {
 	   		 echo "<td style='text-align:center;vertical-align:middle;padding-right:25px;'>".
 	   		 "<a href='popup.php?itemid=" . $aresult['ITEMID']. "&KeepThis=true&TB_iframe=true&height=265&width=645'" .
 	   		  "title=\"more info\" class=\"thickbox\">" .
-	   		 	"<img src='img/info.png' border='0' alt='more info'></a>";
+	   		 	"<img class=\"clearimg\" src='img/info.png' border='0' alt='more info'></a>";
 
 
 	  	if($session->isTeller() or $session->isAdmin()){
@@ -318,7 +318,7 @@ if($trimmed == "") {
 			}
 			//echo $argToPass;
 	  		echo "<a href='checkout.php?$argToPass&' title='CheckOut'>".
-	  			"<img src='img/cart.png' border='0' alt='check out item'></a></td>";
+	  			"<img class=\"clearimg\" src='img/cart.png' border='0' alt='check out item'></a></td>";
 	  		}else
 	  			echo "</td>";
 
