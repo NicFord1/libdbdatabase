@@ -28,4 +28,26 @@ function performFunctionOnAllPlugins($functionName, $param1, $param2) {
   }
   return $returnList;
 }
+// Use reflection to invoke given function on all plugins. Return list
+// of returned values.
+function performFunctionOnOnePlugin($functionName, $param1, $param2, $typePlugin) {
+  global $listOfPlugins;
+	$returnListSize = 0;
+
+  foreach($listOfPlugins as $plugin) {
+    $reflector = new ReflectionObject($plugin);
+    
+    $temp = strtolower(str_replace('Plugin', "", $reflector->getName()) . 's');
+    
+    //print $temp . "\n";
+    //print $typePlugin . "\n";
+    
+    if($temp == $typePlugin and $reflector->hasMethod($functionName)) {
+      $returnList[$returnListSize++] = $reflector->getMethod($functionName)->
+          invoke($plugin, $param1, $param2);
+    }
+  }
+  return $returnList;
+}
+
 ?>
