@@ -12,21 +12,19 @@ diagrams
     618 450 100 4 0 0
   classdiagram_ref 129364 // DatabaseView
     778 563 100 4 0 0
-  classdiagram_ref 130314 // User
-    618 450 100 4 120 0
-  active  usecasediagram_ref 130516 // UseCaseDiagram
+  usecasediagram_ref 130516 // UseCaseDiagram
     778 563 100 4 0 1
   sequencediagram_ref 131668 // authenticatesequence
     778 563 100 4 0 0
   sequencediagram_ref 132820 // listmybookssequence
     778 563 100 4 0 0
-  classdiagram_ref 129236 // System
+  active  classdiagram_ref 129236 // System
     618 450 100 4 0 0
   classdiagram_ref 129162 // Media
-    618 450 100 4 300 0
+    618 450 100 4 0 0
 end
 show_stereotypes
-selected usecasediagram_ref 130516 // UseCaseDiagram
+selected classdiagram_ref 129236 // System
 open
   classview_ref 128010 // sketch
   class_ref 132490 // User

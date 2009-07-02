@@ -4,8 +4,8 @@ classinstance 128084 class_ref 129236 // Session
   name ""   xyz 101 4 2000 life_line_z 2000
 classinstance 128212 class_ref 129492 // DatabaseInterface
   name ""   xyz 280 4 2000 life_line_z 2000
-classinstance 128340 class_ref 128394 // GUI
-  name ""   xyz 487 4 2000 life_line_z 2000
+classinstance 128340 class_ref 128394 // HTMLConnection
+  name ""   xyz 464 4 2000 life_line_z 2000
 durationcanvas 128468 classinstance_ref 128084 // :Session
   xyzwh 122 94 2010 11 195
 end
@@ -15,7 +15,7 @@ end
 durationcanvas 128980 classinstance_ref 128212 // :DatabaseInterface
   xyzwh 326 155 2010 11 36
 end
-durationcanvas 129364 classinstance_ref 128340 // :GUI
+durationcanvas 129364 classinstance_ref 128340 // :HTMLConnection
   xyzwh 506 218 2010 11 33
 end
 msg 128724 asynchronous
