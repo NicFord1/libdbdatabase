@@ -1,0 +1,77 @@
+format 66
+
+classcanvas 128379 class_ref 128428 // Customer
+  class_drawing_mode default show_context_mode default show_stereotype_properties default
+  xyz 37 238 2000
+end
+usecasecanvas 129147 usecase_ref 128123 // Log In
+  xyzwh 238 273 3005 64 32 label_xy 255 305
+end
+usecasecanvas 129275 usecase_ref 128251 // Create New Account
+  xyzwh 240 222 3005 64 32 label_xy 221 254
+end
+usecasecanvas 130299 usecase_ref 128379 // Delete Account
+  xyzwh 236 327 3005 64 32 label_xy 231 359
+end
+subject 131067 ""
+  xyzwh 182 206 2000 242 176
+classcanvas 131579 class_ref 128684 // Admin
+  class_drawing_mode default show_context_mode default show_stereotype_properties default
+  xyz 367 441 2000
+end
+note 131835 "A teller can do everything a customer can do, and an admin can do everything a teller can do."
+  xyzwh 15 8 2000 133 94
+usecasecanvas 131963 usecase_ref 128507 // Search Media
+  xyzwh 284 137 3005 64 32 label_xy 283 169
+end
+usecasecanvas 132091 usecase_ref 128635 // Check Out Media
+  xyzwh 443 206 3005 64 32 label_xy 435 238
+end
+usecasecanvas 132219 usecase_ref 128763 // Check In Media
+  xyzwh 440 147 3005 64 32 label_xy 436 179
+end
+usecasecanvas 132475 usecase_ref 129019 // View Account History
+  xyzwh 195 136 3005 64 32 label_xy 174 168
+end
+usecasecanvas 132603 usecase_ref 129147 // Change Account Info
+  xyzwh 332 327 3005 64 32 label_xy 313 359
+end
+usecasecanvas 133371 usecase_ref 129275 // Add Media
+  xyzwh 437 332 3005 64 32 label_xy 443 364
+end
+subject 133883 ""
+  xyzwh 165 116 2000 360 281
+classcanvas 135035 class_ref 128556 // Teller
+  class_drawing_mode default show_context_mode default show_stereotype_properties default
+  xyz 634 175 2000
+end
+classcanvas 135419 class_ref 128251 // Database
+  class_drawing_mode default show_context_mode default show_stereotype_properties default
+  xyz 38 429 2000
+end
+note 135547 "The database is involved in every use case.  Associations aren't drawn so the diagram is readable."
+  xyzwh 109 410 2000 133 95
+usecasecanvas 136187 usecase_ref 130939 // View Details
+  xyzwh 360 138 3005 64 32 label_xy 361 170
+end
+line 130043 ----
+  from ref 128379 z 3006 to ref 129275
+line 130171 ----
+  from ref 128379 z 3006 to ref 129147
+line 131707 ----
+  from ref 131579 z 3006 to ref 130299
+line 132987 ----
+  from ref 129147 z 3006 to ref 132603
+line 134011 ----
+  from ref 128379 z 3006 to ref 132475
+line 134139 ----
+  from ref 128379 z 3006 to ref 131963
+line 134779 ----
+  from ref 131579 z 3006 to ref 133371
+line 135163 ----
+  from ref 135035 z 3006 to ref 132219
+line 135291 ----
+  from ref 135035 z 3006 to ref 132091
+line 136315 ----
+  from ref 131963 z 3006 to ref 136187
+end
