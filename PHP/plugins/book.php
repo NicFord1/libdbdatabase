@@ -60,6 +60,7 @@ class BookPlugin {
          $resultslist[$index]["Description"] = $row["description"];
          $index++;
       }
+      if(count($resultslist)==0) return null;
       return $resultslist;
    } // get
 } // class

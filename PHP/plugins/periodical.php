@@ -26,7 +26,7 @@ class PeriodicalPlugin {
       $index = 0;
       $resultslist[] = array();
       while ($row = mysql_fetch_array($result)) {
-         $resultslist[$index]["ITEMID"] = $row["itemid"];
+		 $resultslist[$index]["ITEMID"] = $row["itemid"];
          $resultslist[$index]["ISBN"] = $row["isbn"];
          $resultslist[$index]["ISSN"] = $row["issn"];
          $resultslist[$index]["SICI"] = $row["sici"];
@@ -34,11 +34,11 @@ class PeriodicalPlugin {
          $resultslist[$index]["Editor"] = $row["editor"];
          $resultslist[$index]["Genre"] = $row["genre"];
          $resultslist[$index]["Publisher"] = $row["publisher"];
-         $resultslist[$index]["Release Date"] = $row["releasedate"];
          $resultslist[$index]["Rating"] = $row["rating"];
          $resultslist[$index]["Description"] = $row["description"];
          $index++;
       }
+      if(count($resultslist)==0) return null;
       return $resultslist;
    } // search
 	public function get($id, $database) {
@@ -54,10 +54,10 @@ class PeriodicalPlugin {
       $index = 0;
       $resultslist[] = array();
       while ($row = mysql_fetch_array($result)) {
-         $resultslist[$index]["ITEMID"] = $row["itemid"];
+      	 $resultslist[$index]["ITEMID"] = $row["itemid"];
          $resultslist[$index]["ISBN"] = $row["isbn"];
-         $resultslist[$index]["ISSN"] = $row["issn"];
-         $resultslist[$index]["SICI"] = $row["sici"];
+		 $resultslist[$index]["ISSN"] = $row["issn"];
+		 $resultslist[$index]["SICI"] = $row["sici"];
          $resultslist[$index]["Title"] = $row["title"];
          $resultslist[$index]["Author"] = $row["author"];
          $resultslist[$index]["Publisher"] = $row["publisher"];
