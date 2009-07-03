@@ -3,17 +3,18 @@
 
 = Details =
 
-Below is a list of the reources for this project:
+Below is a list of the resources for this project:
 
 == Project ==
-    * Project Description -- http://userpages.umbc.edu/~vick/432/assignments/Summer09/Programming/
-    * LibDBDatabase on Nicks-Net (working install)  -- http://LibDBDatabase.Nicks-Net.us
-
-== Tools ==
-    * BOUML (free/Open Source UML 2 tool box) -- http://bouml.sourceforge.net/
-    * SCPlugin (integrates SVN into Mac OS X Finder) -- http://scplugin.tigris.org/
+    * [http://userpages.umbc.edu/~vick/432/assignments/Summer09/Programming/ Vick's Project Description] (2009 Summer)
+    * [http://LibDBDatabase.Nicks-Net.us LibDBDatabase on Nicks-Net] (working install)
 
 == PHP Related ==
-    * PHP 5 Object-Oriented section of PHP Manual -- http://us.php.net/manual/en/language.oop5.php
-    * PHP 5 Reflection -- http://us.php.net/manual/en/language.oop5.reflection.php
-    * PHP 5 Patterns -- http://us.php.net/manual/en/language.oop5.patterns.php
+    * [http://us.php.net/manual/en/language.oop5.php PHP 5 Object-Oriented] (PHP Manual)
+    * [http://us.php.net/manual/en/language.oop5.reflection.php PHP 5 Reflection] (PHP Manual)
+    * [http://us.php.net/manual/en/language.oop5.patterns.php PHP 5 Patterns] (PHP Manual)
+
+== Tools ==
+    * [http://bouml.sourceforge.net/ BOUML] (free/Open Source UML 2 tool box)
+    * [http://scplugin.tigris.org/ SCPlugin] (integrates SVN into Mac OS X Finder)
+    * [http://www.easyeclipse.org/site/distributions/lamp.html EasyEclipse for LAMP] (For PHP, Python, Perl, and Ruby development with a web server and a database_
