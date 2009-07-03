@@ -17,7 +17,7 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'config.php') !== false) {
 
 
 define("SITE_NAME", "LibDBDatabase");
-define("SITE_BASE_URL", "http://LibDBDatabase.Nicks-Net.us");
+define("SITE_BASE_URL", "http://LibDBDatabase.change.me");
 
 
 /******************************\
@@ -32,9 +32,6 @@ define("GUEST",  "Guest");
 define("CUST",   "Customer");
 define("TELLER", "Teller");
 define("ADMIN",  "Administrator");
-
-
-define("SALT_LENGTH", 17);
 
 
 /**
@@ -66,7 +63,7 @@ define("COOKIE_PATH", "/");  //Avaible in whole domain
 /**
  * Hashing Variables - these are the parameters to the hashing function.
  */
-define("SALTLENGTH", 17);
+define("SALT_LENGTH", 17);
 
 
 /********************\
@@ -78,7 +75,7 @@ define("SALTLENGTH", 17);
  * newly registered users.
  */
 define("EMAIL_FROM_NAME", SITE_NAME);
-define("EMAIL_FROM_ADDR", "LibDBDatabase-noreply@Nicks-Net.us");
+define("EMAIL_FROM_ADDR", "LibDBDatabase-noreply@change.me");
 define("EMAIL_WELCOME", true);
 
 

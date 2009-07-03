@@ -112,7 +112,7 @@ LAST_INSERT_ID(),
 'Sybex',
 04212002,
 3,
-'Developing applications and sites for the World Wide Web, or for Web-like uses such as intranets, has become one of the most extensive areas of computing and programming work. If it can be done digitally, then somebody, somewhere, is trying to adapt it to a web browser. Understanding the various flavors of web activity? Static and dynamic pages, client-side and server-side systems? Is a necessary step toward increasing your flexibility as a developer. PHP builds upon the familiar structure of programming languages such as C, Java, and Perl. It helps create dynamic HTML content by providing the necessary tools to easily manipulate that content. PHP is',
+'Developing applications and sites for the World Wide Web, or for Web-like uses such as intranets, has become one of the most extensive areas of computing and programming work. If it can be done digitally, then somebody, somewhere, is trying to adapt it to a web browser. Understanding the various flavors of web activity? Static and dynamic pages, client-side and server-side systems? Is a necessary step toward increasing your flexibility as a developer. PHP builds upon the familiar structure of programming languages such as C, Java, and Perl. It helps create dynamic HTML content by providing the necessary tools to easily manipulate that content.',
 20.0,
 0.5
 );
