@@ -1,0 +1,169 @@
+format 66
+
+classinstance 128123 class_ref 129108 // Session
+  name ""   xyz 259 4 2000 life_line_z 2000
+classinstance 128251 class_ref 128212 // Process
+  name ""   xyz 31 4 2000 life_line_z 2000
+classinstance 128763 class_ref 128596 // MySQLDB
+  name ""   xyz 463 4 2000 life_line_z 2000
+classinstance 130811 class_ref 129364 // User
+  name ""   xyz 659 4 2000 life_line_z 2000
+durationcanvas 128379 classinstance_ref 128251 // :Process
+  xyzwh 53 51 2010 11 32
+end
+durationcanvas 129275 classinstance_ref 128763 // :MySQLDB
+  xyzwh 489 135 2010 11 36
+end
+durationcanvas 129659 classinstance_ref 128763 // :MySQLDB
+  xyzwh 489 196 2010 11 25
+end
+durationcanvas 129915 classinstance_ref 128763 // :MySQLDB
+  xyzwh 489 63 2010 11 35
+end
+durationcanvas 130299 classinstance_ref 128763 // :MySQLDB
+  xyzwh 489 234 2010 11 25
+end
+durationcanvas 130427 classinstance_ref 128763 // :MySQLDB
+  xyzwh 489 278 2010 11 36
+end
+durationcanvas 130939 classinstance_ref 130811 // :User
+  xyzwh 678 347 2010 11 138
+end
+durationcanvas 131195 classinstance_ref 128763 // :MySQLDB
+  xyzwh 489 384 2010 11 36
+end
+durationcanvas 131579 classinstance_ref 128763 // :MySQLDB
+  xyzwh 489 449 2010 11 37
+end
+durationcanvas 131963 classinstance_ref 128251 // :Process
+  xyzwh 53 520 2010 11 25
+end
+durationcanvas 132091 classinstance_ref 128123 // :Session
+  xyzwh 280 52 2010 11 648
+  overlappingdurationcanvas 132347
+    xyzwh 286 524 2020 11 25
+  end
+end
+durationcanvas 132603 classinstance_ref 128763 // :MySQLDB
+  xyzwh 489 564 2010 11 25
+end
+durationcanvas 132859 classinstance_ref 128763 // :MySQLDB
+  xyzwh 489 603 2010 11 28
+end
+durationcanvas 133115 classinstance_ref 130811 // :User
+  xyzwh 678 659 2010 11 33
+end
+msg 128635 synchronous
+  from durationcanvas_ref 128379
+  to durationcanvas_ref 132091
+  yz 52 2015 explicitmsg "login(subuname, subpass, subremember)"
+  show_full_operations_definition default drawing_language default
+  label_xy 74 39
+msg 129019 synchronous
+  from durationcanvas_ref 132091
+  to durationcanvas_ref 129915
+  yz 63 2015 explicitmsg "getUID(username)"
+  show_full_operations_definition default drawing_language default
+  label_xy 336 49
+msg 129147 return
+  from durationcanvas_ref 129915
+  to durationcanvas_ref 132091
+  yz 87 2015 explicitmsg "uid"
+  show_full_operations_definition default drawing_language default
+  label_xy 372 73
+msg 129403 synchronous
+  from durationcanvas_ref 132091
+  to durationcanvas_ref 129275
+  yz 135 2015 explicitmsg "getUserInfo(uid, DB_TBL_CUSTOMERS)"
+  show_full_operations_definition default drawing_language default
+  label_xy 296 122
+msg 129531 return
+  from durationcanvas_ref 129275
+  to durationcanvas_ref 132091
+  yz 160 2015 explicitmsg "userinfo"
+  show_full_operations_definition default drawing_language default
+  label_xy 359 146
+msg 129787 synchronous
+  from durationcanvas_ref 132091
+  to durationcanvas_ref 129659
+  yz 196 2015 explicitmsg "addActiveUser(uid, time)"
+  show_full_operations_definition default drawing_language default
+  label_xy 320 182
+msg 130043 synchronous
+  from durationcanvas_ref 132091
+  to durationcanvas_ref 130299
+  yz 234 3005 explicitmsg "removeActiveGuest(ip)"
+  show_full_operations_definition default drawing_language default
+  label_xy 323 222
+msg 130555 synchronous
+  from durationcanvas_ref 132091
+  to durationcanvas_ref 130427
+  yz 278 2015 explicitmsg "confirmUID(uid, DB_TBL_ADMINS)"
+  show_full_operations_definition default drawing_language default
+  label_xy 308 264
+msg 130683 return
+  from durationcanvas_ref 130427
+  to durationcanvas_ref 132091
+  yz 303 2020 explicitmsg "true"
+  show_full_operations_definition default drawing_language default
+  label_xy 380 289
+msg 131067 synchronous
+  from durationcanvas_ref 132091
+  to durationcanvas_ref 130939
+  yz 347 2015 explicitmsg "this->user = new Administrator(userinfo)"
+  show_full_operations_definition default drawing_language default
+  label_xy 409 335
+msg 131323 synchronous
+  from durationcanvas_ref 130939
+  to durationcanvas_ref 131195
+  yz 384 2020 explicitmsg "confirmUserUID(username,uid)"
+  show_full_operations_definition default drawing_language default
+  label_xy 515 369
+msg 131451 return
+  from durationcanvas_ref 131195
+  to durationcanvas_ref 130939
+  yz 409 2015 explicitmsg "true"
+  show_full_operations_definition default drawing_language default
+  label_xy 570 395
+msg 131707 synchronous
+  from durationcanvas_ref 130939
+  to durationcanvas_ref 131579
+  yz 449 2015 explicitmsg "getUserInfo(uid, DB_TBL_ADMINS)"
+  show_full_operations_definition default drawing_language default
+  label_xy 506 437
+msg 131835 return
+  from durationcanvas_ref 131579
+  to durationcanvas_ref 130939
+  yz 474 2015 explicitmsg "userinfo"
+  show_full_operations_definition default drawing_language default
+  label_xy 569 460
+msg 132219 synchronous
+  from durationcanvas_ref 131963
+  to durationcanvas_ref 132091
+  yz 520 2015 msg operation_ref 135380 // "logout()"
+  show_full_operations_definition default drawing_language default
+  label_xy 154 506
+reflexivemsg 132475 synchronous
+  to durationcanvas_ref 132347
+  yz 524 2025 explicitmsg "this->logged_in = false"
+  show_full_operations_definition default drawing_language default
+  label_xy 320 522
+msg 132731 synchronous
+  from durationcanvas_ref 132091
+  to durationcanvas_ref 132603
+  yz 564 2015 explicitmsg "removeActiveUser(uid)"
+  show_full_operations_definition default drawing_language default
+  label_xy 341 550
+msg 132987 synchronous
+  from durationcanvas_ref 132091
+  to durationcanvas_ref 132859
+  yz 603 2015 explicitmsg "addActiveGuest(ip, time)"
+  show_full_operations_definition default drawing_language default
+  label_xy 331 589
+msg 133243 synchronous
+  from durationcanvas_ref 132091
+  to durationcanvas_ref 133115
+  yz 661 2015 explicitmsg "this->user = new Guest(ip, time)"
+  show_full_operations_definition default drawing_language default
+  label_xy 409 648
+end
