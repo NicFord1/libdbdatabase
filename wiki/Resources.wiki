@@ -18,3 +18,4 @@ Below is a list of the resources for this project:
     * [http://bouml.sourceforge.net/ BOUML] (free/Open Source UML 2 tool box)
     * [http://scplugin.tigris.org/ SCPlugin] (integrates SVN into Mac OS X Finder)
     * [http://www.easyeclipse.org/site/distributions/lamp.html EasyEclipse for LAMP] (For PHP, Python, Perl, and Ruby development with a web server and a database_
+    * [http://www.wampserver.com/en/ WAMP Server Suite] (Windows Apache, MySQL and PHP for local testing/debugging)
