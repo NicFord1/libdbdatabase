@@ -1,95 +1,81 @@
+#summary Identifies the latest/up-to-date requirements for project.
+#labels Phase-Requirements,Featured
+
 Users
-        - UserID
-        - FirstName
-        - LastName
-        - birth date
-        - balance
-        - history (of every action performed, except searches)
-        - address
-        - sex
-        - phone number
+   * User ID (uid)
+   * First Name
+   * Last Name
+   * Birth Date (unix timestamp)
+   * Balance
+   * History (borrowed items)
+   * Address
+   * Gender
+   * Phone Number
 
 Books
-        - ISBN
-        - title
-        - author
-        - genre
-                genre is broken down into more and more specific genres, the most specific is
-listed here
-        - abstract/description
-        - publisher
-        - publish date
-        - rating
-        - cost
-        - late fee
+   * ISBN
+   * Title
+   * Author
+   * Genre
+   * Description
+   * Publisher
+   * Release Date
+   * Rating
+   * Cost
+   * Late Fee
 
 CDs
-        - UPC
-        - title
-        - author
-        - genre
-        - release date
-        - rating
-        - abstract/description
-        - cost
-        - late fee
+   * UPC
+   * Title
+   * Author
+   * Genre
+   * Release Date
+   * Rating
+   * Description
+   * Cost
+   * Late Fee
 
 DVDs
-        - UPC
-        - title
-        - author
-        - genre
-        - release date
-        - rating
-        - abstract/description
-        - cost
-        - late fee
+   * UPC
+   * Title
+   * Author
+   * Genre
+   * Release Date
+   * Rating
+   * Description
+   * Cost
+   * Late Fee
 
-Journal
-        - title
-        - volume
-        - release date
-        - rating
-        - abstract/description
-        - cost
-        - late fee
+Periodical
+   * Title
+   * Volume
+   * Release Date
+   * Rating
+   * Description
+   * Cost
+   * Late Fee
 
-General Media
-- users can leave comments on a media type
-
-
-Fee System
-- Each media type will have a late fee specified by the media type.
-The late fee is the fee incurred for each day late.
-After an item is late, the late fee will be added to the user's balance every day.
-- allow users to pay for an item and keep it if they wish to
-- certain media types have a rental fee, which is an amount up front required to borrow
-the item
-
-
-users can search
-- search by all fields in that media (subject, data, author, publisher, publish
+Search
+   * By all fields in that media type (subject, data, author, publisher, publish
 date, rating, price)
-- a user can click on a search result to see further information
-including recommended further reading
-- whether the item is available or not
-- employees searching can also see quantity
+   * Users can click on a search result to see further information including recommended further reading
+   * Whether the item is available or not
+   * Employees searching can also see quantity
 
-user account info
-- borrow media
-- list of their borrowed items with due dates
-- account balance breakdown
-- change their information/password/etc
-- teller can create/modify customer accounts
-- admins can create/modify any kind of account
+User Account Info
+   * Change their information/password/etc
+   * Teller can create/modify customer accounts
+   * Admins can create/modify any kind of account
+
+User History
+   * List of their borrowed items with due dates and whether item has been returned
+   * Admins can view anyone's history
 
 General Requirements
-- leave general comments to the library
-- users should be able to put a book on a hold list so they can get the book
-when it's available
-- admins can add/remove media from the library
-- admins can also edit any account
-- tellers check out books to users by userID and mediaID
+   * Admins can add/remove media from the library
+   * Admins can also edit any account
+   * Tellers check out books to users by Username and mediaID (ISBN, UPC, etc)
 
 
-allow new media types to be defines, maybe based on some default media type
+Plugin System
+   * Allow new media types to be defined without modifying existing code
