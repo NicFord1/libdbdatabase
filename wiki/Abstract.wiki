@@ -9,7 +9,7 @@ Nicholas Ford</p>
 
 Our team has decided to create a library application, which will be written in PHP and connect to a MySQL database. The project is called _[http://LibDBDatabase.Nicks-Net.us LibDBDatabase]_, which will be implemented as a library where users can add, remove, and find items. Items in the library consist of books, catalogs, peer-reviewed journals, novels, music CDs, educational and entertainment DVDs, and other media supported by a plugin system. Items in the database will have a weight attributed with them that represents its ratings. When a customer has an item for check-out or searches for an item, the library will make a recommendation to him or her based on ratings and relevance of other similar items.
 
-The application will implement several criteria listed below:
+The application will implement several criteria listed below ([FunctionRequirements]):
 
     * A Search function, where one can search the library database using various criteria (subject, data, author, publisher, publish date, rating, price) to find a specific book or a series of books matching the query. 
 
