@@ -22,8 +22,10 @@ function performFunctionOnAllPlugins($functionName, $param1, $param2) {
   foreach($listOfPlugins as $plugin) {
     $reflector = new ReflectionObject($plugin);
     if($reflector->hasMethod($functionName)) {
-      $returnList[$returnListSize++] = $reflector->getMethod($functionName)->
+      $returnedFromPlugin = $reflector->getMethod($functionName)->
           invoke($plugin, $param1, $param2);
+      if($returnedFromPlugin != null)
+          $returnList[$returnListSize++] = $returnedFromPlugin;
     }
   }
   return $returnList;
